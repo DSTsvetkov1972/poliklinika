@@ -1,6 +1,6 @@
 folders_rules_dict = {
     "Согаз_изменение объёма": {
-        "fns_name": "base",
+        "processor_name": "base",
         "skiprows": 21,
         "filter_not_empty": "Фамилия",
         "source_header": [
