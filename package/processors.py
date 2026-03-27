@@ -14,12 +14,14 @@ def base(folder, file, folders_rules_dict):
         filter_not_empty_column = folders_rules_dict[folder]['filter_not_empty']
         source_header = folders_rules_dict[folder]['source_header']
 
-        df = pd.read_excel(os.path.join('files',folder, file), skiprows=skiprows)
+        df = pd.read_excel(os.path.join('Исходники',folder, file), skiprows=skiprows)
         
         df_columns = list(df.columns)
         if source_header==df_columns:
             df = df .fillna('')
             df = df[df[filter_not_empty_column]!='']
+            df['Папка'] = folder
+            df['Файл'] = file
 
             if df.empty:
                 return(False, 'Пустая таблица') 
@@ -35,4 +37,4 @@ def base(folder, file, folders_rules_dict):
         return(False, str(e))
     
 
-fns_dict = {'base': base}
+processors_dict = {'base': base}
