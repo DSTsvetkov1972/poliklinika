@@ -5,6 +5,7 @@ import os
 from package.logo import logo_colored
 from package.sources_and_files import sources_and_prepared_summary
 from package.download_to_pickomed import prepared_maker
+from package.confirm_download import get_files_to_confirm, check_opened_files_to_confirm
 
 
 from colorama import Fore, Style, init
@@ -43,19 +44,14 @@ while True:
                     print(Fore.RED, prepared_maker_res[1], Fore.RESET) 
                       
             
-            # os.startfile('Сводка по подготовке файлов к загрузке.xlsx')
-
-
-
-
         elif choise == '3':
-            pass
-
-
-
+            # files_to_confirm = get_files_to_confirm()
+            print(check_opened_files_to_confirm())
 
     except Exception as e:
         print(Fore.RED, str(e), Fore.RESET)
+
+
 
 
 

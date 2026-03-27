@@ -1,9 +1,4 @@
-def a():
-    print('a')
+from datetime import datetime
 
-def b():
-    print('b')
 
-f = a
-
-f()
+print(datetime.now().strftime("%Y-%m-%d_%H-%M-%S"))
