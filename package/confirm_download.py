@@ -46,16 +46,16 @@ def check_opened_files_to_confirm():
     source_folders = list(os.walk(os.path.join(os.getcwd(), 'Исходники')))[0][1]
     source_opened_files = []
     for source_folder in source_folders:
-        print(source_folder)
+        #print(source_folder)
         source_files = list(os.walk(os.path.join(os.getcwd(), 'Исходники', source_folder)))[0][2]
-        print(source_files)
+        #print(source_files)
         source_opened_files_in_folder = [f"Исходники\\{ source_folder }\\{ source_file[2:] }" for source_file in source_files if source_file[:2] == '~$']
         source_opened_files += source_opened_files_in_folder
 
-    print(Fore.YELLOW, source_opened_files, Fore.RESET)
+    #print(Fore.YELLOW, source_opened_files, Fore.RESET)
         
     opened_files = prepared_opened_files+source_opened_files    
-    print(Fore.RED, opened_files, Fore.RESET)
+    #print(Fore.RED, opened_files, Fore.RESET)
     opened_files_str = "\n".join(opened_files)
 
     
@@ -65,8 +65,9 @@ def check_opened_files_to_confirm():
 def confirm_files(files_to_confirm):
 
     for downloaded_file, downloaded_file_data in files_to_confirm.items():
+        downloaded_folder = downloaded_file[:-5]
         for source_file in downloaded_file_data['files_in_file']:
-            source_file_path = os.path.join(os.getcwd(), 'Исходники', source_file)
+            source_file_path = os.path.join(os.getcwd(), 'Исходники', downloaded_folder, source_file)
             os.remove(source_file_path)
 
         downloaded_file_path = os.path.join(os.getcwd(), 'Подготовленные', downloaded_file)
@@ -75,4 +76,7 @@ def confirm_files(files_to_confirm):
 
 if __name__ == '__main__':
     print(check_opened_files_to_confirm())
+    files_to_confirm = get_files_to_confirm()
+    print(files_to_confirm)
+    confirm_files(files_to_confirm)
 
