@@ -20,8 +20,8 @@ advertisement = """
  без ТЗ, совещаний, бюрократии и миллионного бюджета?
  Обращайтесь:
  Цветков Дмитрий Сергеевич
- DSTsvetkov@yandex.ru
- +7-903-617-77-55
+ DSTsvetkovPRO@yandex.ru
+ +7 (903) 617-77-55
 """
 
 advertisement_colored = Fore.YELLOW + advertisement + Fore.RESET

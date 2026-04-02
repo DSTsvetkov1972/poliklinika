@@ -10,6 +10,18 @@ from openpyxl.styles import Alignment, Font
 
 from colorama import Fore
 
+def is_excel_file_open(filepath):
+    try:
+        # Попытка открыть файл для записи (режим 'rb' тоже сработает)
+        # Важно: мы не используем with, чтобы закрыть файл сразу после проверки
+        with open(filepath, 'r+b'):
+            # Если получилось открыть — файл не заблокирован
+            return False
+    except (IOError, PermissionError):
+        # Если вылетела ошибка доступа — файл, скорее всего, открыт в Excel
+        return True
+    
+
 def get_files_to_confirm():
 
     files_to_confirm = {}
@@ -46,10 +58,21 @@ def check_opened_files_to_confirm():
     source_folders = list(os.walk(os.path.join(os.getcwd(), 'Исходники')))[0][1]
     source_opened_files = []
     for source_folder in source_folders:
-        #print(source_folder)
-        source_files = list(os.walk(os.path.join(os.getcwd(), 'Исходники', source_folder)))[0][2]
-        #print(source_files)
-        source_opened_files_in_folder = [f"Исходники\\{ source_folder }\\{ source_file[2:] }" for source_file in source_files if source_file[:2] == '~$']
+        # print(source_folder)
+        source_folder_path = os.path.join(os.getcwd(), 'Исходники', source_folder)
+        source_files = list(os.walk(source_folder_path))[0][2]
+        # print(source_files)
+        source_opened_files_in_folder = []
+        
+        for source_file in source_files:
+            if source_file[:2] == '~$':
+                continue
+
+            sorce_file_path = os.path.join(source_folder_path, source_file)
+            if is_excel_file_open(sorce_file_path):
+                source_opened_files_in_folder.append(f"Исходники\\{ source_folder }\\{ source_file }")
+        # print(source_opened_files_in_folder)
+
         source_opened_files += source_opened_files_in_folder
 
     #print(Fore.YELLOW, source_opened_files, Fore.RESET)

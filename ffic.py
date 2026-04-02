@@ -5,7 +5,7 @@ import os
 from package.logo import logo_colored
 from package.sources_and_files import sources_and_prepared_summary
 from package.download_to_pickomed import prepared_maker
-from package.confirm_download import get_files_to_confirm, check_opened_files_to_confirm
+from package.confirm_download import get_files_to_confirm, check_opened_files_to_confirm, confirm_files
 
 
 from colorama import Fore, Style, init
@@ -45,8 +45,16 @@ while True:
                       
             
         elif choise == '3':
-            # files_to_confirm = get_files_to_confirm()
-            print(check_opened_files_to_confirm())
+            files_to_confirm = get_files_to_confirm()
+            check_opened_files_to_confirm_res = check_opened_files_to_confirm()
+            if check_opened_files_to_confirm_res:
+                print(Fore.RED, f'Закройте файлы:\n{check_opened_files_to_confirm_res}\n и повторите попытку', Fore.RESET)
+                continue
+
+            files_to_confirm = get_files_to_confirm()
+            print(files_to_confirm)
+            confirm_files(files_to_confirm) 
+
 
     except Exception as e:
         print(Fore.RED, str(e), Fore.RESET)
