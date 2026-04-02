@@ -1,4 +1,9 @@
-from datetime import datetime
+from package.config import folders_rules_dict
+import os
+
+folders = list(os.walk(os.path.join(os.getcwd(), 'Исходники')))[0][1]
 
 
-print(datetime.now().strftime("%Y-%m-%d_%H-%M-%S"))
+print(folders)
+for k in folders_rules_dict.keys():
+    print(k)

@@ -2,6 +2,7 @@
 from colorama import Fore, init
 import pandas as pd
 import os
+from package.config import folders_rules_dict, folders_maker
 from package.logo import logo_colored
 from package.sources_and_files import sources_and_prepared_summary
 from package.download_to_pickomed import prepared_maker
@@ -14,6 +15,7 @@ init()
 print(Style.BRIGHT)
 print(logo_colored)
 
+folders_maker(folders_rules_dict)
     
 while True:
     try:
