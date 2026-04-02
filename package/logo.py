@@ -4,7 +4,7 @@
 from colorama import Fore
 
 
-logo = Fore.BLACK + """
+logo = Fore.MAGNTA + """
 ********************************************************************************
                     ПОДГОТОВКА К ЗАГРУЗКЕ В ПИКОМЕД
                          ФАЙЛОВ ОТ СТРАХОВЫХ
@@ -36,6 +36,6 @@ for ch in list(logo):
         ch_colored = ch
     logo_colored += ch_colored
 
-version_colored = Fore.MAGENTA + version + Fore.RESET    
+version_colored = Fore.BLACK + version + Fore.RESET    
 
 logo_colored = logo_colored + version_colored + advertisement_colored
