@@ -5,3 +5,4 @@ __pycache__
 Загруженные/*
 *.xlsx
 Исходники copy/*
+output/
