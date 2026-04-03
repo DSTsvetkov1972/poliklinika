@@ -21,9 +21,10 @@ folders_maker()
 while True:
     try:
         print()
-        print(Fore.WHITE + '1' + Fore.BLUE + '- получить сводку по исходниками и подготовленным к загрузке' + Fore.RESET)
-        print(Fore.WHITE + '2' + Fore.BLUE + '- подготовить файлы для загрузки в Пикомед' + Fore.RESET)
-        print(Fore.WHITE + '3' + Fore.BLUE + '- подтвердить загрузку файлов в Пикомед' + Fore.RESET)
+        print(Fore.WHITE + '1' + Fore.BLUE + ' - получить сводку по исходникам и подготовленным к загрузке' + Fore.RESET)
+        print(Fore.WHITE + '2' + Fore.BLUE + ' - подготовить файлы для загрузки в Пикомед' + Fore.RESET)
+        print(Fore.WHITE + '3' + Fore.BLUE + ' - подтвердить загрузку файлов в Пикомед' + Fore.RESET)
+        
         choise = input("Ваш выбор: ")
 
         if choise == '1':
