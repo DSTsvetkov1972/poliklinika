@@ -49,14 +49,13 @@ while True:
                       
             
         elif choise == '3':
-            files_to_confirm = get_files_to_confirm()
             check_opened_files_to_confirm_res = check_opened_files_to_confirm()
             if check_opened_files_to_confirm_res:
                 print(Fore.RED + f'Закройте файлы:\n{check_opened_files_to_confirm_res}\n и повторите попытку' + Fore.RESET)
                 continue
 
             files_to_confirm = get_files_to_confirm()
-            print(files_to_confirm)
+            # print(files_to_confirm)
             confirm_files(files_to_confirm) 
 
 
