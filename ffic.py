@@ -55,8 +55,9 @@ while True:
                 continue
 
             files_to_confirm = get_files_to_confirm()
-            # print(files_to_confirm)
-            confirm_files(files_to_confirm) 
+            confirmed_files_qty = confirm_files(files_to_confirm)
+            print(Fore.GREEN + f'Подтверждена загрузка файлов: { confirmed_files_qty }' + Fore.RESET)
+             
 
 
     except Exception as e:

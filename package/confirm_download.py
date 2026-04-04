@@ -86,6 +86,8 @@ def check_opened_files_to_confirm():
 
 
 def confirm_files(files_to_confirm):
+    
+    confirm_files_qty = 0
 
     for downloaded_file, downloaded_file_data in files_to_confirm.items():
         downloaded_folder = downloaded_file[:-5]
@@ -96,6 +98,11 @@ def confirm_files(files_to_confirm):
         downloaded_file_path = os.path.join(os.getcwd(), 'Подготовленные', downloaded_file)
         backup_file_path = os.path.join(os.getcwd(), 'Загруженные', downloaded_file_data['backup_file_name'])
         shutil.move(downloaded_file_path, backup_file_path)
+        confirm_files_qty += len(downloaded_file_data['files_in_file'])
+        
+    return confirm_files_qty
+        
+        
 
 if __name__ == '__main__':
     print(check_opened_files_to_confirm())

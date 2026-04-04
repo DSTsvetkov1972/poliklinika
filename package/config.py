@@ -1,5 +1,5 @@
 folders_rules_dict = {
-    "Тест": {
+    "Согаз_изменение объёма": {
         "processor_name": "base",
         "skiprows": 21,
         "filter_not_empty": "Фамилия",
