@@ -35,7 +35,7 @@ folders_rules_dict = {
             }                                                         
         }
     },
-        "ВСК_открепление": {
+    "ВСК_открепление": {
         "processor_name": "base",
         "skiprows": 5,
         "filter_not_empty": "NAME1",
@@ -62,6 +62,64 @@ folders_rules_dict = {
             "Отчество": {
                 "source": "column", "value": "NAME3"
             }                                                         
+        }
+    },
+    "ЗЕТТА_открепление": {
+        "processor_name": "split_fio",
+        "skiprows": 16,
+        "filter_not_empty": "Фамилия имя  отчество",
+        "source_header": [
+            "№", "Номер полиса", "Фамилия имя  отчество", "Дата рождения",
+            "Дата открепления                              (последний день обслуживания)"
+        ],
+        "result_columns": {
+            "Номер полиса": {
+                "source": "column", "value": "Номер полиса"
+            },
+            "Дата открепления": {
+                "source": "column", "value": "Дата открепления                              (последний день обслуживания)"
+            },
+            "Дата рождения": {
+                "source": "column", "value": "Дата рождения"
+            },
+            "Фамилия": {
+                "source": "column", "value": "NAME1"
+            }, 
+            "Имя": {
+                "source": "column", "value": "NAME2"
+            },    
+            "Отчество": {
+                "source": "column", "value": "NAME3"
+            }                                                         
+        }
+    },
+    "ЛУЧИ_открепление": {
+        "processor_name": "base",
+        "skiprows": 17,
+        "filter_not_empty": "Фамилия",
+        "source_header": [
+            "№п/п", "№ полиса", "Фамилия", "Имя", "Отчество", "Пол", "Дата рождения",
+            "Последний день обслуживания", "Место работы", "Программа", "Тип оплаты", "Клиники сети"
+        ],
+        "result_columns": {
+            "Номер полиса": {
+                "source": "column", "value": "№ полиса"
+            },
+            "Дата открепления": {
+                "source": "column", "value": "Последний день обслуживания"
+                },
+            "Дата рождения": {
+                "source": "column", "value": "Дата рождения"
+                },
+            "Фамилия": {
+                "source": "column", "value": "Фамилия"
+                }, 
+            "Имя": {
+                "source": "column", "value": "Имя"
+                },    
+            "Отчество": {
+                "source": "column", "value": "Отчество"
+                }                                                         
         }
     }
 }
