@@ -16,22 +16,22 @@ folders_rules_dict = {
         ],
         "result_columns": {
             "Номер полиса": {
-                "source": "column", "value": "policy_number"
+                "source_type": "column", "source_column_name": "policy_number"
             },
             "Дата открепления": {
-                "source": "column", "value": "date_cancel"
+                "source_type": "column", "source_column_name": "date_cancel"
             },
             "Дата рождения": {
-                "source": "column", "value": "birth_date"
+                "source_type": "column", "source_column_name": "birth_date"
             },
             "Фамилия": {
-                "source": "column", "value": "per_last_name"
+                "source_type": "column", "source_column_name": "per_last_name"
             }, 
             "Имя": {
-                "source": "column", "value": "per_first_name"
+                "source_type": "column", "source_column_name": "per_first_name"
             },    
             "Отчество": {
-                "source": "column", "value": "per_middle_name"
+                "source_type": "column", "source_column_name": "per_middle_name"
             }                                                         
         }
     },
@@ -45,51 +45,51 @@ folders_rules_dict = {
         ],
         "result_columns": {
             "Номер полиса": {
-                "source": "column", "value": "POLIC SER"
+                "source": "column", "source_column_name": "POLIC SER"
             },
             "Дата открепления": {
-                "source": "column", "value": "END"
+                "source": "column", "source_column_name": "END"
             },
             "Дата рождения": {
-                "source": "column", "value": "DATE"
+                "source": "column", "source_column_name": "DATE"
             },
             "Фамилия": {
-                "source": "column", "value": "NAME1"
+                "source": "column", "source_column_name": "NAME1"
             }, 
             "Имя": {
-                "source": "column", "value": "NAME2"
+                "source": "column", "source_column_name": "NAME2"
             },    
             "Отчество": {
-                "source": "column", "value": "NAME3"
+                "source": "column", "source_column_name": "NAME3"
             }                                                         
         }
     },
     "ЗЕТТА_открепление": {
-        "processor_name": "split_fio",
+        "processor_name": "base",
         "skiprows": 16,
         "filter_not_empty": "Фамилия имя  отчество",
         "source_header": [
-            "№", "Номер полиса", "Фамилия имя  отчество", "Дата рождения",
+            "Unnamed: 0", "№", "Номер полиса", "Unnamed: 3", "Фамилия имя  отчество", "Unnamed: 5", "Дата рождения",
             "Дата открепления                              (последний день обслуживания)"
         ],
         "result_columns": {
             "Номер полиса": {
-                "source": "column", "value": "Номер полиса"
+                "source_type": "column", "source_column_name": "Номер полиса"
             },
             "Дата открепления": {
-                "source": "column", "value": "Дата открепления                              (последний день обслуживания)"
+                "source_type": "column", "source_column_name": "Дата открепления                              (последний день обслуживания)"
             },
             "Дата рождения": {
-                "source": "column", "value": "Дата рождения"
+                "source_type": "column", "source_column_name": "Дата рождения"
             },
             "Фамилия": {
-                "source": "column", "value": "NAME1"
+                "source_type": "surname_from_column", "source_column_name": "Фамилия имя  отчество"
             }, 
             "Имя": {
-                "source": "column", "value": "NAME2"
+                "source_type": "name_from_column", "source_column_name": "Фамилия имя  отчество"
             },    
             "Отчество": {
-                "source": "column", "value": "NAME3"
+                "source_type": "patronymic_from_column", "source_column_name": "Фамилия имя  отчество"
             }                                                         
         }
     },
@@ -103,22 +103,22 @@ folders_rules_dict = {
         ],
         "result_columns": {
             "Номер полиса": {
-                "source": "column", "value": "№ полиса"
+                "source_type": "column", "source_column_name": "№ полиса"
             },
             "Дата открепления": {
-                "source": "column", "value": "Последний день обслуживания"
+                "source_type": "column", "source_column_name": "Последний день обслуживания"
                 },
             "Дата рождения": {
-                "source": "column", "value": "Дата рождения"
+                "source_type": "column", "source_column_name": "Дата рождения"
                 },
             "Фамилия": {
-                "source": "column", "value": "Фамилия"
+                "source_type": "column", "source_column_name": "Фамилия"
                 }, 
             "Имя": {
-                "source": "column", "value": "Имя"
+                "source_type": "column", "source_column_name": "Имя"
                 },    
             "Отчество": {
-                "source": "column", "value": "Отчество"
+                "source_type": "column", "source_column_name": "Отчество"
                 }                                                         
         }
     }

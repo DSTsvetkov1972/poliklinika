@@ -1,9 +1,11 @@
-from package.config import folders_rules_dict
-import os
-
-folders = list(os.walk(os.path.join(os.getcwd(), 'Исходники')))[0][1]
+import pandas as pd
 
 
-print(folders)
-for k in folders_rules_dict.keys():
-    print(k)
+
+
+
+
+df = pd.DataFrame([{'fio': 'Цвектков Дмитрий Сергеевич'}, {'fio': 'Буль оглы кизы Мухамед Ибрагимович'}, {'fio': 'Петрос Иванович Кузьмин'}])
+
+df['name'] = df['fio'].apply(lambda x: ' '.join(x.split(' ')[:-2]))
+print(df)
