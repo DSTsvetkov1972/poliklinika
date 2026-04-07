@@ -1,7 +1,8 @@
 folders_rules_dict = {
     "Альфа_открепление": {
         "processor_name": "base",
-        "skiprows": 0,
+        "sheet_name": "",
+        "header_row": 1,
         "filter_not_empty": "row_number",
         "source_header": [
             "row_number", "policy_number", "date_from", "date_to", "date_cancel", "prog_code", "fio", "prog_name",
@@ -37,7 +38,8 @@ folders_rules_dict = {
     },
     "ВСК_открепление": {
         "processor_name": "base",
-        "skiprows": 5,
+        "sheet_name": "",
+        "header_row": 6,
         "filter_not_empty": "NAME1",
         "source_header": [
             "npp", "NAME1", "NAME2", "NAME3", "NIB", "DATE", "SEX", "POLIC", "POLIC SER", "ADDRESS P",
@@ -66,10 +68,11 @@ folders_rules_dict = {
     },
     "ЗЕТТА_открепление": {
         "processor_name": "base",
-        "skiprows": 16,
+        "sheet_name": "Письмо",
+        "header_row": 17,
         "filter_not_empty": "Фамилия имя  отчество",
         "source_header": [
-            "Unnamed: 0", "№", "Номер полиса", "Unnamed: 3", "Фамилия имя  отчество", "Unnamed: 5", "Дата рождения",
+            "", "№", "Номер полиса", "", "Фамилия имя  отчество", "", "Дата рождения",
             "Дата открепления                              (последний день обслуживания)"
         ],
         "result_columns": {
@@ -95,7 +98,8 @@ folders_rules_dict = {
     },
     "ЛУЧИ_открепление": {
         "processor_name": "base",
-        "skiprows": 17,
+        "sheet_name": "",
+        "header_row": 18,
         "filter_not_empty": "Фамилия",
         "source_header": [
             "№п/п", "№ полиса", "Фамилия", "Имя", "Отчество", "Пол", "Дата рождения",
@@ -121,6 +125,35 @@ folders_rules_dict = {
                 "source_type": "column", "source_column_name": "Отчество"
                 }                                                         
         }
-    }
+    },
+    "РЕСО_открепление": {
+        "processor_name": "base",
+        "sheet_name": "Список",
+        "header_row": 9,
+        "filter_not_empty": "Открепление с",
+        "source_header": [
+            "", "№\nп/п", "ФИО", "Дата рождения", "Пол", "Адрес", "№ полиса", "Начало обслуживания", "Открепление с", "Программа мед.  обслуживания", "Страхователь"
+        ],
+        "result_columns": {
+            "Номер полиса": {
+                "source_type": "column", "source_column_name": "№ полиса"
+            },
+            "Дата открепления": {
+                "source_type": "column", "source_column_name": "Открепление с"
+                },
+            "Дата рождения": {
+                "source_type": "column", "source_column_name": "Дата рождения"
+                },
+            "Фамилия": {
+                "source_type": "surname_from_column", "source_column_name": "ФИО"
+                }, 
+            "Имя": {
+                "source_type": "name_from_column", "source_column_name": "ФИО"
+                },    
+            "Отчество": {
+                "source_type": "patronymic_from_column", "source_column_name": "ФИО"
+                }                                                         
+        }
+    }    
 }
 

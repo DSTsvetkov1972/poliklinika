@@ -27,7 +27,6 @@ def processor_starter(folder, file):
     processor = processors_dict.get(processor_name_in_config)
     if not processor:
         return (False, f'Обработчик файлов { processor_name_in_config } не создан')
-    
     return processor(folder, file, folders_rules_dict)
 
 
@@ -46,7 +45,6 @@ def prepared_maker():
 
             res_dfs = []
             
-
             if files:
 
                 for file in files:           
@@ -60,7 +58,7 @@ def prepared_maker():
 
                     if res_dfs:
                         res_df = pd.concat(res_dfs)
-                        res_df.to_excel(os.path.join(os.getcwd(), 'Подготовленные', f'{ folder }.xlsx'))
+                        res_df.to_excel(os.path.join(os.getcwd(), 'Подготовленные', f'{ folder }.xlsx'), index=False)
 
         log_df = pd.DataFrame(processor_log, columns=['Папка', 'Файл', 'Результат обработки'])
         log_df.to_excel('Сводка по подготовке файлов к загрузке.xlsx', index=None)
