@@ -154,6 +154,40 @@ folders_rules_dict = {
                 "source_type": "patronymic_from_column", "source_column_name": "ФИО"
                 }                                                         
         }
-    }    
+    },
+    "СОГАЗ_открепление": {
+        "processor_name": "base",
+        "sheet_name": "Список",
+        "header_row": 22,
+        "filter_not_empty": "Фамилия",
+        "source_header": [
+            "№ п/п", "Фамилия", "Имя", "Отчество", "Дата рождения", "№ полиса", "Окончание обслуживания", "Программа мед.обслуживания", "Место работы (Страхователь)"
+        ],
+        "result_columns": {
+            "Номер полиса": {
+                "source_type": "column", "source_column_name": "№ полиса"
+            },
+            "Дата открепления": {
+                "source_type": "column", "source_column_name": "Окончание обслуживания"
+                },
+            "Дата рождения": {
+                "source_type": "column", "source_column_name": "Дата рождения"
+                },
+            "Фамилия": {
+                "source_type": "column", "source_column_name": "Фамилия"
+                }, 
+            "Имя": {
+                "source_type": "column", "source_column_name": "Имя"
+                },    
+            "Отчество": {
+                "source_type": "column", "source_column_name": "Отчество"
+                }                                                         
+        }
+    },
+    "СОГЛАСИЕ_открепление": {
+        "processor_name": "soglasie_otkrep",
+        "sheet_name": "TDSheet"                                
+        }
+    }  
 }
 

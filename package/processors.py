@@ -1,5 +1,17 @@
 import pandas as pd
 import os
+from datetime import datetime
+
+
+
+def is_date(string, date_format="%d.%m.%Y"):
+    """Проверяет, можно ли преобразовать строку в дату"""
+    try:
+        datetime.strptime(str(string), date_format)
+        return True
+    except ValueError:
+        return False
+
 
 def fio_splitter(fio):
     """Функция возвращает словарь с фамилией, именем и отчеством из
