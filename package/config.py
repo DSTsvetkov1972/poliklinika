@@ -47,22 +47,22 @@ folders_rules_dict = {
         ],
         "result_columns": {
             "Номер полиса": {
-                "source": "column", "source_column_name": "POLIC SER"
+                "source_type": "column", "source_column_name": "POLIC SER"
             },
             "Дата открепления": {
-                "source": "column", "source_column_name": "END"
+                "source_type": "column", "source_column_name": "END"
             },
             "Дата рождения": {
-                "source": "column", "source_column_name": "DATE"
+                "source_type": "column", "source_column_name": "DATE"
             },
             "Фамилия": {
-                "source": "column", "source_column_name": "NAME1"
+                "source_type": "column", "source_column_name": "NAME1"
             }, 
             "Имя": {
-                "source": "column", "source_column_name": "NAME2"
+                "source_type": "column", "source_column_name": "NAME2"
             },    
             "Отчество": {
-                "source": "column", "source_column_name": "NAME3"
+                "source_type": "column", "source_column_name": "NAME3"
             }                                                         
         }
     },
@@ -187,7 +187,7 @@ folders_rules_dict = {
     "СОГЛАСИЕ_открепление": {
         "processor_name": "soglasie_otkrep",
         "sheet_name": "TDSheet"                                
-        }
-    }  
+    }
+
 }
 

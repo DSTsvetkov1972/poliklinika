@@ -7,7 +7,7 @@ from package.config import folders_rules_dict
 from package.processors import processors_dict
 from openpyxl import load_workbook
 from openpyxl.styles import Alignment, Font
-
+from tqdm import tqdm
 from colorama import Fore
 
 
@@ -35,6 +35,10 @@ def processor_starter(folder, file):
 
 def prepared_maker():
     try:
+        if os.path.exists(os.path.join(os.getcwd(), 'Сводка по подготовке файлов к загрузке.xlsx')):
+            with open(os.path.join(os.getcwd(), 'Сводка по подготовке файлов к загрузке.xlsx'), 'r+b'):
+                pass
+
         processor_log = []
 
         folders = list(os.walk('Исходники'))[0][1]
@@ -47,7 +51,7 @@ def prepared_maker():
             
             if files:
 
-                for file in files:           
+                for file in tqdm(files, desc=folder, unit='Файл', leave=True):           
                     processor_starter_res = processor_starter(folder, file)
                     # print(file, processor_starter_res)
                     if processor_starter_res[0]:
