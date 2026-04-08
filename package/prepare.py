@@ -7,7 +7,7 @@ from package.config import folders_rules_dict
 from package.processors import processors_dict
 from openpyxl import load_workbook
 from openpyxl.styles import Alignment, Font
-from tqdm import tqdm
+# from tqdm import tqdm
 from progress.bar import FillingSquaresBar
 from colorama import Fore
 
