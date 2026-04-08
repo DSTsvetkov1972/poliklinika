@@ -126,6 +126,10 @@ folders_rules_dict = {
                 }                                                         
         }
     },
+    "Ренессанс_открепление": {
+        "processor_name": "renessans_otkrep",
+        "sheet_name": "О1"                                
+    },
     "РЕСО_открепление": {
         "processor_name": "base",
         "sheet_name": "Список",

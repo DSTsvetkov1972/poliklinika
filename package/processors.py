@@ -129,8 +129,61 @@ def soglasie_otkrep(folder, file, folders_rules_dict):
     except Exception as e:
         return(False, str(e))
 
+
+def renessans_otkrep(folder, file, folders_rules_dict):
     
+
+    try:
+        file_path = os.path.join(os.getcwd(), 'Исходники', folder, file)
+        df = pd.read_excel(file_path, header=None, sheet_name=folders_rules_dict[folder]['sheet_name'])
+
+        df[6] = df[0].apply(lambda x: x[-88:-78] if 'просит Вас снять с' in str(x) and is_date(x[-88:-78]) else None)
+        df[6] = df[6].ffill()
+
+        df[7] = df[4].apply(lambda x: is_date(x))
+        df = df[df[7]]
+
+        df.rename(columns={1:'Фамилия', 2:'Имя', 3:'Отчество', 4:'Дата рождения', 5:'Номер полиса', 6:'Дата открепления'}, inplace=True)
+        df = df[["Номер полиса", "Дата открепления", "Дата рождения", "Фамилия", "Имя", "Отчество"]]
+        return (True, df)
+    
+    except Exception as e:
+        return(False, str(e))
+
+
+
+def soglasie_otkrep(folder, file, folders_rules_dict):
+    
+
+    try:
+        file_path = os.path.join(os.getcwd(), 'Исходники', folder, file)
+        df = pd.read_excel(file_path, header=None, sheet_name=folders_rules_dict[folder]['sheet_name'])
+
+        df[4] = df[3].apply(lambda x: is_date(x))
+
+
+        df[5] = df[2].apply(lambda x: x if is_date(x) else None)
+        df[5] = df[5].ffill()
+
+        df = df[df[4]]
+
+
+        df['Фамилия'] = df[2].apply(lambda x: fio_splitter(x)['surname'])
+        df['Имя'] = df[2].apply(lambda x: fio_splitter(x)['name'])
+        df['Отчество'] = df[2].apply(lambda x: fio_splitter(x)['patronymic'])
+
+
+        df.columns= [0, "Номер полиса", 2, "Дата рождения", 4, "Дата открепления", "Фамилия", "Имя", "Отчество"]
+        df = df[["Номер полиса", "Дата открепления", "Дата рождения", "Фамилия", "Имя", "Отчество"]]
+        df['Папка'] = folder
+        df['Файл'] = file
+        return (True, df)
+    except Exception as e:
+        return(False, str(e))
+
+
 processors_dict = {
     'base': base,
+    'renessans_otkrep': renessans_otkrep,
     'soglasie_otkrep': soglasie_otkrep
     }

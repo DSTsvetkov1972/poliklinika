@@ -1,17 +1,3 @@
-def fio_splitter(fio):
+s = 'Страховая компания ПАО "Группа Ренессанс Страхование" благодарит за сотрудничество и просит Вас снять с 01.04.2026 г. с медицинского обслуживания следующих  Застрахованных  клиентов  компании:'
 
-    whitespace_qty = fio.count(' ')
-    if whitespace_qty != 2:
-        raise ValueError(f'Строка ФИО должна содержать 2 пробела, по факту { whitespace_qty }')
-    fio_parts = fio.split(' ')
-    return {
-        'surname': fio_parts[0],
-        'name': fio_parts[1],
-        'patronymic': fio_parts[2]
-    }
-
-
-if __name__ == '__main__':
-    fio = 'Цветков Дмитрий Сергеевич'
-
-    print(fio_splitter(fio))
+print(len(s[-88:-78]))
