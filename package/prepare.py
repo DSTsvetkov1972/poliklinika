@@ -44,6 +44,8 @@ def prepared_maker():
 
         folders = list(os.walk('Исходники'))[0][1]
 
+        max_folder_len = max([len(f) for f in folders])
+
         print(Fore.BLACK)
         for folder in folders:
             # print(Fore.MAGENTA, folder, Fore.RESET)
@@ -53,7 +55,12 @@ def prepared_maker():
             
             if files:
                     
-                bar = FillingSquaresBar(f'{ folder }:', max = len(files), suffix = '%(index)d/%(max)d')    
+                bar = FillingSquaresBar(
+                    f'{folder:>{max_folder_len}}',
+                    max=len(files),
+                    suffix = '%(index)d/%(max)d',
+                    fill='█', empty_fill='░',
+                    width = 50)    
 
                 # for file in tqdm(files, desc=folder, unit='Файл', leave=True):
                 for file in files:     
