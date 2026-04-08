@@ -145,6 +145,9 @@ def renessans_otkrep(folder, file, folders_rules_dict):
 
         df.rename(columns={1:'Фамилия', 2:'Имя', 3:'Отчество', 4:'Дата рождения', 5:'Номер полиса', 6:'Дата открепления'}, inplace=True)
         df = df[["Номер полиса", "Дата открепления", "Дата рождения", "Фамилия", "Имя", "Отчество"]]
+        
+        df['Папка'] = folder
+        df['Файл'] = file
         return (True, df)
     
     except Exception as e:
