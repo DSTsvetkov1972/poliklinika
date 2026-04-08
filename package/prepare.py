@@ -43,6 +43,7 @@ def prepared_maker():
 
         folders = list(os.walk('Исходники'))[0][1]
 
+        print(Fore.BLACK)
         for folder in folders:
             # print(Fore.MAGENTA, folder, Fore.RESET)
             files = list(os.walk(os.path.join('Исходники', folder)))[0][2]
@@ -63,6 +64,8 @@ def prepared_maker():
                     if res_dfs:
                         res_df = pd.concat(res_dfs)
                         res_df.to_excel(os.path.join(os.getcwd(), 'Подготовленные', f'{ folder }.xlsx'), index=False)
+
+        print(Fore.RESET)                
 
         log_df = pd.DataFrame(processor_log, columns=['Папка', 'Файл', 'Результат обработки'])
         log_df.to_excel('Сводка по подготовке файлов к загрузке.xlsx', index=None)

@@ -187,7 +187,36 @@ folders_rules_dict = {
     "СОГЛАСИЕ_открепление": {
         "processor_name": "soglasie_otkrep",
         "sheet_name": "TDSheet"                                
+    },
+    "Югория_открепление": {
+        "processor_name": "base",
+        "sheet_name": "",
+        "header_row": 7,
+        "filter_not_empty": "Фамилия",
+        "source_header": [
+            "№ п/п", "Полис", "Фамилия", "Имя", "Отчество", "Пол", "Дата рождения", "Адрес", "Телефон",
+            "Дата открепления (последний день обслуживания)", "Наименование Страхователя", "Название страховой компании"
+        ],
+        "result_columns": {
+            "Номер полиса": {
+                "source_type": "column", "source_column_name": "Полис"
+            },
+            "Дата открепления": {
+                "source_type": "column", "source_column_name": "Дата открепления (последний день обслуживания)"
+            },
+            "Дата рождения": {
+                "source_type": "column", "source_column_name": "Дата рождения"
+            },
+            "Фамилия": {
+                "source_type": "column", "source_column_name": "Фамилия"
+            }, 
+            "Имя": {
+                "source_type": "column", "source_column_name": "Имя"
+            },    
+            "Отчество": {
+                "source_type": "column", "source_column_name": "Отчество"
+            }                                                         
+        }
     }
-
 }
 
