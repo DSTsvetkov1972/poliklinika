@@ -8,6 +8,7 @@ from package.processors import processors_dict
 from openpyxl import load_workbook
 from openpyxl.styles import Alignment, Font
 from tqdm import tqdm
+from progress.bar import FillingSquaresBar
 from colorama import Fore
 
 
@@ -51,8 +52,11 @@ def prepared_maker():
             res_dfs = []
             
             if files:
+                    
+                bar = FillingSquaresBar(f'{ folder }:', max = len(files), suffix = '%(index)d/%(max)d')    
 
-                for file in tqdm(files, desc=folder, unit='Файл', leave=True):           
+                # for file in tqdm(files, desc=folder, unit='Файл', leave=True):
+                for file in files:     
                     processor_starter_res = processor_starter(folder, file)
                     # print(file, processor_starter_res)
                     if processor_starter_res[0]:
@@ -64,6 +68,9 @@ def prepared_maker():
                     if res_dfs:
                         res_df = pd.concat(res_dfs)
                         res_df.to_excel(os.path.join(os.getcwd(), 'Подготовленные', f'{ folder }.xlsx'), index=False)
+                    bar.next()
+                
+                bar.finish()
 
         print(Fore.RESET)                
 
