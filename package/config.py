@@ -36,6 +36,12 @@ folders_rules_dict = {
             }                                                         
         }
     },
+    "Альфа_скачано": {
+        "email_folder": "",
+        "processor_name": "email_base",
+        "in_otkrep_file_name": "",
+        "in_prikrep_file_name": ""
+    },
     "ВСК_открепление": {
         "processor_name": "base",
         "sheet_name": "",

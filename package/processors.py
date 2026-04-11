@@ -22,6 +22,12 @@ def fio_splitter(fio):
 
     fio_parts = fio.split(' ')
 
+    if whitespace_qty == 3 and fio[-4:] in ['кызы', 'оглы'] :
+        return {
+            'surname': fio_parts[0],
+            'name': fio_parts[1],
+            'patronymic': ' '.join(fio_parts[2:])}
+
     if whitespace_qty == 2:
         return {
             'surname': fio_parts[0],
@@ -33,7 +39,7 @@ def fio_splitter(fio):
             'name': fio_parts[1],
             'patronymic': ''}
     else:
-        raise ValueError(f'Строка с ФИО "{ fio }" должна содержать 1 или 2 пробела. По факту: { whitespace_qty }')
+        raise ValueError(f'Строка с ФИО "{ fio }" должна содержать 1 или 2 пробела или 3 пробела и оканчиваться на "кызы" или "оглы". По факту: { whitespace_qty }')
 
 
 def base(folder, file, folders_rules_dict):
@@ -190,3 +196,7 @@ processors_dict = {
     'renessans_otkrep': renessans_otkrep,
     'soglasie_otkrep': soglasie_otkrep
     }
+
+
+if __name__ == '__main__':
+    print(fio_splitter("Цветков Дмитрий Сергеевич оглы"))

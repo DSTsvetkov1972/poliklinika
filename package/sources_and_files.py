@@ -7,7 +7,7 @@ from openpyxl import load_workbook
 from openpyxl.styles import Alignment, Font
 
 
-def sources_summary():
+def source_folders_summary():
     """Получаем датафрейм
     с количеством файлов в исходных папках
     """
@@ -60,10 +60,10 @@ def sources_and_prepared_summary():
     if os.path.exists(os.path.join(os.getcwd(),'~$Исходники и подготовленные.xlsx')):
         return False
     else:
-        sources_summary_df = sources_summary()
+        source_folders_summary_df = source_folders_summary()
         prepared_summary_df = prepared_summary()
 
-        res_df = pd.merge(sources_summary_df, prepared_summary_df, on='Папка', how='outer')
+        res_df = pd.merge(source_folders_summary_df, prepared_summary_df, on='Папка', how='outer')
         res_df.to_excel('Исходники и подготовленные.xlsx', index=None)
 
         wb = load_workbook('Исходники и подготовленные.xlsx')
