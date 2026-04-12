@@ -5,7 +5,7 @@ import os
 from package.project_starter import folders_maker
 from package.config import folders_rules_dict
 from package.logo import logo_colored
-from package.sources_and_files import sources_and_prepared_summary
+from package.summary import sources_and_prepared_summary
 from package.prepare import prepared_maker
 from package.confirm import get_files_to_confirm, check_opened_files_to_confirm, confirm_files
 

@@ -1,3 +1,18 @@
+IMAP_SERVER = 'imap.yandex.ru'
+IMAP_PORT = 993
+
+# EMAIL = 'dstsvetkovpro@yandex.ru'  # Ваш полный адрес
+#APP_PASSWORD = "dtpfgxyymoacfvbi" # Сгенерированный пароль
+
+EMAIL = 'spiski220@yandex.ru'  # Ваш полный адрес
+APP_PASSWORD = "scmvylbvzywljjou" # Сгенерированный пароль
+
+MARK_SEEN = False # Для разработки. Чтобы письма просмотренные программой
+                  # не помечались как прочитанные  
+
+
+
+
 folders_rules_dict = {
     "Альфа_открепление": {
         "processor_name": "base",
@@ -36,12 +51,18 @@ folders_rules_dict = {
             }                                                         
         }
     },
-    "Альфа_скачано": {
-        "email_folder": "",
-        "processor_name": "email_base",
-        "in_otkrep_file_name": "",
-        "in_prikrep_file_name": ""
+    "Альфа_прикрепление": {
     },
+    "Альфа_скачано": {
+        "email_folder": "Альфа\xa0Страхование",
+        "processor_name": "email_base",
+        "file_actions": {
+            "_snyat.xlsx": "Альфа_открепление",
+            "_prikr.xlsx": "Альфа_прикрепление",
+            "_all.xlsx": "trash"
+        }
+    },
+
     "ВСК_открепление": {
         "processor_name": "base",
         "sheet_name": "",
@@ -72,6 +93,17 @@ folders_rules_dict = {
             }                                                         
         }
     },
+    "ВСК_прикрепление": {
+    },
+    "ВСК_скачано": {
+        "email_folder": "ВСК",
+        "processor_name": "email_base",
+        "file_actions": {
+            "_snyat.xlsx": "ВСК_открепление",
+            "_prikr.xlsx": "прикрепление.xlsx"
+        }
+    },
+        
     "ЗЕТТА_открепление": {
         "processor_name": "base",
         "sheet_name": "Письмо",
@@ -102,6 +134,13 @@ folders_rules_dict = {
             }                                                         
         }
     },
+    "ЗЕТТА_прикрепление": {
+    },
+    "ЗЕТТА_скачано": {
+        "email_folder": "Альянс",
+        "processor_name": "email_zetta"
+    },
+             
     "ЛУЧИ_открепление": {
         "processor_name": "base",
         "sheet_name": "",
@@ -132,10 +171,32 @@ folders_rules_dict = {
                 }                                                         
         }
     },
+    "Лучи_прикрепление": {
+    },
+    "Лучи_скачано": {
+        "email_folder": "Лучи(Бестдоктор)",
+        "processor_name": "email_base",
+        "file_actions": {
+            "Открепление пациентов": "ЛУЧИ_открепление",
+            "Прикрепление пациентов": "Лучи_прикрепление"
+        }
+    },
+        
     "Ренессанс_открепление": {
         "processor_name": "renessans_otkrep",
         "sheet_name": "О1"                                
     },
+    "Ренессанс_прикрепление": {
+    },
+    "Ренессанс_скачано": {
+        "email_folder": "Ренессанс",
+        "processor_name": "email_base",
+        "file_actions": {
+            "_откр_": "Ренессанс_открепление",
+            "_прикр_": "Ренессанс_прикрепление"
+        }
+    },
+        
     "РЕСО_открепление": {
         "processor_name": "base",
         "sheet_name": "Список",
@@ -165,6 +226,17 @@ folders_rules_dict = {
                 }                                                         
         }
     },
+    "РЕСО_прикрепление": {
+    },
+    "РЕСО_скачано": {
+        "email_folder": "Ресо-Гарантия",
+        "processor_name": "email_base",
+        "file_actions": {
+            "o": "РЕСО_открепление",
+            "p": "РЕСО_прикрепление"
+        }
+    },
+        
     "СОГАЗ_открепление": {
         "processor_name": "base",
         "sheet_name": "Список",
@@ -194,10 +266,30 @@ folders_rules_dict = {
                 }                                                         
         }
     },
+    "СОГАЗ_прикрепление": {
+    },
+    "СОГАЗ_скачано": {
+        "email_folder": "СОГАЗ",
+        "processor_name": "email_sogaz",
+        "file_actions": {
+            "": "",
+            "": ""
+        }
+    },
+        
     "СОГЛАСИЕ_открепление": {
         "processor_name": "soglasie_otkrep",
         "sheet_name": "TDSheet"                                
     },
+    "СОГЛАСИЕ_прикрепление": {
+    },
+    "СОГЛАСИЕ_скачано": {
+        "email_folder": "Согласие",
+        "processor_name": "email_soglasie",
+        "": "",
+        "": ""
+    },
+        
     "Югория_открепление": {
         "processor_name": "base",
         "sheet_name": "",
@@ -227,6 +319,15 @@ folders_rules_dict = {
                 "source_type": "column", "source_column_name": "Отчество"
             }                                                         
         }
-    }
+    },
+    "Югория_прикрепление": {
+    },
+    "Югория_скачано": {
+        "email_folder": "Ф-1|Югория",
+        "processor_name": "email_base",
+        "АО_ГСК_Югория_списки_прикрепление_ЗХ_ГБУЗ_ГП_№_220_ДЗМ_(Филиал_№1)_": "Югория_прикрепление",
+        "АО_ГСК_Югория_списки_открепление_ГБУЗ_ГП_№_220_ДЗМ_(Филиал_№1)_": "Югория_прикрепление"
+    },
+    
 }
 

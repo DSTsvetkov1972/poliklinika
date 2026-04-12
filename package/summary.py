@@ -1,10 +1,68 @@
 import os, sys
 import pandas as pd
+from progress.bar import FillingSquaresBar
 
 sys.path.append(os.getcwd())
 
 from openpyxl import load_workbook
 from openpyxl.styles import Alignment, Font
+
+from imap_tools import MailBox, AND
+from package.config import IMAP_SERVER, IMAP_PORT, EMAIL, APP_PASSWORD, MARK_SEEN
+from package.config import folders_rules_dict
+
+import socket
+
+
+def get_unread_messages(email_folder):
+    #"""Получает количество непрочитанных писем в папке"""
+    #try:
+        with MailBox(IMAP_SERVER, port=IMAP_PORT).login(EMAIL, APP_PASSWORD, initial_folder='INBOX') as mailbox:
+
+                mailbox.folder.set(email_folder)
+                
+                # Ищем непрочитанные письма (критерий seen=False)
+                unread_messages = list(mailbox.fetch(AND(seen=False), mark_seen=False))
+                
+                return (True, len(unread_messages))
+            
+    #except socket.gaierror as e:
+    #    return (True, f"get_unread_messages_from_all_folders: { e }.\nВозможно отсутствует подключение к интернет.")
+    #except Exception as e:
+    #    return (False, f"get_unread_messages_from_all_folders: { e }")
+
+
+def email_summary():
+    
+    email_folders = {}
+    
+    for folder, folder_rules  in folders_rules_dict.items():
+
+        email_folder = folder_rules.get('email_folder')
+        if email_folder:
+            email_folders[folder.split('_')[0]] = email_folder
+
+       
+    bar = FillingSquaresBar(
+        'Подсчитативаем непрочитанные письма:',
+        max=len(email_folders),
+        suffix = '%(index)d/%(max)d',
+        fill='█', empty_fill='░',
+        width = 50) 
+    
+    for ensurence_company, email_folder in email_folders.items():
+        #if ensurence_company!='Югория':
+        #    continue
+        email_folders[ensurence_company] = get_unread_messages(email_folder)[1]
+        bar.next()
+        
+    bar.finish()
+    return email_folders            
+
+        
+
+        
+
 
 
 def source_folders_summary():
@@ -16,6 +74,7 @@ def source_folders_summary():
     folders = list(os.walk(os.path.join(os.getcwd(), 'Исходники')))[0][1]
     
     for folder in folders:
+
         files = list(os.walk(os.path.join(os.getcwd(), 'Исходники', folder)))[0][2]
         folders_info.append([folder, len(files)])
 
@@ -95,4 +154,5 @@ def sources_and_prepared_summary():
 
 if __name__ == '__main__':
 
-    sources_and_prepared_summary()
+    print(email_summary())
+    # sources_and_prepared_summary()

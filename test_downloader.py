@@ -19,7 +19,7 @@ with MailBox(IMAP_SERVER, port=IMAP_PORT).login(EMAIL, PASSWORD, 'INBOX') as mai
     mailbox.folder.set('Файлы 220')
     
     # Перебираем все письма в папке INBOX
-    for msg in mailbox.fetch(AND(seen=False)):
+    for msg in mailbox.fetch(AND(new=True)):
         print(f"\nПисьмо: {msg.subject} {msg.__dict__}")
         
         for att in msg.attachments:
