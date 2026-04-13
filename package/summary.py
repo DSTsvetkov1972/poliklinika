@@ -84,7 +84,7 @@ def folders_summary():
         files = list(os.walk(os.path.join(os.getcwd(), 'Исходники', folder)))[0][2]
         folder_dict = {'Компания': ensurence_company, file_type: len(files)}
 
-        if file_type == 'Скачано файлов' in folder:
+        if file_type == 'Скачано' in folder:
             downloaded_folders_info.append(folder_dict)
         elif file_type == 'Прикрепление' in folder:
             start_folders_info.append(folder_dict)
@@ -157,8 +157,9 @@ def summary():
         ws.column_dimensions['B'].width = 20
         ws.column_dimensions['C'].width = 20
         ws.column_dimensions['D'].width = 20
+        ws.column_dimensions['E'].width = 20
 
-        for col in range(1, 5):
+        for col in range(1, 6):
             cell = ws.cell(column=col, row=1)
             cell.font = Font(bold=True)  # Жирный шрифт
             cell.alignment = Alignment(horizontal='center', vertical='center', wrap_text=True)  # Выравнивание по центру

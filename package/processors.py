@@ -1,7 +1,8 @@
 import pandas as pd
-import os
+import os, shutil
 from datetime import datetime
-
+# from config import folders_rules_dict
+from colorama import Fore
 
 
 def is_date(string, date_format="%d.%m.%Y"):
@@ -191,12 +192,40 @@ def soglasie_otkrep(folder, file, folders_rules_dict):
         return(False, str(e))
 
 
+
+
+def email_base(folder, file, folders_rules_dict):
+    try:
+        file_path = os.path.join(os.getcwd(), 'Исходники', folder, file)
+        print(folders_rules_dict[folder]['file_actions'])
+        
+        for k, new_folder in folders_rules_dict[folder]['file_actions'].items():
+            if k in file:
+                if not new_folder:
+                    continue
+                elif new_folder == 'trash':
+                    pass
+                else:
+                    new_file_path = os.path.join(os.getcwd(), 'Исходники', new_folder, file)
+                    shutil.move(file_path, new_file_path)
+
+        return (True, new_folder)
+    except Exception as e:
+        return(False, e)
+
+
+
+
 processors_dict = {
     'base': base,
     'renessans_otkrep': renessans_otkrep,
-    'soglasie_otkrep': soglasie_otkrep
+    'soglasie_otkrep': soglasie_otkrep,
+    'email_base': email_base
     }
 
 
 if __name__ == '__main__':
-    print(fio_splitter("Цветков Дмитрий Сергеевич оглы"))
+    folder = 'Альфа_Скачано'
+    file = '1007_00346407_31-03-2026-20-15-21_all.xlsx'
+    folders_rules_dict=folders_rules_dict
+    print(email_base(folder, file, folders_rules_dict))

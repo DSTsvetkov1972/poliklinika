@@ -22,19 +22,25 @@ while True:
     try:
         print()
         print(Fore.WHITE + '0' + Fore.BLUE + ' - получить сводку по исходникам и подготовленным к загрузке' + Fore.RESET)
+        print(Fore.WHITE + '1' + Fore.BLUE + ' - скачать вложения из писем электронной почты' + Fore.RESET)
+        print(Fore.WHITE + '2' + Fore.BLUE + ' - разобрать скаченные вложения по папкам' + Fore.RESET)                
         print(Fore.WHITE + '3' + Fore.BLUE + ' - подготовить файлы для загрузки в Пикомед' + Fore.RESET)
         print(Fore.WHITE + '4' + Fore.BLUE + ' - подтвердить загрузку файлов в Пикомед' + Fore.RESET)
         
         choise = input("Ваш выбор: ")
 
         if choise == '0':
-
             if summary():
                 print(Fore.GREEN + 'Файл "Исходники и подготовленные.xlsx" сформирован и открыт на рабочем столе.' + Fore.RESET)
             else:
                 print(Fore.RED + 'Файл "Исходники и подготовленные.xlsx" уже открыт на рабочем столе. Закройте его и повторите попытку.' + Fore.RESET)                
             os.startfile('Исходники и подготовленные.xlsx')
-
+        elif choise == '2':
+            if summary():
+                print(Fore.GREEN + 'Файл "Исходники и подготовленные.xlsx" сформирован и открыт на рабочем столе.' + Fore.RESET)
+            else:
+                print(Fore.RED + 'Файл "Исходники и подготовленные.xlsx" уже открыт на рабочем столе. Закройте его и повторите попытку.' + Fore.RESET)                
+            os.startfile('Исходники и подготовленные.xlsx')
         elif choise == '3':
             prepared_maker_res = prepared_maker()
             if prepared_maker_res[0]:
