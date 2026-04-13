@@ -41,6 +41,8 @@ def email_summary():
             email_folders[folder.split('_')[0]] = email_folder
 
        
+    
+    email_folders_info = []
     bar = FillingSquaresBar(
         'Просматриваем папки в электронной почте:',
         max=len(email_folders),
@@ -48,14 +50,16 @@ def email_summary():
         fill='█', empty_fill='░',
         width = 50) 
     
+
     for ensurence_company, email_folder in email_folders.items():
         #if ensurence_company!='Югория':
         #    continue
-        email_folders[ensurence_company] = get_unread_messages(email_folder)[1]
+        #email_folders[ensurence_company] = get_unread_messages(email_folder)[1]
+        email_folders_info.append({'Компания': ensurence_company, 'Непрочитанных писем': get_unread_messages(email_folder)[1]}) 
         bar.next()
         
     bar.finish()
-    return email_folders            
+    return pd.DataFrame(email_folders_info)
 
         
 
@@ -78,21 +82,21 @@ def folders_summary():
         file_type = folder_parts[1]
 
         files = list(os.walk(os.path.join(os.getcwd(), 'Исходники', folder)))[0][2]
-        folder_dict = {'ensurence_company': ensurence_company, file_type: len(files)}
+        folder_dict = {'Компания': ensurence_company, file_type: len(files)}
 
-        if file_type == 'скачано' in folder:
+        if file_type == 'Скачано файлов' in folder:
             downloaded_folders_info.append(folder_dict)
-        elif file_type == 'прикрепление' in folder:
+        elif file_type == 'Прикрепление' in folder:
             start_folders_info.append(folder_dict)
-        elif file_type == 'открепление' in folder:
+        elif file_type == 'Открепление' in folder:
             finish_folders_info.append(folder_dict)
 
     downloaded_df = pd.DataFrame(downloaded_folders_info)
     start_df = pd.DataFrame(start_folders_info)
     finish_df = pd.DataFrame(finish_folders_info)
 
-    res_df = pd.merge(downloaded_df, start_df, on='ensurence_company')
-    res_df  = pd.merge(res_df, finish_df, on='ensurence_company')
+    res_df = pd.merge(downloaded_df, start_df, on='Компания', how='outer')
+    res_df = pd.merge(res_df, finish_df, on='Компания', how='outer')
 
     return res_df 
 
@@ -138,7 +142,8 @@ def summary():
         folders_summary_df = folders_summary()
         prepared_summary_df = prepared_summary()
 
-        res_df = pd.merge(folders_summary_df, prepared_summary_df, on='Папка', how='outer')
+        res_df = pd.merge(email_summary_df, folders_summary_df, on='Компания', how='outer')
+        #res_df = pd.merge(folders_summary_df, prepared_summary_df, on='Папка', how='outer')
         res_df.to_excel('Исходники и подготовленные.xlsx', index=None)
 
         wb = load_workbook('Исходники и подготовленные.xlsx')
@@ -169,7 +174,7 @@ def summary():
 
 
 if __name__ == '__main__':
-    print(email_summary())
+    print(prepared_summary())
 
     #print(folders_summary())
     # sources_and_prepared_summary()
