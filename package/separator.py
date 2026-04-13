@@ -4,7 +4,7 @@ import pandas as pd
 sys.path.append(os.getcwd())
 
 from package.config import folders_rules_dict
-from package.processors import processors_dict
+from package.email_separators import separators_dict
 from openpyxl import load_workbook
 from openpyxl.styles import Alignment, Font
 # from tqdm import tqdm
@@ -25,7 +25,7 @@ def processor_starter(folder, file):
     if not processor_name_in_config:
         return (False, f'В правилах обработки не задан обработчик для { folder }')
 
-    processor = processors_dict.get(processor_name_in_config)
+    processor = separators_dict.get(processor_name_in_config)
     if not processor:
         return (False, f'Обработчик файлов { processor_name_in_config } не создан')
     return processor(folder, file, folders_rules_dict)
