@@ -13,7 +13,7 @@ from colorama import Fore
 
 
 
-def processor_starter(folder, file, folders_rules_dict):
+def processor_starter(folder, file):
     """
     """
 
@@ -36,27 +36,21 @@ def processor_starter(folder, file, folders_rules_dict):
 
 def separator():
     try:
-        if os.path.exists(os.path.join(os.getcwd(), 'Сводка по распределению файлов.xlsx')):
-            with open(os.path.join(os.getcwd(), 'Сводка по распределению файлов.xlsx'), 'r+b'):
-                pass
-
         processor_log = []
 
         folders = list(os.walk('Исходники'))[0][1]
         downloaded_folders = [folder for folder in folders if '_Скачано' in folder]
-        print(Fore.GREEN, downloaded_folders, Fore.RESET)
-
+        
         max_folder_len = max([len(f) for f in downloaded_folders])
 
         print(Fore.BLACK)
         for folder in downloaded_folders:
-            print(Fore.MAGENTA, folder, Fore.RESET)
+            #print(Fore.MAGENTA, folder, Fore.RESET)
             files = list(os.walk(os.path.join('Исходники', folder)))[0][2]
 
-
-            
+                        
             if files:
-                
+
                 bar = FillingSquaresBar(
                     f'{folder:>{max_folder_len}}',
                     max=len(files),
@@ -65,23 +59,20 @@ def separator():
                     width = 50)    
 
 
-                for file in files:   
-                     
-                    processor_starter_res = processor_starter(folder, file, folders_rules_dict)
-                    print(Fore.YELLOW, file, Fore.RESET) 
-                    print(file, processor_starter_res)
-                    #processor_log.append([folder, file, processor_starter_res[1]])
+                for file in files:
+                    processor_starter_res = processor_starter(folder, file)
+                    processor_log.append([folder, file, processor_starter_res[1]])
 
-                    #bar.next()
+                    bar.next()
                 
                 bar.finish()
 
         print(Fore.RESET)                
 
         log_df = pd.DataFrame(processor_log, columns=['Папка', 'Файл', 'Результат обработки'])
-        log_df.to_excel('Сводка по подготовке файлов к загрузке.xlsx', index=None)
+        log_df.to_excel('Сводка по распределению файлов.xlsx', index=None)
             
-        wb = load_workbook('Сводка по подготовке файлов к загрузке.xlsx')
+        wb = load_workbook('Сводка по распределению файлов.xlsx')
 
         ws = wb['Sheet1']
 
@@ -103,11 +94,11 @@ def separator():
         #    ws.cell(column=3, row=row).alignment = Alignment(horizontal='center', vertical='center', wrap_text=True)
         #    ws.cell(column=4, row=row).alignment = Alignment(horizontal='center', vertical='center', wrap_text=True)
 
-        wb.save('Сводка по подготовке файлов к загрузке.xlsx')
+        wb.save('Сводка по распределению файлов.xlsx')
         return (True,)
 
     except Exception as e:
-        return (False, str(e))
+        return (False, e)
 
 
     

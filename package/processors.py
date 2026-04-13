@@ -104,7 +104,7 @@ def base(folder, file, folders_rules_dict):
                     f"Ожидалось:\n"
                     f"{ source_header }")
     except Exception as e:
-        return(False, str(e))
+        return(False, e)
     
 
 def soglasie_otkrep(folder, file, folders_rules_dict):
@@ -134,7 +134,7 @@ def soglasie_otkrep(folder, file, folders_rules_dict):
         df['Файл'] = file
         return (True, df)
     except Exception as e:
-        return(False, str(e))
+        return(False, e)
 
 
 def renessans_otkrep(folder, file, folders_rules_dict):
@@ -158,7 +158,7 @@ def renessans_otkrep(folder, file, folders_rules_dict):
         return (True, df)
     
     except Exception as e:
-        return(False, str(e))
+        return(False, e)
 
 
 
@@ -189,7 +189,7 @@ def soglasie_otkrep(folder, file, folders_rules_dict):
         df['Файл'] = file
         return (True, df)
     except Exception as e:
-        return(False, str(e))
+        return(False, e)
 
 
 
@@ -197,19 +197,19 @@ def soglasie_otkrep(folder, file, folders_rules_dict):
 def email_base(folder, file, folders_rules_dict):
     try:
         file_path = os.path.join(os.getcwd(), 'Исходники', folder, file)
-        print(folders_rules_dict[folder]['file_actions'])
+        # print(folders_rules_dict[folder]['file_actions'])
         
-        for k, new_folder in folders_rules_dict[folder]['file_actions'].items():
-            if k in file:
-                if not new_folder:
-                    continue
-                elif new_folder == 'trash':
-                    pass
-                else:
+        for sign, new_folder in folders_rules_dict[folder]['file_actions'].items():
+            if sign in file:
+                if new_folder == 'удалён':
+                    # Удаляем файл
+                    return (True, new_folder)
+                elif new_folder :
                     new_file_path = os.path.join(os.getcwd(), 'Исходники', new_folder, file)
                     shutil.move(file_path, new_file_path)
-
-        return (True, new_folder)
+                    return (True, new_folder)
+        return (True, 'Не установлены правила обработки файла')
+            
     except Exception as e:
         return(False, e)
 

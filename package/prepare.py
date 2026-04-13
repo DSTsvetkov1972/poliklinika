@@ -44,11 +44,12 @@ def prepared_maker():
 
         folders = list(os.walk('Исходники'))[0][1]
 
+        folders = [folder for folder in folders if '_Открепление' in folder or '_Прикрепление' in folder]
+
         max_folder_len = max([len(f) for f in folders])
 
         print(Fore.BLACK)
         for folder in folders:
-            # print(Fore.MAGENTA, folder, Fore.RESET)
             files = list(os.walk(os.path.join('Исходники', folder)))[0][2]
 
             res_dfs = []
@@ -116,7 +117,6 @@ def prepared_maker():
     
 
 if __name__ == '__main__':
-    folder = 'Согаз_изменение объёма'
+    folder = 'ВСК_Открепление'
     file = 'Согаз изменение объема пример.xls'
-    err_list = []
-    res_file_creator(folder, file, err_list)
+    processor_starter(folder, file)

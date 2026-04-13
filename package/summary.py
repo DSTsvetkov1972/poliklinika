@@ -114,12 +114,18 @@ def prepared_summary():
     for file in prepared_files:
         df = pd.read_excel(os.path.join(os.getcwd(), 'Подготовленные', file))
         df = df[['Папка', 'Файл']]
+        #df = df.groupby('Папка').agg({
+        #    'Файл': 'nunique' ,
+        #    'Папка': 'count'
+        #    }).rename(columns={
+        #       'Файл': 'Файлов в подготовленном файле',
+        #       'Папка': 'Строк в подготовленном файле'
+        #       })
+        
         df = df.groupby('Папка').agg({
-            'Файл': 'nunique',
-            'Папка': 'count'
+            'Файл': 'nunique'
             }).rename(columns={
-               'Файл': 'Файлов в подготовленном файле',
-               'Папка': 'Строк в подготовленном файле'
+               'Файл': 'Файлов в подготовленном файле'
                })
         # print(df)
         prepared_files_info.append(df)
@@ -127,10 +133,22 @@ def prepared_summary():
     if prepared_files_info:
         total_df = pd.concat(prepared_files_info)
         total_df = total_df.reset_index('Папка')
+
+        start_df = total_df[total_df['Папка'].str.contains('_Прикрепление')]
+        start_df['Компания'] = start_df['Папка'].apply(lambda x: x.split('_')[0])
+        start_df = start_df.rename(columns={'Файлов в подготовленном файле': 'Подготовлено прикреп'})
+
+        finish_df = total_df[total_df['Папка'].str.contains('_Открепление')]
+        finish_df['Компания'] = finish_df['Папка'].apply(lambda x : x.split('_')[0])
+        finish_df = finish_df.rename(columns={'Файлов в подготовленном файле': 'Подготовлено откреп'})
+
+        res_df = pd.merge(start_df, finish_df, on='Компания', how='outer')
+        res_df = res_df[['Компания', 'Подготовлено прикреп', 'Подготовлено откреп']]
+
     else:
-        total_df = pd.DataFrame(columns=['Папка'])
+        res_df = pd.DataFrame(columns=['Компания', 'Подготовлено прикреп', 'Подготовлено откреп'])
     #total_df_grouped.columns = ['Папка', 'Подготовленных файлов']
-    return total_df
+    return res_df
 
 
 def summary():
@@ -143,7 +161,9 @@ def summary():
         prepared_summary_df = prepared_summary()
 
         res_df = pd.merge(email_summary_df, folders_summary_df, on='Компания', how='outer')
-        #res_df = pd.merge(folders_summary_df, prepared_summary_df, on='Папка', how='outer')
+        res_df = pd.merge(res_df, prepared_summary_df, on='Компания', how='outer')
+        res_df = res_df.fillna(0)
+
         res_df.to_excel('Исходники и подготовленные.xlsx', index=None)
 
         wb = load_workbook('Исходники и подготовленные.xlsx')
@@ -158,16 +178,18 @@ def summary():
         ws.column_dimensions['C'].width = 20
         ws.column_dimensions['D'].width = 20
         ws.column_dimensions['E'].width = 20
+        ws.column_dimensions['F'].width = 20
+        ws.column_dimensions['G'].width = 20
 
-        for col in range(1, 6):
+        for col in range(1, 8):
             cell = ws.cell(column=col, row=1)
             cell.font = Font(bold=True)  # Жирный шрифт
             cell.alignment = Alignment(horizontal='center', vertical='center', wrap_text=True)  # Выравнивание по центру
 
         for row in range(2, ws.max_row+1):
-            ws.cell(column=2, row=row).alignment = Alignment(horizontal='center', vertical='center', wrap_text=True)
-            ws.cell(column=3, row=row).alignment = Alignment(horizontal='center', vertical='center', wrap_text=True)
-            ws.cell(column=4, row=row).alignment = Alignment(horizontal='center', vertical='center', wrap_text=True)
+            for column in range(2, 8):
+                ws.cell(column=column, row=row).alignment = Alignment(horizontal='center', vertical='center', wrap_text=True)
+
 
         wb.save('Исходники и подготовленные.xlsx')
         return True
@@ -175,7 +197,7 @@ def summary():
 
 
 if __name__ == '__main__':
-    print(prepared_summary())
+    print(email_summary())
 
     #print(folders_summary())
     # sources_and_prepared_summary()

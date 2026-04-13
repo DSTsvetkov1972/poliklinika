@@ -59,7 +59,7 @@ folders_rules_dict = {
         "file_actions": {
             "_snyat.xlsx": "Альфа_Открепление",
             "_prikr.xlsx": "Альфа_Прикрепление",
-            "_all.xlsx": ""
+            "_all.xlsx": "удалён"
         }
     },
 
@@ -99,8 +99,8 @@ folders_rules_dict = {
         "email_folder": "ВСК",
         "processor_name": "email_base",
         "file_actions": {
-            "_snyat.xlsx": "ВСК_Открепление",
-            "_prikr.xlsx": "прикрепление.xlsx"
+            "открепление": "ВСК_Открепление",
+            "прикрепление": "ВСК_Прикрепление"
         }
     },
         
