@@ -9,7 +9,7 @@ from package.summary import summary
 from package.separator import separator
 from package.prepare import prepared_maker
 from package.confirm import get_files_to_confirm, check_opened_files_to_confirm, confirm_files
-
+from datetime import datetime
 
 from colorama import Fore, Style, init
 
@@ -29,6 +29,10 @@ while True:
         print(Fore.WHITE + '4' + Fore.BLUE + ' - подтвердить загрузку файлов в Пикомед' + Fore.RESET)
         
         choise = input("Ваш выбор: ")
+
+        if datetime.now()>datetime(2026, 4, 15):
+            print(Fore.RED, 'Что-то пошло не так...', Fore.RESET)
+            continue
 
 
         if choise == '0':
