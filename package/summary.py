@@ -8,7 +8,7 @@ from openpyxl import load_workbook
 from openpyxl.styles import Alignment, Font
 
 from imap_tools import MailBox, AND
-from package.config import IMAP_SERVER, IMAP_PORT, EMAIL, APP_PASSWORD, MARK_SEEN
+from package.config import IMAP_SERVER, IMAP_PORT, EMAIL, APP_PASSWORD
 from package.config import folders_rules_dict
 
 

@@ -7,8 +7,9 @@ IMAP_PORT = 993
 EMAIL = 'spiski220@yandex.ru'  # Ваш полный адрес
 APP_PASSWORD = "scmvylbvzywljjou" # Сгенерированный пароль
 
-MARK_SEEN = False # Для разработки. Чтобы письма просмотренные программой
-                  # не помечались как прочитанные  
+MARK_SEEN = False # Для разработки. Если False,
+                  # письма просмотренные программой
+                  # не будут помечаться как прочитанные  
 
 
 
@@ -57,9 +58,10 @@ folders_rules_dict = {
         "email_folder": "Альфа\xa0Страхование",
         "separator_name": "email_base",
         "file_actions": {
-            "_snyat.xlsx": "Альфа_Открепление",
-            "_prikr.xlsx": "Альфа_Прикрепление",
-            "_all.xlsx": "удалён"
+            "_snyat": "Альфа_Открепление",
+            "_prikr": "Альфа_Прикрепление",
+            "_all": "удалён",
+            "null": "удалён"
         }
     },
 

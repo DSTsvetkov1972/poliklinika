@@ -1,6 +1,6 @@
 import os
 import email
-from imap_tools import MailBox, AND
+from imap_tools import MailBox, AND, OR
 
 # НАСТРОЙКИ ДЛЯ ЯНДЕКСА
 IMAP_SERVER = 'imap.yandex.ru'   # IMAP-сервер Яндекса
@@ -18,8 +18,8 @@ with MailBox(IMAP_SERVER, port=IMAP_PORT).login(EMAIL, PASSWORD, 'INBOX') as mai
 
     mailbox.folder.set('Файлы 220')
     
-    # Перебираем все письма в папке INBOX
-    for msg in mailbox.fetch(AND(new=True)):
+    print('Перебираем все письма в папке INBOX')
+    for msg in mailbox.fetch(OR(new=True, seen=False), mark_seen=False):
         print(f"\nПисьмо: {msg.subject} {msg.__dict__}")
         
         for att in msg.attachments:
@@ -32,7 +32,7 @@ with MailBox(IMAP_SERVER, port=IMAP_PORT).login(EMAIL, PASSWORD, 'INBOX') as mai
                 
                 file_path = os.path.join(DOWNLOAD_DIR, att.filename)
                 
-                # Сохраняем файл
+                print(f'Сохраняем файл {file_path}')
                 with open(file_path, 'wb') as f:
                     f.write(att.payload)
                 

@@ -21,7 +21,7 @@ def processor_starter(folder, file):
     if not folder_rules:
         return (False, f'Не созданы правила обработки для { folder }')
     
-    processor_name_in_config = folder_rules.get('processor_name')
+    processor_name_in_config = folder_rules.get('separator_name')
     if not processor_name_in_config:
         return (False, f'В правилах обработки не задан обработчик для { folder }')
 
