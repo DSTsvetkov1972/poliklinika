@@ -2,11 +2,16 @@ import pandas as pd
 import os, sys, shutil
 sys.path.append(os.getcwd())
 import re
+import zipfile
+
 from datetime import datetime
 from package.config import folders_rules_dict
 from colorama import Fore
 from openpyxl import load_workbook
 
+
+
+    
 
 def email_by_file_name(folder, file, folders_rules_dict):
     try:
@@ -42,7 +47,8 @@ def email_by_cell_value(folder, file, folders_rules_dict):
             
             else:
                 ws = wb[file_rule['sheet_name']]
-                if ws[file_rule['cell']].value == file_rule['value']:
+
+                if re.search(file_rule['pattern'], str(ws[file_rule['cell']].value)):
                     new_file_path = os.path.join(os.getcwd(), 'Исходники', file_rule['target_folder'], file)
                     shutil.move(file_path, new_file_path)
                     return (True, file_rule['target_folder'])
@@ -54,14 +60,14 @@ def email_by_cell_value(folder, file, folders_rules_dict):
 
 
 
-separators_dict = {
-    'email_by_file_name': email_by_file_name,
-    'email_by_cell_value': email_by_cell_value
-    }
 
+separators_dict = {
+    "email_by_file_name": email_by_file_name,
+    "email_by_cell_value": email_by_cell_value
+}
 
 if __name__ == '__main__':
-    folder = 'СОГЛАСИЕ_Скачано'
-    file = '2501343.xlsx'
+    folder = 'ЗЕТТА_Скачано'
+    file = '220_М5-230019355_(5987-5987)(1)(4751986).xlsx'
     folders_rules_dict=folders_rules_dict
     print(email_by_cell_value(folder, file, folders_rules_dict))

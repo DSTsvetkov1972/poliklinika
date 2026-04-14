@@ -133,7 +133,11 @@ folders_rules_dict = {
     },
     "ЗЕТТА_Скачано": {
         "email_folder": "Альянс",
-        "separator_name": "email_zetta"
+        "separator_name": "email_by_cell_value",
+        "file_rules": [
+            {"sheet_name": "Письмо", "cell": "B12", "pattern": ".*мы просим Вас принять на медицинское обслуживание следующих застрахованных клиентов:$", "target_folder": "ЗЕТТА_Прикрепление"},
+            {"sheet_name": "Письмо", "cell": "B11", "pattern": "просит Вас снять с медицинского обслуживания  застрахованных клиентов:", "target_folder": "ЗЕТТА_Открепление"}
+        ]
     },
              
     "Лучи_Открепление": {
@@ -227,8 +231,8 @@ folders_rules_dict = {
         "email_folder": "Ресо-Гарантия",
         "separator_name": "email_by_file_name",
         "file_rules": [
-            {"pattern":"^o418\d{5}\.xlsx$", "target_folder":"РЕСО_Открепление"},
-            {"pattern":"p418\d{5}\.xlsx$", "target_folder":"РЕСО_Прикрепление"}
+            {"pattern":"^o418\d{5}(_copy)*\.xlsx$", "target_folder":"РЕСО_Открепление"},
+            {"pattern":"^p418\d{5}(_copy)*\.xlsx$", "target_folder":"РЕСО_Прикрепление"}
         ]
     },
         
@@ -282,8 +286,8 @@ folders_rules_dict = {
         "email_folder": "Согласие",
         "separator_name": "email_by_cell_value",
         "file_rules": [
-            {"sheet_name": "Лист1", "cell": "J7", "value": "POLICSER", "target_folder": "СОГЛАСИЕ_Прикрепление"},
-            {"sheet_name": "TDSheet", "cell": "B7", "value": "просит Вас снять с медицинского обслуживания застрахованных", "target_folder": "СОГЛАСИЕ_Открепление"}
+            {"sheet_name": "Лист1", "cell": "J7", "pattern": "POLICSER", "target_folder": "СОГЛАСИЕ_Прикрепление"},
+            {"sheet_name": "TDSheet", "cell": "B7", "pattern": "просит Вас снять с медицинского обслуживания застрахованных", "target_folder": "СОГЛАСИЕ_Открепление"}
         ]
     },
         

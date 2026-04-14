@@ -1,6 +1,6 @@
 import os, sys
 import pandas as pd
-import re
+import zipfile
 
 sys.path.append(os.getcwd())
 
@@ -12,6 +12,28 @@ from openpyxl.styles import Alignment, Font
 from progress.bar import FillingSquaresBar
 from colorama import Fore
 
+
+def extract_encrypted_zip(
+        zip_path,
+        extract_path =  os.path.join(os.getcwd(), "Исходники", "ЗЕТТА_Скачано"),
+        password_file_path = os.path.join(os.getcwd(), "zetta_password.txt")):
+
+    try:
+        with open(password_file_path) as password_file:
+            password =  password_file.readline()
+
+    
+        with zipfile.ZipFile(zip_path, 'r') as zip_ref:
+            # Пароль нужно передать в байтовом формате
+            zip_ref.extractall(path=extract_path, pwd=password.encode('utf-8'))
+
+        os.remove(zip_path)
+        return(True, f"✅ Извлечены файлы из архива {extract_path}")
+    
+    except RuntimeError as e:
+        return (False, f"❌ Ошибка: Неверный пароль или архив поврежден. {e}")
+    except zipfile.BadZipFile:
+        return(False, "❌ Ошибка: Файл не является ZIP-архивом или поврежден.")
 
 
 def processor_starter(folder, file):
@@ -36,6 +58,16 @@ def processor_starter(folder, file):
 
 
 def separator():
+    source_files = list(os.walk(os.path.join(os.getcwd(), 'Исходники', 'ЗЕТТА_Скачано')))[0][2]
+    zip_file_paths = [os.path.join(os.getcwd(), 'Исходники', 'ЗЕТТА_скачано', file) for file in source_files if file[-3:]=='zip']
+
+    for zip_file_path in zip_file_paths:
+        extract_encrypted_zip_res = extract_encrypted_zip(zip_file_path)
+        if extract_encrypted_zip_res[0]:
+            print(Fore.GREEN, extract_encrypted_zip_res[1], Fore.RESET)
+        else:
+            print(Fore.RED, extract_encrypted_zip_res[1], Fore.RESET)
+
     try:
         processor_log = []
 
