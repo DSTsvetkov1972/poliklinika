@@ -19,6 +19,7 @@ def fio_splitter(fio):
     строки ФИО. Если строка содержит более двух пробелов, функция выкидывает
     исключение"""
 
+    fio = fio.strip()
     whitespace_qty = fio.count(' ')
 
     fio_parts = fio.split(' ')

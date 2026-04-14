@@ -4,6 +4,8 @@ from progress.bar import FillingSquaresBar
 
 sys.path.append(os.getcwd())
 
+from colorama import Fore
+
 from openpyxl import load_workbook
 from openpyxl.styles import Alignment, Font
 
@@ -43,6 +45,8 @@ def email_summary():
        
     
     email_folders_info = []
+    
+    print(Fore.BLACK)
     bar = FillingSquaresBar(
         'Просматриваем папки в электронной почте:',
         max=len(email_folders),
@@ -59,6 +63,8 @@ def email_summary():
         bar.next()
         
     bar.finish()
+    print(Fore.RESET)
+    
     return pd.DataFrame(email_folders_info)
 
         

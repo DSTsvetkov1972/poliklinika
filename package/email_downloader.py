@@ -2,14 +2,14 @@ import os, sys
 sys.path.append(os.getcwd())
 from colorama import Fore
 from imap_tools import MailBox, OR
-from time import sleep
 
 from package.config import IMAP_SERVER, IMAP_PORT, EMAIL, APP_PASSWORD, MARK_SEEN
 from package.config import folders_rules_dict
 
 
-def get_attached_file(email_folder, download_folder):
-
+def get_attached_file(email_folder, download_folder, max_folders_len):
+    start_message = Fore.BLUE + f'Загружаем из { email_folder } в {download_folder}...'.ljust(max_folders_len+20)
+    print(start_message)
     try:
         with MailBox(IMAP_SERVER, port=IMAP_PORT).login(EMAIL, APP_PASSWORD, 'INBOX') as mailbox:
             # print("Подключение успешно! Обработка писем...")
@@ -46,28 +46,24 @@ def get_attached_file(email_folder, download_folder):
 
                         with open(file_path, 'wb') as f:
                             f.write(att.payload)
-
-            print(f'получено писем: { msg_qty }, загружено файлов: { att_qty }', Fore.RESET)     
-        return (True,)
+        summary = Fore.GREEN + f'получено писем: {msg_qty:3}, загружено файлов: {att_qty:4}' + Fore.RESET
+        finish_message = '\033[F\033[' + start_message + summary
+        print(finish_message)
     except Exception as e:
         return(False, e)
 
 
 def attachments_downloader():
-    try:
-
         folders = list(os.walk('Исходники'))[0][1]
         downloaded_folders = [folder for folder in folders if '_Скачано' in folder]
 
+        folders_len = [len(download_folder + folders_rules_dict[download_folder]['email_folder']) for download_folder in downloaded_folders]
+        max_folders_len = max(folders_len)
+
         for download_folder in downloaded_folders:
             email_folder = folders_rules_dict[download_folder]['email_folder']
-            print(Fore.BLACK + f'Загружаем из { email_folder } в {download_folder}...')
-            get_attached_file(email_folder, download_folder)
-
-        return (True,)
-
-    except Exception as e:
-        return (False, e)
+            
+            get_attached_file(email_folder, download_folder, max_folders_len)
 
     
 

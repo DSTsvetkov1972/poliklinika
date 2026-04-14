@@ -1,5 +1,6 @@
 import pandas as pd
 import os, shutil
+import re
 from datetime import datetime
 # from config import folders_rules_dict
 from colorama import Fore
@@ -10,8 +11,8 @@ def email_base(folder, file, folders_rules_dict):
         file_path = os.path.join(os.getcwd(), 'Исходники', folder, file)
         # print(folders_rules_dict[folder]['file_actions'])
         
-        for sign, new_folder in folders_rules_dict[folder]['file_actions'].items():
-            if sign in file:
+        for pattern, new_folder in folders_rules_dict[folder]['file_actions'].items():
+            if re.search(pattern, file):
                 if new_folder == 'удалён':
                     # Удаляем файл
                     return (True, new_folder)

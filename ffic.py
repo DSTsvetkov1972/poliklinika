@@ -3,8 +3,8 @@ from colorama import Fore, init
 import pandas as pd
 import os
 from package.project_starter import folders_maker
-from package.config import folders_rules_dict
 from package.logo import logo_colored
+from package.email_downloader import attachments_downloader
 from package.summary import summary
 from package.separator import separator
 from package.prepare import prepared_maker
@@ -23,7 +23,7 @@ while True:
     try:
         print()
         print(Fore.WHITE + '0' + Fore.BLUE + ' - получить сводку по исходникам и подготовленным к загрузке' + Fore.RESET)
-        # print(Fore.WHITE + '1' + Fore.BLUE + ' - скачать вложения из писем электронной почты' + Fore.RESET)
+        print(Fore.WHITE + '1' + Fore.BLUE + ' - скачать вложения из писем электронной почты' + Fore.RESET)
         print(Fore.WHITE + '2' + Fore.BLUE + ' - разобрать скаченные вложения по папкам' + Fore.RESET)                
         print(Fore.WHITE + '3' + Fore.BLUE + ' - подготовить файлы для загрузки в Пикомед' + Fore.RESET)
         print(Fore.WHITE + '4' + Fore.BLUE + ' - подтвердить загрузку файлов в Пикомед' + Fore.RESET)
@@ -37,6 +37,10 @@ while True:
             else:
                 print(Fore.RED + 'Файл "Исходники и подготовленные.xlsx" уже открыт на рабочем столе. Закройте его и повторите попытку.' + Fore.RESET)                
             os.startfile('Исходники и подготовленные.xlsx')
+
+        elif choise == '1':
+            attachments_downloader()
+
         elif choise == '2':
 
             if os.path.exists(os.path.join(os.getcwd(), "~$Сводка по распределению файлов.xlsx")):
