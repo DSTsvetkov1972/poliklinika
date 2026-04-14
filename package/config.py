@@ -48,14 +48,14 @@ folders_rules_dict = {
     },
     "Альфа_Скачано": {
         "email_folder": "Альфа\xa0Страхование",
-        "separator_name": "email_base",
-        "file_actions": {
-            "_snyat(_copy)*\.xlsx$": "Альфа_Открепление",
-            "_prikr(_copy)*\.xlsx$": "Альфа_Прикрепление",
-            "_all(_copy)*\.xlsx$": "удалён",
-            "^(_copy)*\.xlsx$": "удалён",
-            "^null(_copy)*\.xlsx$": "удалён"
-        }
+        "separator_name": "email_by_file_name",
+        "file_rules": [
+            {"pattern": "_snyat(_copy)*\.xlsx$","target_folder": "Альфа_Открепление"},
+            {"pattern": "_prikr(_copy)*\.xlsx$", "target_folder": "Альфа_Прикрепление"},
+            {"pattern": "_all(_copy)*\.xlsx$", "target_folder": "удалён"},
+            {"pattern": "^(_copy)*\.xlsx$",  "target_folder": "удалён"},
+            {"pattern": "^null(_copy)*\.xlsx$",  "target_folder": "удалён"}
+        ]
     },
 
     "ВСК_Открепление": {
@@ -92,8 +92,8 @@ folders_rules_dict = {
     },
     "ВСК_Скачано": {
         "email_folder": "ВСК",
-        "separator_name": "email_base",
-        "file_actions": {
+        "separator_name": "email_by_file_name",
+        "file_rules": {
             "открепление": "ВСК_Открепление",
             "прикрепление": "ВСК_Прикрепление"
         }
@@ -170,8 +170,8 @@ folders_rules_dict = {
     },
     "Лучи_Скачано": {
         "email_folder": "Лучи(Бестдоктор)",
-        "separator_name": "email_base",
-        "file_actions": {
+        "separator_name": "email_by_file_name",
+        "file_rules": {
             "Открепление пациентов": "ЛУЧИ_Открепление",
             "Прикрепление пациентов": "Лучи_Прикрепление"
         }
@@ -185,11 +185,11 @@ folders_rules_dict = {
     },
     "Ренессанс_Скачано": {
         "email_folder": "Ренессанс",
-        "separator_name": "email_base",
-        "file_actions": {
-            "_откр_": "Ренессанс_Открепление",
-            "_прикр_": "Ренессанс_Прикрепление"
-        }
+        "separator_name": "email_by_file_name",
+        "file_rules": [
+            {"_откр_": "Ренессанс_Открепление"},
+            {"_прикр_": "Ренессанс_Прикрепление"}
+        ]
     },
         
     "РЕСО_Открепление": {
@@ -265,8 +265,8 @@ folders_rules_dict = {
     },
     "СОГАЗ_Скачано": {
         "email_folder": "СОГАЗ",
-        "separator_name": "email_sogaz",
-        "file_actions": {
+        "separator_name": "emaiemail_by_file_namel_sogaz",
+        "file_rules": {
             "": "",
             "": ""
         }
@@ -280,9 +280,11 @@ folders_rules_dict = {
     },
     "СОГЛАСИЕ_Скачано": {
         "email_folder": "Согласие",
-        "separator_name": "email_soglasie",
-        "": "",
-        "": ""
+        "separator_name": "email_by_cell_value",
+        "file_rules": [
+            {"sheet_name": "Лист1", "cell": "J7", "value": "POLICSER", "target_folder": "СОГЛАСИЕ_Прикрепление"},
+            {"sheet_name": "TDSheet", "cell": "B7", "value": "просит Вас снять с медицинского обслуживания застрахованных", "target_folder": "СОГЛАСИЕ_Открепление"}
+        ]
     },
         
     "Югория_Открепление": {
@@ -320,7 +322,7 @@ folders_rules_dict = {
     "Югория_Скачано": {
         "email_folder": "Ф-1|Югория",
         "separator_name": "email_base",
-        "file_actions": {
+        "file_rules": {
             "АО_ГСК_Югория_списки_прикрепление_ГБУЗ_ГП_№_220_ДЗМ_(Филиал_№1)_": "Югория_Прикрепление",
             "АО_ГСК_Югория_списки_открепление_ГБУЗ_ГП_№_220_ДЗМ_(Филиал_№1)_": "Югория_Открепление"
         }
