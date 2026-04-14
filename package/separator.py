@@ -81,7 +81,7 @@ def separator():
 
         # Устанавливаем ширину для конкретной колонки
         ws.column_dimensions['A'].width = 36
-        ws.column_dimensions['B'].width = 42
+        ws.column_dimensions['B'].width = 84
         ws.column_dimensions['C'].width = 64
 
 
@@ -94,7 +94,7 @@ def separator():
         #    ws.cell(column=2, row=row).alignment = Alignment(horizontal='center', vertical='center', wrap_text=True)
         #    ws.cell(column=3, row=row).alignment = Alignment(horizontal='center', vertical='center', wrap_text=True)
         #    ws.cell(column=4, row=row).alignment = Alignment(horizontal='center', vertical='center', wrap_text=True)
-
+        ws.auto_filter.ref = ws.dimensions
         wb.save('Сводка по распределению файлов.xlsx')
         return (True,)
 

@@ -50,11 +50,11 @@ folders_rules_dict = {
         "email_folder": "Альфа\xa0Страхование",
         "separator_name": "email_by_file_name",
         "file_rules": [
-            {"pattern": "_snyat(_copy)*\.xlsx$","target_folder": "Альфа_Открепление"},
+            {"pattern": "_snyat(_copy)*\.xlsx$", "target_folder": "Альфа_Открепление"},
             {"pattern": "_prikr(_copy)*\.xlsx$", "target_folder": "Альфа_Прикрепление"},
             {"pattern": "_all(_copy)*\.xlsx$", "target_folder": "удалён"},
-            {"pattern": "^(_copy)*\.xlsx$",  "target_folder": "удалён"},
-            {"pattern": "^null(_copy)*\.xlsx$",  "target_folder": "удалён"}
+            {"pattern": "^(_copy)*\.xlsx$", "target_folder": "удалён"},
+            {"pattern": "^null(_copy)*\.xlsx$", "target_folder": "удалён"}
         ]
     },
 
@@ -93,10 +93,10 @@ folders_rules_dict = {
     "ВСК_Скачано": {
         "email_folder": "ВСК",
         "separator_name": "email_by_file_name",
-        "file_rules": {
-            "открепление": "ВСК_Открепление",
-            "прикрепление": "ВСК_Прикрепление"
-        }
+        "file_rules": [
+            {"pattern": "^открепление(_copy)*\.xlsx$", "target_folder": "ВСК_Открепление"},
+            {"pattern": "^прикрепление(_copy)*\.xlsx$", "target_folder":  "ВСК_Прикрепление"}
+        ]
     },
         
     "ЗЕТТА_Открепление": {
@@ -187,8 +187,8 @@ folders_rules_dict = {
         "email_folder": "Ренессанс",
         "separator_name": "email_by_file_name",
         "file_rules": [
-            {"_откр_": "Ренессанс_Открепление"},
-            {"_прикр_": "Ренессанс_Прикрепление"}
+            {"pattern": "^П.*_прикр_.*\.xls$", "target_folder": "Ренессанс_Прикрепление"},
+            {"pattern": "^П.*_откр_.*\.xls$", "target_folder": "Ренессанс_Открепление"}
         ]
     },
         
@@ -225,11 +225,11 @@ folders_rules_dict = {
     },
     "РЕСО_Скачано": {
         "email_folder": "Ресо-Гарантия",
-        "separator_name": "email_base",
-        "file_actions": {
-            "^o.+\.xlsx$": "РЕСО_Открепление",
-            "^p.+\.xlsx$": "РЕСО_Прикрепление"
-        }
+        "separator_name": "email_by_file_name",
+        "file_rules": [
+            {"pattern":"^o418\d{5}\.xlsx$", "target_folder":"РЕСО_Открепление"},
+            {"pattern":"p418\d{5}\.xlsx$", "target_folder":"РЕСО_Прикрепление"}
+        ]
     },
         
     "СОГАЗ_Открепление": {
@@ -265,11 +265,11 @@ folders_rules_dict = {
     },
     "СОГАЗ_Скачано": {
         "email_folder": "СОГАЗ",
-        "separator_name": "emaiemail_by_file_namel_sogaz",
-        "file_rules": {
-            "": "",
-            "": ""
-        }
+        "separator_name": "email_by_file_name",
+        "file_rules": [
+            {"pattern": "_прикр_.*\.xls$", "target_folder": "Ренессанс_Прикрепление"},
+            {"pattern": "_откр_.*\.xls$", "target_folder": "Ренессанс_Открепление"}
+        ]
     },
         
     "СОГЛАСИЕ_Открепление": {
