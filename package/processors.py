@@ -108,36 +108,6 @@ def base(folder, file, folders_rules_dict):
         return(False, e)
     
 
-def soglasie_otkrep(folder, file, folders_rules_dict):
-    
-
-    try:
-        file_path = os.path.join(os.getcwd(), 'Исходники', folder, file)
-        df = pd.read_excel(file_path, header=None, sheet_name=folders_rules_dict[folder]['sheet_name'])
-
-        df[4] = df[3].apply(lambda x: is_date(x))
-
-
-        df[5] = df[2].apply(lambda x: x if is_date(x) else None)
-        df[5] = df[5].ffill()
-
-        df = df[df[4]]
-
-
-        df['Фамилия'] = df[2].apply(lambda x: fio_splitter(x)['surname'])
-        df['Имя'] = df[2].apply(lambda x: fio_splitter(x)['name'])
-        df['Отчество'] = df[2].apply(lambda x: fio_splitter(x)['patronymic'])
-
-
-        df.columns= [0, "Номер полиса", 2, "Дата рождения", 4, "Дата открепления", "Фамилия", "Имя", "Отчество"]
-        df = df[["Номер полиса", "Дата открепления", "Дата рождения", "Фамилия", "Имя", "Отчество"]]
-        df['Папка'] = folder
-        df['Файл'] = file
-        return (True, df)
-    except Exception as e:
-        return(False, e)
-
-
 def renessans_otkrep(folder, file, folders_rules_dict):
     
 
@@ -162,7 +132,6 @@ def renessans_otkrep(folder, file, folders_rules_dict):
         return(False, e)
 
 
-
 def soglasie_otkrep(folder, file, folders_rules_dict):
     
 
@@ -193,35 +162,10 @@ def soglasie_otkrep(folder, file, folders_rules_dict):
         return(False, e)
 
 
-
-
-def email_base(folder, file, folders_rules_dict):
-    try:
-        file_path = os.path.join(os.getcwd(), 'Исходники', folder, file)
-        # print(folders_rules_dict[folder]['file_actions'])
-        
-        for sign, new_folder in folders_rules_dict[folder]['file_actions'].items():
-            if sign in file:
-                if new_folder == 'удалён':
-                    # Удаляем файл
-                    return (True, new_folder)
-                elif new_folder :
-                    new_file_path = os.path.join(os.getcwd(), 'Исходники', new_folder, file)
-                    shutil.move(file_path, new_file_path)
-                    return (True, new_folder)
-        return (True, 'Не установлены правила обработки файла')
-            
-    except Exception as e:
-        return(False, e)
-
-
-
-
 processors_dict = {
     'base': base,
     'renessans_otkrep': renessans_otkrep,
-    'soglasie_otkrep': soglasie_otkrep,
-    'email_base': email_base
+    'soglasie_otkrep': soglasie_otkrep
     }
 
 
