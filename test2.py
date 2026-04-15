@@ -1,3 +1,3 @@
-from datetime import datetime
+import os
 
-print(datetime.now()>datetime(2026, 4, 14))
+os.mkdir('aaa.txt') 

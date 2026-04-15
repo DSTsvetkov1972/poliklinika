@@ -1,4 +1,4 @@
-import os, sys
+import os, sys, shutil
 import pandas as pd
 import zipfile
 
@@ -13,10 +13,24 @@ from progress.bar import FillingSquaresBar
 from colorama import Fore
 
 
-def extract_encrypted_zip(
-        zip_path,
-        extract_path =  os.path.join(os.getcwd(), "Исходники", "ЗЕТТА_Скачано"),
-        password_file_path = os.path.join(os.getcwd(), "zetta_password.txt")):
+def file_path_if_exists_2(file_name, target_folder):
+
+    target_file_path = os.path.join(target_folder, file_name)
+
+    while True:
+        target_file_path_parts = target_file_path.split('.')
+        target_file_path_short = '.'.join(target_file_path_parts[0:-1])
+        target_file_path_extension = target_file_path_parts[-1]
+
+        if os.path.exists(target_file_path):
+            target_file_path = f'{ target_file_path_short }_copy.{target_file_path_extension}'
+        else:
+            return target_file_path
+
+
+def extract_encrypted_zip(zip_path,
+                          extract_path,
+                          password_file_path = os.path.join(os.getcwd(), "zetta_password.txt")):
 
     try:
         with open(password_file_path) as password_file:
@@ -28,12 +42,44 @@ def extract_encrypted_zip(
             zip_ref.extractall(path=extract_path, pwd=password.encode('utf-8'))
 
         os.remove(zip_path)
-        return(True, f"✅ Извлечены файлы из архива {extract_path}")
+        unzipped_files =  list(os.walk(extract_path))[0][2]
+        
+        return(unzipped_files, f"✅ Извлечены файлы из архива {extract_path}")
+
+       
+            
     
     except RuntimeError as e:
-        return (False, f"❌ Ошибка: Неверный пароль или архив поврежден. {e}")
+        return (False, f"❌ {extract_path}: Неверный пароль или архив поврежден. {e}")
     except zipfile.BadZipFile:
-        return(False, "❌ Ошибка: Файл не является ZIP-архивом или поврежден.")
+        return(False, f"❌ {extract_path}: Файл не является ZIP-архивом или поврежден.")
+    except Exception as e:
+        return(False, f"❌ {extract_path}: {e}")
+
+
+def unzip_files():
+    source_files = list(os.walk(os.path.join(os.getcwd(), 'Исходники', 'ЗЕТТА_Скачано')))[0][2]
+    zip_file_paths = [os.path.join(os.getcwd(), 'Исходники', 'ЗЕТТА_скачано', file) for file in source_files if file[-3:]=='zip']
+
+    for zip_file_path in zip_file_paths:
+        extract_path =  os.path.join(os.getcwd(), "Исходники", "ЗЕТТА_unzipped")
+        if os.path.exists(extract_path):
+            shutil.rmtree(extract_path)
+
+        extract_encrypted_zip_res = extract_encrypted_zip(zip_file_path, extract_path)
+        unzipped_files = extract_encrypted_zip_res[0]
+        
+        if unzipped_files:
+            for unzipped_file in unzipped_files:
+                unzipped_file_path = os.path.join(os.getcwd(), 'Исходники', 'ЗЕТТА_unzipped', unzipped_file)
+                unzipped_file_path_checked = file_path_if_exists_2(unzipped_file, os.path.join(os.getcwd(), 'Исходники', 'ЗЕТТА_Скачано'))
+                shutil.move(unzipped_file_path, unzipped_file_path_checked)
+        
+            shutil.rmtree(extract_path)
+
+            print(Fore.GREEN, extract_encrypted_zip_res[1], Fore.RESET)
+        else:
+            print(Fore.RED, extract_encrypted_zip_res[1], Fore.RESET)
 
 
 def processor_starter(folder, file):
@@ -54,19 +100,8 @@ def processor_starter(folder, file):
     return processor(folder, file, folders_rules_dict)
 
 
-
-
-
 def separator():
-    source_files = list(os.walk(os.path.join(os.getcwd(), 'Исходники', 'ЗЕТТА_Скачано')))[0][2]
-    zip_file_paths = [os.path.join(os.getcwd(), 'Исходники', 'ЗЕТТА_скачано', file) for file in source_files if file[-3:]=='zip']
-
-    for zip_file_path in zip_file_paths:
-        extract_encrypted_zip_res = extract_encrypted_zip(zip_file_path)
-        if extract_encrypted_zip_res[0]:
-            print(Fore.GREEN, extract_encrypted_zip_res[1], Fore.RESET)
-        else:
-            print(Fore.RED, extract_encrypted_zip_res[1], Fore.RESET)
+    unzip_files()
 
     try:
         processor_log = []
@@ -137,7 +172,4 @@ def separator():
     
 
 if __name__ == '__main__':
-    folder = 'Альфа_Скачано'
-    file = '1007g_00346689_01-04-2026-20-16-51_1007gфв_prikr.xlsx'
-
-    separator()
+    unzip_files()

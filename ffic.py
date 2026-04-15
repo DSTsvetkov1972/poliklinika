@@ -30,7 +30,7 @@ while True:
         
         choise = input("Ваш выбор: ")
 
-        if datetime.now()>datetime(2026, 4, 15):
+        if datetime.now()>datetime(2026, 5, 31):
             print(Fore.RED, 'Что-то пошло не так...', Fore.RESET)
             continue
 

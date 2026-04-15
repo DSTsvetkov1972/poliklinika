@@ -7,6 +7,18 @@ from package.config import IMAP_SERVER, IMAP_PORT, EMAIL, APP_PASSWORD, MARK_SEE
 from package.config import folders_rules_dict
 
 
+def file_path_if_exists(file_path):
+    while True:
+        file_path_parts = file_path.split('.')
+        file_path_short = '.'.join(file_path_parts[0:-1])
+        file_path_extension = file_path_parts[-1]
+
+        if os.path.exists(file_path):
+            file_path = f'{ file_path_short }_copy.{file_path_extension}'
+        else:
+            return file_path
+
+
 def get_attached_file(email_folder, download_folder, max_folders_len):
     start_message = Fore.BLUE + f'Загружаем из { email_folder } в {download_folder}...'.ljust(max_folders_len+20)
     print(start_message)
@@ -31,18 +43,10 @@ def get_attached_file(email_folder, download_folder, max_folders_len):
                         
                         file_path = os.path.join(os.getcwd(), 'Исходники', download_folder, att.filename)
 
-                        while True:
-                            file_path_parts = file_path.split('.')
-                            file_path_short = '.'.join(file_path_parts[0:-1])
-                            file_path_extension = file_path_parts[-1]
-
-                            if os.path.exists(file_path):
-                                file_path = f'{ file_path_short }_copy.{file_path_extension}'
-                            else:
-                                break
-
-                            
-                        
+                        # если файл с таким названием существует,
+                        # добавляем в конце суффикс _copy
+                        # пока не получится уникальное имя файла
+                        file_path = file_path_if_exists(file_path)
 
                         with open(file_path, 'wb') as f:
                             f.write(att.payload)
