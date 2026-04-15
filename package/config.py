@@ -51,13 +51,62 @@ folders_rules_dict = {
         ]
     },
     "Альфа_Прикрепление": {
+        "processor_name": "base",
+        "sheet_name": "",
+        "header_row": 7,
+        "filter_not_empty": "ФИО",
+        "source_header": [
+            "№ п/п", "№ полиса", "ФИО", "Дата рождения", "Адрес фактического проживания, телефон",
+            "Группа, № договора, организация", "Период обслуживания", "", "Вид медицинского обслуживания"
+            ],
+        "result_columns": [
+            {"target_column": "Номер полиса",
+             "source_type": "column",
+             "source_column_name": "№ полиса"
+             },
+            {"target_column": "Период обслуживания c",
+             "source_type": "column",
+             "source_column_name": "Период обслуживания"
+             },
+            {"target_column": "Период обслуживания по",
+             "source_type": "column",
+             "source_column_name": ""
+             },
+            {"target_column": "Дата рождения",
+             "source_type": "column",
+             "source_column_name": "Дата рождения"
+             },
+            {"target_column": "Фамилия",
+             "source_type": "surname_from_column",
+             "source_column_name": "ФИО"
+             }, 
+            {"target_column": "Имя",
+             "source_type": "name_from_column",
+             "source_column_name": "ФИО"
+             },
+            {"target_column": "Отчество",
+             "source_type": "patronymic_from_column",
+             "source_column_name": "ФИО"},
+            {"target_column": "Вид медицинского обслуживания",
+             "source_type": "column",
+             "source_column_name": "Вид медицинского обслуживания"},
+            {"target_column": "Код ПИКОМЕД",
+             "source_type": "dict",
+             "source_column_name": "Вид медицинского обслуживания",
+             "dict": {
+                 "Программа \"ЭКОНОМ\", без вызова врача на дом, без скорой помощи, без стоматологии": "код1",
+                 "Программа \"ЭКОНОМ\", вызов врача на дом, без скорой помощи, без стоматологии (Вызов врача на дом в пределах МКАД)": "код2",
+                 "Программа \"ЭКОНОМ\", вызов врача на дом, стоматология, без скорой помощи (Вызов врача на дом в пределах МКАД)": "код3"
+                 }
+            }                                                       
+        ]
     },
     "Альфа_Скачано": {
         "email_folder": "Альфа\xa0Страхование",
         "separator_name": "email_by_file_name",
         "file_rules": [
             {"pattern": "_snyat(_copy)*\.xlsx$", "target_folder": "Альфа_Открепление"},
-            {"pattern": "_prikr(_copy)*\.xlsx$", "target_folder": "Альфа_Прикрепление"},
+            {"pattern": "в_prikr(_copy)*\.xlsx$", "target_folder": "Альфа_Прикрепление"},
             {"pattern": "_all(_copy)*\.xlsx$", "target_folder": "удалён"},
             {"pattern": "^(_copy)*\.xlsx$", "target_folder": "удалён"},
             {"pattern": "^null(_copy)*\.xlsx$", "target_folder": "удалён"}
@@ -101,6 +150,56 @@ folders_rules_dict = {
         ]
     },
     "ВСК_Прикрепление": {
+        "processor_name": "base",
+        "sheet_name": "",
+        "header_row": 8,
+        "filter_not_empty": "DATE",
+        "source_header": [
+            "npp", "NAME1", "NAME2", "NAME3", "NIB", "DATE", "SEX", "POLIC", "POLIC SER",
+            "ADDRESS", "TEL1", "PLACE", "Holding", "BEGIN", "KATEGORY", "END"
+            ],
+        "result_columns": [
+            {"target_column": "Номер полиса",
+             "source_type": "column",
+             "source_column_name": "POLIC SER"
+             },
+            {"target_column": "Период обслуживания c",
+             "source_type": "column",
+             "source_column_name": "BEGIN"
+             },
+            {"target_column": "Период обслуживания по",
+             "source_type": "column",
+             "source_column_name": "END"
+             },
+            {"target_column": "Дата рождения",
+             "source_type": "column",
+             "source_column_name": "DATE"
+             },
+            {"target_column": "Фамилия",
+             "source_type": "column",
+             "source_column_name": "NAME1"
+             }, 
+            {"target_column": "Имя",
+             "source_type": "column",
+             "source_column_name": "NAME2"
+             },
+            {"target_column": "Отчество",
+             "source_type": "column",
+             "source_column_name": "NAME3"},
+            {"target_column": "Вид медицинского обслуживания",
+             "source_type": "column",
+             "source_column_name": "Holding"},
+            {"target_column": "Код ПИКОМЕД",
+             "source_type": "dict",
+             "source_column_name": "KATEGORY",
+             "dict": {
+                 "АПП ПНД(в пред.МКАД) ": "011.58",
+                 "АПП ПНД(в пред.МКАД) Стом. (без протез.) ": "012.58",
+                 "АПП Стом. (без протез.) ": "013.58",
+                 "АПП ": "010.58"
+                 }
+            }
+        ]
     },
     "ВСК_Скачано": {
         "email_folder": "ВСК",

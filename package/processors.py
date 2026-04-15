@@ -24,7 +24,7 @@ def fio_splitter(fio):
 
     fio_parts = fio.split(' ')
 
-    if whitespace_qty == 3 and fio[-4:] in ['кызы', 'оглы'] :
+    if whitespace_qty == 3 and fio[-4:].lower() in ['кызы', 'оглы'] :
         return {
             'surname': fio_parts[0],
             'name': fio_parts[1],
@@ -85,15 +85,18 @@ def base(folder, file, folders_rules_dict):
                 try:
                     for result_column_dict in folders_rules_dict[folder]['result_columns']:
                         target_column  = result_column_dict['target_column']
+                        source_column_name = result_column_dict['source_column_name']
 
                         if result_column_dict['source_type'] == 'column':
-                            res_df[target_column] = df[result_column_dict['source_column_name']]
+                            res_df[target_column] = df[source_column_name]
                         elif result_column_dict['source_type'] == 'surname_from_column':
-                            res_df[target_column] = df[result_column_dict['source_column_name']].apply(lambda fio: fio_splitter(fio)['surname'])
+                            res_df[target_column] = df[source_column_name].apply(lambda fio: fio_splitter(fio)['surname'])
                         elif result_column_dict['source_type'] == 'name_from_column':
-                            res_df[target_column] = df[result_column_dict['source_column_name']].apply(lambda fio: fio_splitter(fio)['name'])
+                            res_df[target_column] = df[source_column_name].apply(lambda fio: fio_splitter(fio)['name'])
                         elif result_column_dict['source_type'] == 'patronymic_from_column':                                                
-                            res_df[target_column] = df[result_column_dict['source_column_name']].apply(lambda fio: fio_splitter(fio)['patronymic'])
+                            res_df[target_column] = df[source_column_name].apply(lambda fio: fio_splitter(fio)['patronymic'])
+                        elif result_column_dict['source_type'] == 'dict':                                                
+                            res_df[target_column] = df[source_column_name].apply(lambda k: result_column_dict['dict'].get(k))                            
 
                     res_df['Папка'] = folder
                     res_df['Файл'] = file        
