@@ -102,6 +102,7 @@ def prepared_maker():
             cell.font = Font(bold=True)  # Жирный шрифт
             cell.alignment = Alignment(horizontal='center', vertical='center', wrap_text=True)  # Выравнивание по центру
 
+        ws.auto_filter.ref = ws.dimensions  
         #for row in range(2, ws.max_row+1):
         #    ws.cell(column=2, row=row).alignment = Alignment(horizontal='center', vertical='center', wrap_text=True)
         #    ws.cell(column=3, row=row).alignment = Alignment(horizontal='center', vertical='center', wrap_text=True)
