@@ -83,21 +83,23 @@ def base(folder, file, folders_rules_dict):
                 res_df = pd.DataFrame()                                                                                                
 
                 try:
-                    for k, v in folders_rules_dict[folder]['result_columns'].items():
-                        if v['source_type'] == 'column':
-                            res_df[k] = df[v['source_column_name']]
-                        elif v['source_type'] == 'surname_from_column':
-                            res_df[k] = df[v['source_column_name']].apply(lambda fio: fio_splitter(fio)['surname'])
-                        elif v['source_type'] == 'name_from_column':
-                            res_df[k] = df[v['source_column_name']].apply(lambda fio: fio_splitter(fio)['name'])
-                        elif v['source_type'] == 'patronymic_from_column':                                                
-                            res_df[k] = df[v['source_column_name']].apply(lambda fio: fio_splitter(fio)['patronymic'])
+                    for result_column_dict in folders_rules_dict[folder]['result_columns']:
+                        target_column  = result_column_dict['target_column']
+
+                        if result_column_dict['source_type'] == 'column':
+                            res_df[target_column] = df[result_column_dict['source_column_name']]
+                        elif result_column_dict['source_type'] == 'surname_from_column':
+                            res_df[target_column] = df[result_column_dict['source_column_name']].apply(lambda fio: fio_splitter(fio)['surname'])
+                        elif result_column_dict['source_type'] == 'name_from_column':
+                            res_df[target_column] = df[result_column_dict['source_column_name']].apply(lambda fio: fio_splitter(fio)['name'])
+                        elif result_column_dict['source_type'] == 'patronymic_from_column':                                                
+                            res_df[target_column] = df[result_column_dict['source_column_name']].apply(lambda fio: fio_splitter(fio)['patronymic'])
 
                     res_df['Папка'] = folder
                     res_df['Файл'] = file        
                     return (True, res_df)
                 except Exception as e:
-                    return(False, str(e))
+                    return(False, e)
         else:
             return (False,
                     f"В файле заголовок:\n"

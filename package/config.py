@@ -21,28 +21,34 @@ folders_rules_dict = {
         "header_row": 7,
         "filter_not_empty": "ФИО",
         "source_header": [
-            "№ п/п", "№ полиса", "ФИО", "Дата рождения", "Группа, № договора, организация", "Дата открепления с (с данной даты не обслуживается)"
-        ],
-        "result_columns": {
-            "Номер полиса": {
-                "source_type": "column", "source_column_name": "№ полиса"
-            },
-            "Дата открепления": {
-                "source_type": "column", "source_column_name": "Дата открепления с (с данной даты не обслуживается)"
-            },
-            "Дата рождения": {
-                "source_type": "column", "source_column_name": "Дата рождения"
-            },
-            "Фамилия": {
-                "source_type": "surname_from_column", "source_column_name": "ФИО"
-            }, 
-            "Имя": {
-                "source_type": "name_from_column", "source_column_name": "ФИО"
-            },    
-            "Отчество": {
-                "source_type": "patronymic_from_column", "source_column_name": "ФИО"
-            }                                                          
-        }
+            "№ п/п", "№ полиса", "ФИО", "Дата рождения", "Группа, № договора, организация",
+            "Дата открепления с (с данной даты не обслуживается)"
+            ],
+        "result_columns": [
+            {"target_column": "Номер полиса",
+             "source_type": "column",
+             "source_column_name": "№ полиса"
+             },
+            {"target_column": "Дата открепления",
+             "source_type": "column",
+             "source_column_name": "Дата открепления с (с данной даты не обслуживается)"
+             },
+            {"target_column": "Дата рождения",
+             "source_type": "column",
+             "source_column_name": "Дата рождения"
+             },
+            {"target_column": "Фамилия",
+             "source_type": "surname_from_column",
+             "source_column_name": "ФИО"
+             }, 
+            {"target_column": "Имя",
+             "source_type": "name_from_column",
+             "source_column_name": "ФИО"
+             },
+            {"target_column": "Отчество",
+             "source_type": "patronymic_from_column",
+             "source_column_name": "ФИО"}                                                          
+        ]
     },
     "Альфа_Прикрепление": {
     },
@@ -67,26 +73,32 @@ folders_rules_dict = {
             "npp", "NAME1", "NAME2", "NAME3", "NIB", "DATE", "SEX", "POLIC", "POLIC SER", "ADDRESS P",
             "TEL1", "KATEGORY", "PLACE", "Holding", "BEGIN", "END"
         ],
-        "result_columns": {
-            "Номер полиса": {
-                "source_type": "column", "source_column_name": "POLIC SER"
+        "result_columns": [
+            {"target_column": "Номер полиса",
+             "source_type": "column",
+             "source_column_name": "POLIC SER"
             },
-            "Дата открепления": {
-                "source_type": "column", "source_column_name": "END"
+            {"target_column": "Дата открепления",
+             "source_type": "column",
+             "source_column_name": "END"
             },
-            "Дата рождения": {
-                "source_type": "column", "source_column_name": "DATE"
+            {"target_column": "Дата рождения",
+             "source_type": "column",
+             "source_column_name": "DATE"
             },
-            "Фамилия": {
-                "source_type": "column", "source_column_name": "NAME1"
+            {"target_column": "Фамилия",
+             "source_type": "column",
+             "source_column_name": "NAME1"
             }, 
-            "Имя": {
-                "source_type": "column", "source_column_name": "NAME2"
+            {"target_column": "Имя",
+             "source_type": "column",
+             "source_column_name": "NAME2"
             },    
-            "Отчество": {
-                "source_type": "column", "source_column_name": "NAME3"
+            {"target_column": "Отчество",
+            "source_type": "column",
+            "source_column_name": "NAME3"
             }                                                         
-        }
+        ]
     },
     "ВСК_Прикрепление": {
     },
@@ -108,26 +120,32 @@ folders_rules_dict = {
             "", "№", "Номер полиса", "", "Фамилия имя  отчество", "", "Дата рождения",
             "Дата открепления                              (последний день обслуживания)"
         ],
-        "result_columns": {
-            "Номер полиса": {
-                "source_type": "column", "source_column_name": "Номер полиса"
+        "result_columns": [
+            {"target_column": "Номер полиса",
+             "source_type": "column",
+             "source_column_name": "Номер полиса"
             },
-            "Дата открепления": {
-                "source_type": "column", "source_column_name": "Дата открепления                              (последний день обслуживания)"
+            {"target_column": "Дата открепления",
+             "source_type": "column",
+             "source_column_name": "Дата открепления                              (последний день обслуживания)"
             },
-            "Дата рождения": {
-                "source_type": "column", "source_column_name": "Дата рождения"
+            {"target_column": "Дата рождения",
+             "source_type": "column",
+             "source_column_name": "Дата рождения"
             },
-            "Фамилия": {
-                "source_type": "surname_from_column", "source_column_name": "Фамилия имя  отчество"
+            {"target_column": "Фамилия",
+             "source_type": "surname_from_column",
+             "source_column_name": "Фамилия имя  отчество"
             }, 
-            "Имя": {
-                "source_type": "name_from_column", "source_column_name": "Фамилия имя  отчество"
+            {"target_column": "Имя",
+             "source_type": "name_from_column",
+             "source_column_name": "Фамилия имя  отчество"
             },    
-            "Отчество": {
-                "source_type": "patronymic_from_column", "source_column_name": "Фамилия имя  отчество"
+            {"target_column": "Отчество",
+             "source_type": "patronymic_from_column",
+             "source_column_name": "Фамилия имя  отчество"
             }                                                         
-        }
+        ]
     },
     "ЗЕТТА_Прикрепление": {
     },
@@ -149,26 +167,32 @@ folders_rules_dict = {
             "№п/п", "№ полиса", "Фамилия", "Имя", "Отчество", "Пол", "Дата рождения",
             "Последний день обслуживания", "Место работы", "Программа", "Тип оплаты", "Клиники сети"
         ],
-        "result_columns": {
-            "Номер полиса": {
-                "source_type": "column", "source_column_name": "№ полиса"
+        "result_columns": [
+            {"target_column": "Номер полиса",
+             "source_type": "column",
+             "source_column_name": "№ полиса"
             },
-            "Дата открепления": {
-                "source_type": "column", "source_column_name": "Последний день обслуживания"
-                },
-            "Дата рождения": {
-                "source_type": "column", "source_column_name": "Дата рождения"
-                },
-            "Фамилия": {
-                "source_type": "column", "source_column_name": "Фамилия"
-                }, 
-            "Имя": {
-                "source_type": "column", "source_column_name": "Имя"
-                },    
-            "Отчество": {
-                "source_type": "column", "source_column_name": "Отчество"
-                }                                                         
-        }
+            {"target_column": "Дата открепления",
+             "source_type": "column",
+             "source_column_name": "Последний день обслуживания"
+             },
+            {"target_column": "Дата рождения",
+             "source_type": "column",
+             "source_column_name": "Дата рождения"
+             },
+            {"target_column": "Фамилия",
+             "source_type": "column",
+             "source_column_name": "Фамилия"
+             }, 
+            {"target_column": "Имя",
+             "source_type": "column",
+             "source_column_name": "Имя"
+             },    
+            {"target_column": "Отчество",
+             "source_type": "column",
+             "source_column_name": "Отчество"
+             }                                                         
+        ]
     },
     "Лучи_Прикрепление": {
     },
@@ -204,26 +228,32 @@ folders_rules_dict = {
         "source_header": [
             "", "№\nп/п", "ФИО", "Дата рождения", "Пол", "Адрес", "№ полиса", "Начало обслуживания", "Открепление с", "Программа мед.  обслуживания", "Страхователь"
         ],
-        "result_columns": {
-            "Номер полиса": {
-                "source_type": "column", "source_column_name": "№ полиса"
-            },
-            "Дата открепления": {
-                "source_type": "column", "source_column_name": "Открепление с"
-                },
-            "Дата рождения": {
-                "source_type": "column", "source_column_name": "Дата рождения"
-                },
-            "Фамилия": {
-                "source_type": "surname_from_column", "source_column_name": "ФИО"
-                }, 
-            "Имя": {
-                "source_type": "name_from_column", "source_column_name": "ФИО"
-                },    
-            "Отчество": {
-                "source_type": "patronymic_from_column", "source_column_name": "ФИО"
-                }                                                         
-        }
+        "result_columns": [
+            {"target_column": "Номер полиса",
+             "source_type": "column",
+             "source_column_name": "№ полиса"
+             },
+            {"target_column": "Дата открепления",
+             "source_type": "column",
+             "source_column_name": "Открепление с"
+             },
+            {"target_column": "Дата рождения",
+             "source_type": "column",
+             "source_column_name": "Дата рождения"
+             },
+            {"target_column": "Фамилия",
+             "source_type": "surname_from_column",
+             "source_column_name": "ФИО"
+             }, 
+            {"target_column": "Имя",
+             "source_type": "name_from_column",
+             "source_column_name": "ФИО"
+             },    
+            {"target_column": "Отчество",
+             "source_type": "patronymic_from_column",
+             "source_column_name": "ФИО"
+             }                                                         
+        ]
     },
     "РЕСО_Прикрепление": {
     },
@@ -244,26 +274,32 @@ folders_rules_dict = {
         "source_header": [
             "№ п/п", "Фамилия", "Имя", "Отчество", "Дата рождения", "№ полиса", "Окончание обслуживания", "Программа мед.обслуживания", "Место работы (Страхователь)"
         ],
-        "result_columns": {
-            "Номер полиса": {
-                "source_type": "column", "source_column_name": "№ полиса"
+        "result_columns": [
+            {"target_column": "Номер полиса",
+             "source_type": "column",
+             "source_column_name": "№ полиса"
             },
-            "Дата открепления": {
-                "source_type": "column", "source_column_name": "Окончание обслуживания"
-                },
-            "Дата рождения": {
-                "source_type": "column", "source_column_name": "Дата рождения"
-                },
-            "Фамилия": {
-                "source_type": "column", "source_column_name": "Фамилия"
-                }, 
-            "Имя": {
-                "source_type": "column", "source_column_name": "Имя"
-                },    
-            "Отчество": {
-                "source_type": "column", "source_column_name": "Отчество"
-                }                                                         
-        }
+            {"target_column": "Дата открепления",
+             "source_type": "column",
+             "source_column_name": "Окончание обслуживания"
+             },
+            {"target_column": "Дата рождения",
+             "source_type": "column",
+             "source_column_name": "Дата рождения"
+             },
+            {"target_column": "Фамилия",
+             "source_type": "column",
+             "source_column_name": "Фамилия"
+             }, 
+            {"target_column": "Имя",
+             "source_type": "column",
+             "source_column_name": "Имя"
+             },    
+            {"target_column": "Отчество",
+             "source_type": "column",
+             "source_column_name": "Отчество"
+             }                                                         
+        ]
     },
     "СОГАЗ_Прикрепление": {
     },
@@ -300,26 +336,32 @@ folders_rules_dict = {
             "№ п/п", "Полис", "Фамилия", "Имя", "Отчество", "Пол", "Дата рождения", "Адрес", "Телефон",
             "Дата открепления (последний день обслуживания)", "Наименование Страхователя", "Название страховой компании"
         ],
-        "result_columns": {
-            "Номер полиса": {
-                "source_type": "column", "source_column_name": "Полис"
+        "result_columns": [
+            {"target_column": "Номер полиса",
+            "source_type": "column",
+            "source_column_name": "Полис"
             },
-            "Дата открепления": {
-                "source_type": "column", "source_column_name": "Дата открепления (последний день обслуживания)"
+            {"target_column": "Дата открепления",
+             "source_type": "column",
+             "source_column_name": "Дата открепления (последний день обслуживания)"
             },
-            "Дата рождения": {
-                "source_type": "column", "source_column_name": "Дата рождения"
+            {"target_column": "Дата рождения",
+             "source_type": "column",
+             "source_column_name": "Дата рождения"
             },
-            "Фамилия": {
-                "source_type": "column", "source_column_name": "Фамилия"
+            {"target_column": "Фамилия",
+             "source_type": "column",
+             "source_column_name": "Фамилия"
             }, 
-            "Имя": {
-                "source_type": "column", "source_column_name": "Имя"
+            {"target_column": "Имя",
+             "source_type": "column",
+             "source_column_name": "Имя"
             },    
-            "Отчество": {
-                "source_type": "column", "source_column_name": "Отчество"
+            {"target_column": "Отчество",
+             "source_type": "column",
+             "source_column_name": "Отчество"
             }                                                         
-        }
+        ]
     },
     "Югория_Прикрепление": {
     },
