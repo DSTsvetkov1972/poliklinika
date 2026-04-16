@@ -96,7 +96,7 @@ def base(folder, file, folders_rules_dict):
                         elif result_column_dict['source_type'] == 'patronymic_from_column':                                                
                             res_df[target_column] = df[source_column_name].apply(lambda fio: fio_splitter(fio)['patronymic'])
                         elif result_column_dict['source_type'] == 'dict':                                                
-                            res_df[target_column] = df[source_column_name].apply(lambda k: result_column_dict['dict'].get(k))                            
+                            res_df[target_column] = df[source_column_name].apply(lambda k: result_column_dict['dict'][k])                            
 
                     res_df['Папка'] = folder
                     res_df['Файл'] = file        

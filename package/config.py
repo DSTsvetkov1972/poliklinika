@@ -210,6 +210,8 @@ folders_rules_dict = {
         ]
     },
         
+    "ЗЕТТА_Изменение": {
+    },
     "ЗЕТТА_Открепление": {
         "processor_name": "base",
         "sheet_name": "Письмо",
@@ -252,6 +254,8 @@ folders_rules_dict = {
         "email_folder": "Альянс",
         "separator_name": "email_by_cell_value",
         "file_rules": [
+            {"sheet_name": "Письмо", "cell": "C11", "pattern": "^Уведомляем Вас об изменении программы обслуживания с:$", "target_folder": "ЗЕТТА_Изменение"},            
+            {"sheet_name": "Письмо", "cell": "C14", "pattern": "^Уведомляем Вас об изменении персональных данных застрахованных с:$", "target_folder": "ЗЕТТА_Изменение"},
             {"sheet_name": "Письмо", "cell": "B12", "pattern": ".*мы просим Вас принять на медицинское обслуживание следующих застрахованных клиентов:$", "target_folder": "ЗЕТТА_Прикрепление"},
             {"sheet_name": "Письмо", "cell": "B11", "pattern": "просит Вас снять с медицинского обслуживания  застрахованных клиентов:", "target_folder": "ЗЕТТА_Открепление"}
         ]
@@ -318,7 +322,8 @@ folders_rules_dict = {
             {"pattern": "^П.*_откр_.*\.xls$", "target_folder": "Ренессанс_Открепление"}
         ]
     },
-        
+
+    "РЕСО_Измененеие": {},       
     "РЕСО_Открепление": {
         "processor_name": "base",
         "sheet_name": "Список",
@@ -355,13 +360,47 @@ folders_rules_dict = {
         ]
     },
     "РЕСО_Прикрепление": {
+        "processor_name": "base",
+        "sheet_name": "Список",
+        "header_row": 9,
+        "filter_not_empty": "Открепление с",
+        "source_header": [
+            "", "№\nп/п", "ФИО", "Дата рождения", "Пол", "Адрес", "№ полиса", "Начало обслуживания", "Открепление с", "Программа мед.  обслуживания", "Страхователь"
+        ],
+        "result_columns": [
+            {"target_column": "Номер полиса",
+             "source_type": "column",
+             "source_column_name": "№ полиса"
+             },
+            {"target_column": "Дата открепления",
+             "source_type": "column",
+             "source_column_name": "Открепление с"
+             },
+            {"target_column": "Дата рождения",
+             "source_type": "column",
+             "source_column_name": "Дата рождения"
+             },
+            {"target_column": "Фамилия",
+             "source_type": "surname_from_column",
+             "source_column_name": "ФИО"
+             }, 
+            {"target_column": "Имя",
+             "source_type": "name_from_column",
+             "source_column_name": "ФИО"
+             },    
+            {"target_column": "Отчество",
+             "source_type": "patronymic_from_column",
+             "source_column_name": "ФИО"
+             }                                                         
+        ]
     },
     "РЕСО_Скачано": {
         "email_folder": "Ресо-Гарантия",
         "separator_name": "email_by_file_name",
         "file_rules": [
-            {"pattern":"^o418\d{5}(_copy)*\.xlsx$", "target_folder":"РЕСО_Открепление"},
-            {"pattern":"^p418\d{5}(_copy)*\.xlsx$", "target_folder":"РЕСО_Прикрепление"}
+            {"pattern":"^i\d{8}(_copy)*\.xlsx$", "target_folder":"РЕСО_Измененеие"},            
+            {"pattern":"^o\d{8}(_copy)*\.xlsx$", "target_folder":"РЕСО_Открепление"},
+            {"pattern":"^p\d{8}(_copy)*\.xlsx$", "target_folder":"РЕСО_Прикрепление"}
         ]
     },
         
@@ -411,6 +450,8 @@ folders_rules_dict = {
         ]
     },
         
+    "СОГЛАСИЕ_Изменение": {                              
+    },
     "СОГЛАСИЕ_Открепление": {
         "processor_name": "soglasie_otkrep",
         "sheet_name": "TDSheet"                                
@@ -421,6 +462,7 @@ folders_rules_dict = {
         "email_folder": "Согласие",
         "separator_name": "email_by_cell_value",
         "file_rules": [
+            {"sheet_name": "TDSheet", "cell": "D3", "pattern": "извещает Вас об изменении данных у застрахованных:", "target_folder": "СОГЛАСИЕ_Изменение"},            
             {"sheet_name": "Лист1", "cell": "J7", "pattern": "POLICSER", "target_folder": "СОГЛАСИЕ_Прикрепление"},
             {"sheet_name": "TDSheet", "cell": "B7", "pattern": "просит Вас снять с медицинского обслуживания застрахованных", "target_folder": "СОГЛАСИЕ_Открепление"}
         ]
