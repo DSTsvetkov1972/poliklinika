@@ -457,6 +457,56 @@ folders_rules_dict = {
         "sheet_name": "TDSheet"                                
     },
     "СОГЛАСИЕ_Прикрепление": {
+                "processor_name": "base",
+        "sheet_name": "",
+        "header_row": 7,
+        "filter_not_empty": "Фамилия",
+        "source_header": [
+            "", "№\nп/п", "Фамилия", "Имя", "Отчество", "", "Дата рождения", "Пол", "Полис", "POLICSER",
+            "Адрес ", "Телефон", "Программа", "Организация", "Начало ", "Конец "
+            ],
+        "result_columns": [
+            {"target_column": "Номер полиса",
+             "source_type": "column",
+             "source_column_name": "Полис"
+             },
+            {"target_column": "Период обслуживания c",
+             "source_type": "column",
+             "source_column_name": "Начало "
+             },
+            {"target_column": "Период обслуживания по",
+             "source_type": "column",
+             "source_column_name": "Конец "
+             },
+            {"target_column": "Дата рождения",
+             "source_type": "column",
+             "source_column_name": "Дата рождения"
+             },
+            {"target_column": "Фамилия",
+             "source_type": "column",
+             "source_column_name": "Фамилия"
+             }, 
+            {"target_column": "Имя",
+             "source_type": "column",
+             "source_column_name": "Имя"
+             },
+            {"target_column": "Отчество",
+             "source_type": "column",
+             "source_column_name": "Отчество"},
+            {"target_column": "Вид медицинского обслуживания",
+             "source_type": "column",
+             "source_column_name": "Программа"},
+            {"target_column": "Код ПИКОМЕД",
+             "source_type": "dict",
+             "source_column_name": "Программа",
+             "dict": {
+                 "Амбулаторно-поликлиническая помощь.": "057.49",
+                 "Амбулаторно-поликлиническая помощь. Стоматологическая помощь.": "060.49",
+                 "Амбулаторно-поликлиническая помощь. Помощь на дому в пределах МКАД.": "058.49",
+                 "Амбулаторно-поликлиническая помощь. Стоматологическая помощь. Помощь на дому в пределах МКАД.": "059.49"
+                 }
+            }
+        ]
     },
     "СОГЛАСИЕ_Скачано": {
         "email_folder": "Согласие",

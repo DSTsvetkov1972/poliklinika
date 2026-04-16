@@ -112,7 +112,7 @@ def prepared_maker():
         return (True,)
 
     except Exception as e:
-        return (False, str(e))
+        return (False, e)
 
 
     
