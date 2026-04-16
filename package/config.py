@@ -15,6 +15,8 @@ MARK_SEEN = False # Для разработки. Если False,
 
 
 folders_rules_dict = {
+    "Альфа_Изменение": {
+    },
     "Альфа_Открепление": {
         "processor_name": "base",
         "sheet_name": "",
@@ -105,6 +107,7 @@ folders_rules_dict = {
         "email_folder": "Альфа\xa0Страхование",
         "separator_name": "email_by_file_name",
         "file_rules": [
+            {"pattern": ".doc$", "target_folder": "Альфа_Изменение"},            
             {"pattern": "_snyat(_copy)*\.xlsx$", "target_folder": "Альфа_Открепление"},
             {"pattern": "в_prikr(_copy)*\.xlsx$", "target_folder": "Альфа_Прикрепление"},
             {"pattern": "_all(_copy)*\.xlsx$", "target_folder": "удалён"},
@@ -307,7 +310,9 @@ folders_rules_dict = {
             "Прикрепление пациентов": "Лучи_Прикрепление"
         }
     },
-        
+
+    "Ренессанс_Изменение":{        
+    },
     "Ренессанс_Открепление": {
         "processor_name": "renessans_otkrep",
         "sheet_name": "О1"                                
@@ -319,11 +324,13 @@ folders_rules_dict = {
         "separator_name": "email_by_file_name",
         "file_rules": [
             {"pattern": "^П.*_прикр_.*\.xls$", "target_folder": "Ренессанс_Прикрепление"},
-            {"pattern": "^П.*_откр_.*\.xls$", "target_folder": "Ренессанс_Открепление"}
+            {"pattern": "^П.*_откр_.*\.xls$", "target_folder": "Ренессанс_Открепление"},
+            {"pattern": "^П.*_мемо_.*\.xls$", "target_folder": "Ренессанс_Изменение"}
         ]
     },
 
-    "РЕСО_Измененеие": {},       
+    "РЕСО_Изменение": {
+    },       
     "РЕСО_Открепление": {
         "processor_name": "base",
         "sheet_name": "Список",
@@ -363,18 +370,22 @@ folders_rules_dict = {
         "processor_name": "base",
         "sheet_name": "Список",
         "header_row": 9,
-        "filter_not_empty": "Открепление с",
+        "filter_not_empty": "Адрес",
         "source_header": [
-            "", "№\nп/п", "ФИО", "Дата рождения", "Пол", "Адрес", "№ полиса", "Начало обслуживания", "Открепление с", "Программа мед.  обслуживания", "Страхователь"
+            "", "№\nп/п", "ФИО", "Дата рождения", "Пол", "Адрес", "№ полиса", "Начало обслуживания", "Окончание обслуживания", "Программа мед.  обслуживания", "Страхователь"
         ],
         "result_columns": [
             {"target_column": "Номер полиса",
              "source_type": "column",
              "source_column_name": "№ полиса"
              },
-            {"target_column": "Дата открепления",
+            {"target_column": "Период обслуживания c",
              "source_type": "column",
-             "source_column_name": "Открепление с"
+             "source_column_name": "Начало обслуживания"
+             },
+            {"target_column": "Период обслуживания по",
+             "source_type": "column",
+             "source_column_name": "Окончание обслуживания"
              },
             {"target_column": "Дата рождения",
              "source_type": "column",
@@ -387,20 +398,36 @@ folders_rules_dict = {
             {"target_column": "Имя",
              "source_type": "name_from_column",
              "source_column_name": "ФИО"
-             },    
+             },
             {"target_column": "Отчество",
              "source_type": "patronymic_from_column",
              "source_column_name": "ФИО"
-             }                                                         
+             },
+            {"target_column": "Вид медицинского обслуживания",
+             "source_type": "column",
+             "source_column_name": "Программа мед.  обслуживания"
+             },
+            {"target_column": "Код ПИКОМЕД",
+             "source_type": "dict",
+             "source_column_name": "Программа мед.  обслуживания",
+             "dict": {
+                 "АМБУЛАТОРНАЯ ПОМОЩЬ, ПОМОЩЬ НА ДОМУ": "???",
+                 "АМБУЛАТОРНАЯ ПОМОЩЬ, ПОМОЩЬ НА ДОМУ, СТОМАТОЛОГИЧЕСКАЯ ПОМОЩЬ (уровень стом. услуг 2)": "???"
+                 }
+            }
         ]
+    },
+    "РЕСО_Прикрепление_2": {
     },
     "РЕСО_Скачано": {
         "email_folder": "Ресо-Гарантия",
-        "separator_name": "email_by_file_name",
+        "separator_name": "email_by_cell_value",
         "file_rules": [
-            {"pattern":"^i\d{8}(_copy)*\.xlsx$", "target_folder":"РЕСО_Измененеие"},            
-            {"pattern":"^o\d{8}(_copy)*\.xlsx$", "target_folder":"РЕСО_Открепление"},
-            {"pattern":"^p\d{8}(_copy)*\.xlsx$", "target_folder":"РЕСО_Прикрепление"}
+            {"sheet_name": "Список", "cell": "B8", "pattern": "принять на медицинское обслуживание застрахованных", "target_folder":"РЕСО_Прикрепление"},
+            {"sheet_name": "Лист1", "cell": "A6", "pattern": "принять на медицинское обслуживание", "target_folder":"РЕСО_Прикрепление_2"},
+            {"sheet_name": "Список", "cell": "B8", "pattern": "просит Вас  снять с обслуживания", "target_folder":"РЕСО_Открепление"},
+            {"sheet_name": "Список", "cell": "A12", "pattern": "просит Вас внести изменения", "target_folder":"РЕСО_Изменение"},
+            {"sheet_name": "Список", "cell": "B8", "pattern": "изменить программу обслуживания", "target_folder":"РЕСО_Изменение"},                      
         ]
     },
         
