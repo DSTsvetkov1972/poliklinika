@@ -1,7 +1,10 @@
 import pandas as pd
-import os, shutil
+import os, sys, shutil
+import pandas as pd
 from datetime import datetime
-# from config import folders_rules_dict
+
+sys.path.append(os.getcwd())
+from package.config import folders_rules_dict
 from colorama import Fore
 
 
@@ -167,15 +170,72 @@ def soglasie_otkrep(folder, file, folders_rules_dict):
         return(False, e)
 
 
+def reso_prikrep_2_conditions(npp_shifted_1, npp_shifted_2, NAME2_shifted_2):
+
+    if npp_shifted_1 == 'npp' and npp_shifted_2 == 'по программе' and NAME2_shifted_2 != '':
+        return(NAME2_shifted_2)
+    elif npp_shifted_1 == 'npp' and (npp_shifted_2 != 'по программе' or NAME2_shifted_2 == ''):
+        raise KeyError('не возможно считать программу страхования')
+    else:
+        None
+
+
+def reso_prikrep_2(folder, file, folders_rules_dict):
+    codes_dict = folders_rules_dict[folder]['dict']
+        
+    try:
+    
+        expected_columns = ['npp', 'NAME1', 'NAME2', 'NAME3', 'NIB', 'DATE', 'SEX', 'POLIC', 'POLIC SER', 'ADDRESS P', 'TEL1', 'KATEGORY ', 'PLACE', 'BEGIN', 'END']
+        file_path = os.path.join(os.getcwd(), "Исходники", "РЕСО_Прикрепление_2", file)
+
+        df = pd.read_excel(file_path, header=None)
+        df =df.fillna('')
+        df_columns = list(df.iloc[7])
+        
+        if df_columns != expected_columns:
+            return (False,
+                    f"В файле заголовок:\n"
+                    f"{ df_columns }\n"
+                    f"Ожидалось:\n"
+                    f"{ expected_columns }")
+        
+        df.columns = df_columns
+
+        df['npp_shifted_1'] = df['npp'].shift(1)
+        df['npp_shifted_2'] = df['npp'].shift(2)        
+        df['NAME2_shifted_2']  =df['NAME2'].shift(2)
+        df = df[(df['NAME1']!='')&(df['NAME1']!='NAME1')]
+        df['по программе'] = df.apply(lambda x: reso_prikrep_2_conditions(x['npp_shifted_1'], x['npp_shifted_2'], x['NAME2_shifted_2']), axis=1)
+        df['по программе'] = df['по программе'].ffill()
+        df =df.fillna('')
+        df=df[['BEGIN', 'END', 'DATE', 'NAME1', 'NAME2', 'NAME3', 'по программе']]
+        df=df.rename(
+            columns={
+                'BEGIN': 'Период обслуживания c',
+                'END': 'Период обслуживания по',
+                'DATE': 'Дата рождения',
+                'NAME1': 'Фамилия',
+                'NAME2': 'Имя',
+                'NAME3': 'Отчество',
+                'по программе': 'Вид медицинского обслуживания' 
+                })
+        df['Код ПИКОМЕД'] = df['Вид медицинского обслуживания'].apply(lambda k: codes_dict[k])
+        df['Папка'] = folder
+        df['Файл'] = file
+
+        return (True, df)
+
+    except Exception as e:
+        return (False, e)
+    
+
+
 processors_dict = {
     'base': base,
     'renessans_otkrep': renessans_otkrep,
-    'soglasie_otkrep': soglasie_otkrep
+    'soglasie_otkrep': soglasie_otkrep,
+    'reso_prikrep_2': reso_prikrep_2
     }
-
-
+   
 if __name__ == '__main__':
-    folder = 'Альфа_Скачано'
-    file = '1007_00346407_31-03-2026-20-15-21_all.xlsx'
-    folders_rules_dict=folders_rules_dict
-    print(email_base(folder, file, folders_rules_dict))
+    print(reso_prikrep_2('РЕСО_Прикрепление_2', 'p41901304.xlsx' , folders_rules_dict)  )
