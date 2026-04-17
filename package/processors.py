@@ -3,6 +3,7 @@ import os, sys, shutil
 import pandas as pd
 from datetime import datetime
 
+
 sys.path.append(os.getcwd())
 from package.config import folders_rules_dict
 from colorama import Fore
@@ -105,7 +106,7 @@ def base(folder, file, folders_rules_dict):
                     res_df['Файл'] = file        
                     return (True, res_df)
                 except Exception as e:
-                    return(False, e)
+                    return(False, f"{repr(e)}")
         else:
             return (False,
                     f"В файле заголовок:\n"
@@ -113,7 +114,7 @@ def base(folder, file, folders_rules_dict):
                     f"Ожидалось:\n"
                     f"{ source_header }")
     except Exception as e:
-        return(False, e)
+        return(False, f"{repr(e)}")
     
 
 def renessans_otkrep(folder, file, folders_rules_dict):
@@ -239,3 +240,19 @@ processors_dict = {
    
 if __name__ == '__main__':
     print(reso_prikrep_2('РЕСО_Прикрепление_2', 'p41901304.xlsx' , folders_rules_dict)  )
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+     
