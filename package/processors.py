@@ -106,7 +106,7 @@ def base(folder, file, folders_rules_dict):
                     res_df['Файл'] = file        
                     return (True, res_df)
                 except Exception as e:
-                    return(False, f"{repr(e)}")
+                    return(False, repr(e))
         else:
             return (False,
                     f"В файле заголовок:\n"
@@ -114,7 +114,7 @@ def base(folder, file, folders_rules_dict):
                     f"Ожидалось:\n"
                     f"{ source_header }")
     except Exception as e:
-        return(False, f"{repr(e)}")
+        return(False, repr(e))
     
 
 def renessans_otkrep(folder, file, folders_rules_dict):
@@ -227,7 +227,7 @@ def reso_prikrep_2(folder, file, folders_rules_dict):
         return (True, df)
 
     except Exception as e:
-        return (False, e)
+        return (False, repr(e))
     
 
 
