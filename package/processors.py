@@ -57,25 +57,30 @@ def base(folder, file, folders_rules_dict):
     """
     try:
         header_row = folders_rules_dict[folder]['header_row']
-        filter_not_empty_column = folders_rules_dict[folder]['filter_not_empty']
+        
         source_header = folders_rules_dict[folder]['source_header']
 
         df = pd.read_excel(os.path.join('Исходники',folder, file), header=None, index_col=None)
         if df.empty:
-            return(False, 'Пустая исходный файл') 
+            return(False, 'Пустой исходный файл') 
         
         df = df.fillna('')
         df_columns = df.iloc[header_row-1].tolist()
 
-        if filter_not_empty_column not in df_columns:
-            return(False, f'Нет колонки "{ filter_not_empty_column }" по которой задана фильтрация') 
+
 
         if source_header == df_columns:
-
             df = df.iloc[header_row:]
             df.columns = df_columns
+        
 
-            df = df[(df[filter_not_empty_column]!='')&(df[filter_not_empty_column]!=filter_not_empty_column)] # Колонка не должна быть пустой и
+            filter_not_in_column = folders_rules_dict[folder]['filter_not_in']['column']
+            if filter_not_in_column not in df_columns:
+                return(False, f'Нет колонки "{ filter_not_in_column }" по которой задана фильтрация')             
+
+            #
+            for condition in folders_rules_dict[folder]['filter_not_in']['conditions']:
+                df = df[df[filter_not_in_column]!=condition]                                                # Колонка не должна быть пустой и
                                                                                                             # не содержать значение равное
                                                                                                             # имени колонки. 
                                                                                                             # Так сделано на случай, если на листе

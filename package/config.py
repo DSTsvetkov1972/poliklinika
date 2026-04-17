@@ -21,7 +21,10 @@ folders_rules_dict = {
         "processor_name": "base",
         "sheet_name": "",
         "header_row": 7,
-        "filter_not_empty": "ФИО",
+        "filter_not_in": {
+            "column": "ФИО",
+            "conditions": ["", "ФИО"]
+            },
         "source_header": [
             "№ п/п", "№ полиса", "ФИО", "Дата рождения", "Группа, № договора, организация",
             "Дата открепления с (с данной даты не обслуживается)"
@@ -56,7 +59,10 @@ folders_rules_dict = {
         "processor_name": "base",
         "sheet_name": "",
         "header_row": 7,
-        "filter_not_empty": "ФИО",
+        "filter_not_in": {
+            "column": "ФИО",
+            "conditions": ["","ФИО"]
+            },
         "source_header": [
             "№ п/п", "№ полиса", "ФИО", "Дата рождения", "Адрес фактического проживания, телефон",
             "Группа, № договора, организация", "Период обслуживания", "", "Вид медицинского обслуживания"
@@ -113,11 +119,16 @@ folders_rules_dict = {
         ]
     },
 
+    "ВСК_Изменение": {
+    },
     "ВСК_Открепление": {
         "processor_name": "base",
         "sheet_name": "",
         "header_row": 6,
-        "filter_not_empty": "NAME1",
+        "filter_not_in": {
+            "column": "NAME1",
+            "conditions": ["", "NAME1"]
+            },
         "source_header": [
             "npp", "NAME1", "NAME2", "NAME3", "NIB", "DATE", "SEX", "POLIC", "POLIC SER", "ADDRESS P",
             "TEL1", "KATEGORY", "PLACE", "Holding", "BEGIN", "END"
@@ -153,7 +164,10 @@ folders_rules_dict = {
         "processor_name": "base",
         "sheet_name": "",
         "header_row": 8,
-        "filter_not_empty": "DATE",
+        "filter_not_in": {
+            "column": "DATE",
+            "conditions": ["", "DATE"]
+            },
         "source_header": [
             "npp", "NAME1", "NAME2", "NAME3", "NIB", "DATE", "SEX", "POLIC", "POLIC SER",
             "ADDRESS", "TEL1", "PLACE", "Holding", "BEGIN", "KATEGORY", "END"
@@ -212,7 +226,10 @@ folders_rules_dict = {
         "processor_name": "base",
         "sheet_name": "Письмо",
         "header_row": 17,
-        "filter_not_empty": "Фамилия имя  отчество",
+        "filter_not_in": {
+            "column": "Фамилия имя  отчество",
+            "conditions": ["", "Фамилия имя  отчество"]
+            },
         "source_header": [
             "", "№", "Номер полиса", "", "Фамилия имя  отчество", "", "Дата рождения",
             "Дата открепления                              (последний день обслуживания)"
@@ -245,6 +262,57 @@ folders_rules_dict = {
         ]
     },
     "ЗЕТТА_Прикрепление": {
+        "processor_name": "base",
+        "sheet_name": "",
+        "header_row": 18,
+        "filter_not_in": {
+            "column": "Дата прикр.",
+            "conditions": ["", "Дата прикр.", "BEGIN"]
+            },
+        "source_header": [
+            "", "№ ", "Фамилия", "Имя", "Отчество", "№ ИБ", "Дата рождения", "Пол \n(муж,\nжен)", "№ Полиса",
+            "Серия полиса", "Домашний адрес", "Телефон", "Категория", "Место работы", "Дата прикр.", "Дата откр."
+            ],
+        "result_columns": [
+            {"target_column": "Номер полиса",
+             "source_type": "column",
+             "source_column_name": "№ Полиса"
+             },
+            {"target_column": "Период обслуживания c",
+             "source_type": "column",
+             "source_column_name": "Дата прикр."
+             },
+            {"target_column": "Период обслуживания по",
+             "source_type": "column",
+             "source_column_name": "Дата откр."
+             },
+            {"target_column": "Дата рождения",
+             "source_type": "column",
+             "source_column_name": "Дата рождения"
+             },
+            {"target_column": "Фамилия",
+             "source_type": "column",
+             "source_column_name": "Фамилия"
+             }, 
+            {"target_column": "Имя",
+             "source_type": "column",
+             "source_column_name": "Имя"
+             },
+            {"target_column": "Отчество",
+             "source_type": "column",
+             "source_column_name": "Отчество"
+             },
+            {"target_column": "Вид медицинского обслуживания",
+             "source_type": "column",
+             "source_column_name": "Категория"
+             },
+            {"target_column": "Код ПИКОМЕД",
+             "source_type": "dict",
+             "source_column_name": "Категория",
+             "dict": {
+                 }
+            }                                                       
+        ]
     },
     "ЗЕТТА_Скачано": {
         "email_folder": "Альянс",
@@ -256,12 +324,18 @@ folders_rules_dict = {
             {"sheet_name": "Письмо", "cell": "B11", "pattern": "просит Вас снять с медицинского обслуживания  застрахованных клиентов:", "target_folder": "ЗЕТТА_Открепление"}
         ]
     },
-             
+
+    "Лучи_Изменение": {
+
+    },         
     "Лучи_Открепление": {
         "processor_name": "base",
         "sheet_name": "",
         "header_row": 18,
-        "filter_not_empty": "Фамилия",
+        "filter_not_in": {
+            "column": "Фамилия",
+            "conditions": ["", "Фамилия"]
+            },
         "source_header": [
             "№п/п", "№ полиса", "Фамилия", "Имя", "Отчество", "Пол", "Дата рождения",
             "Последний день обслуживания", "Место работы", "Программа", "Тип оплаты", "Клиники сети"
@@ -328,7 +402,10 @@ folders_rules_dict = {
         "processor_name": "base",
         "sheet_name": "Список",
         "header_row": 9,
-        "filter_not_empty": "Открепление с",
+        "filter_not_in": {
+            "column": "Открепление с",
+            "conditions": ["", "Открепление с"]
+            },
         "source_header": [
             "", "№\nп/п", "ФИО", "Дата рождения", "Пол", "Адрес", "№ полиса", "Начало обслуживания", "Открепление с", "Программа мед.  обслуживания", "Страхователь"
         ],
@@ -363,7 +440,10 @@ folders_rules_dict = {
         "processor_name": "base",
         "sheet_name": "Список",
         "header_row": 9,
-        "filter_not_empty": "Адрес",
+        "filter_not_in": {
+            "column": "Адрес",
+            "conditions": ["", "Адрес"]
+            },
         "source_header": [
             "", "№\nп/п", "ФИО", "Дата рождения", "Пол", "Адрес", "№ полиса", "Начало обслуживания", "Окончание обслуживания", "Программа мед.  обслуживания", "Страхователь"
         ],
@@ -424,12 +504,17 @@ folders_rules_dict = {
             {"sheet_name": "Список", "cell": "B8", "pattern": "изменить программу обслуживания", "target_folder":"РЕСО_Изменение"},                      
         ]
     },
-        
+
+    "СОГАЗ_Изменение": {
+    },    
     "СОГАЗ_Открепление": {
         "processor_name": "base",
         "sheet_name": "Список",
         "header_row": 22,
-        "filter_not_empty": "Фамилия",
+        "filter_not_in": {
+            "column": "Фамилия",
+            "conditions": ["", "Фамилия"]
+            },
         "source_header": [
             "№ п/п", "Фамилия", "Имя", "Отчество", "Дата рождения", "№ полиса", "Окончание обслуживания", "Программа мед.обслуживания", "Место работы (Страхователь)"
         ],
@@ -478,10 +563,13 @@ folders_rules_dict = {
         "sheet_name": "TDSheet"                                
     },
     "СОГЛАСИЕ_Прикрепление": {
-                "processor_name": "base",
+        "processor_name": "base",
         "sheet_name": "",
         "header_row": 7,
-        "filter_not_empty": "Фамилия",
+        "filter_not_in": {
+            "column": "Фамилия",
+            "conditions": ["", "Фамилия"]
+            },
         "source_header": [
             "", "№\nп/п", "Фамилия", "Имя", "Отчество", "", "Дата рождения", "Пол", "Полис", "POLICSER",
             "Адрес ", "Телефон", "Программа", "Организация", "Начало ", "Конец "
@@ -535,11 +623,16 @@ folders_rules_dict = {
         ]
     },
         
+    "Югория_Изменение": {
+    },    
     "Югория_Открепление": {
         "processor_name": "base",
         "sheet_name": "",
         "header_row": 7,
-        "filter_not_empty": "Фамилия",
+        "filter_not_in": {
+            "column": "Фамилия",
+            "conditions": ["", "Фамилия"]
+        },
         "source_header": [
             "№ п/п", "Полис", "Фамилия", "Имя", "Отчество", "Пол", "Дата рождения", "Адрес", "Телефон",
             "Дата открепления (последний день обслуживания)", "Наименование Страхователя", "Название страховой компании"
@@ -576,11 +669,10 @@ folders_rules_dict = {
     "Югория_Скачано": {
         "email_folder": "Ф-1|Югория",
         "separator_name": "email_base",
-        "file_rules": {
-            "АО_ГСК_Югория_списки_прикрепление_ГБУЗ_ГП_№_220_ДЗМ_(Филиал_№1)_": "Югория_Прикрепление",
-            "АО_ГСК_Югория_списки_открепление_ГБУЗ_ГП_№_220_ДЗМ_(Филиал_№1)_": "Югория_Открепление"
-        }
-    },
-    
+        "file_rules": [
+            {"pattern": "АО_ГСК_Югория_списки_прикрепление_ГБУЗ_ГП_№_220_ДЗМ_(Филиал_№1)_", "target_folder": "Югория_Прикрепление"},
+            {"pattern": "АО_ГСК_Югория_списки_открепление_ГБУЗ_ГП_№_220_ДЗМ_(Филиал_№1)_", "target_folder": "Югория_Открепление"}
+        ]
+    }
 }
 
