@@ -262,57 +262,9 @@ folders_rules_dict = {
         ]
     },
     "ЗЕТТА_Прикрепление": {
-        "processor_name": "base",
-        "sheet_name": "",
-        "header_row": 18,
-        "filter_not_in": {
-            "column": "Дата прикр.",
-            "conditions": ["", "Дата прикр.", "BEGIN"]
-            },
-        "source_header": [
-            "", "№ ", "Фамилия", "Имя", "Отчество", "№ ИБ", "Дата рождения", "Пол \n(муж,\nжен)", "№ Полиса",
-            "Серия полиса", "Домашний адрес", "Телефон", "Категория", "Место работы", "Дата прикр.", "Дата откр."
-            ],
-        "result_columns": [
-            {"target_column": "Номер полиса",
-             "source_type": "column",
-             "source_column_name": "№ Полиса"
-             },
-            {"target_column": "Период обслуживания c",
-             "source_type": "column",
-             "source_column_name": "Дата прикр."
-             },
-            {"target_column": "Период обслуживания по",
-             "source_type": "column",
-             "source_column_name": "Дата откр."
-             },
-            {"target_column": "Дата рождения",
-             "source_type": "column",
-             "source_column_name": "Дата рождения"
-             },
-            {"target_column": "Фамилия",
-             "source_type": "column",
-             "source_column_name": "Фамилия"
-             }, 
-            {"target_column": "Имя",
-             "source_type": "column",
-             "source_column_name": "Имя"
-             },
-            {"target_column": "Отчество",
-             "source_type": "column",
-             "source_column_name": "Отчество"
-             },
-            {"target_column": "Вид медицинского обслуживания",
-             "source_type": "column",
-             "source_column_name": "Категория"
-             },
-            {"target_column": "Код ПИКОМЕД",
-             "source_type": "dict",
-             "source_column_name": "Категория",
-             "dict": {
-                 }
-            }                                                       
-        ]
+        "processor_name": "zetta_prikrep",
+        "dict": {
+        }
     },
     "ЗЕТТА_Скачано": {
         "email_folder": "Альянс",
