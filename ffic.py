@@ -39,10 +39,11 @@ while True:
 
 
         if choise == '0':
-            if summary():
+            if not os.path.exists(os.path.join(os.getcwd(),'~$Исходники и подготовленные.xlsx')):
+                summary()
                 print(Fore.GREEN + 'Файл "Исходники и подготовленные.xlsx" сформирован и открыт на рабочем столе.' + Fore.RESET)
             else:
-                print(Fore.RED + 'Файл "Исходники и подготовленные.xlsx" уже открыт на рабочем столе. Закройте его и повторите попытку.' + Fore.RESET)                
+                print(Fore.RED + 'Файл "Исходники и подготовленные.xlsx" уже открыт на рабочем столе. Закройте его и повторите попытку.' + Fore.RESET)             
             os.startfile('Исходники и подготовленные.xlsx')
 
         elif choise == '1':
@@ -60,16 +61,19 @@ while True:
             os.startfile('Сводка по распределению файлов.xlsx')
         
         elif choise == '3':
-            prepared_maker_res = prepared_maker()
-            if prepared_maker_res[0]:
-                print(Fore.GREEN + 'Файл "Сводка по подготовке файлов к загрузке.xlsx" сформирован и открыт на рабочем столе.' + Fore.RESET)
-                os.startfile('Сводка по подготовке файлов к загрузке.xlsx')    
-            else:
-                if '[Errno 13] Permission denied:' in prepared_maker_res[1]:
-                    print(Fore.RED + 'Файл "Сводка по подготовке файлов к загрузке.xlsx" уже открыт на рабочем столе. Закройте его и повторите попытку.' + Fore.RESET)
-                                     
+
+            if not os.path.exists(os.path.join(os.getcwd(), '~Сводка по подготовке файлов к загрузке.xlsx')):
+                prepared_maker_res = prepared_maker()
+                                        
+                if prepared_maker_res[0]:
+                    print(Fore.GREEN + 'Файл "Сводка по подготовке файлов к загрузке.xlsx" сформирован и открыт на рабочем столе.' + Fore.RESET)
+                    os.startfile('Сводка по подготовке файлов к загрузке.xlsx')  
                 else:
-                    print(Fore.RED + prepared_maker_res[1], Fore.RESET) 
+                    print(Fore.RED + prepared_maker_res[1], Fore.RESET)
+            else:
+
+                print(Fore.RED + 'Файл "Исходники и подготовленные.xlsx" уже открыт на рабочем столе. Закройте его и повторите попытку.' + Fore.RESET)     
+                os.startfile('Сводка по подготовке файлов к загрузке.xlsx')  
                       
             
         elif choise == '4':

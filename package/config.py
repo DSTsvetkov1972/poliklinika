@@ -337,6 +337,9 @@ folders_rules_dict = {
         "sheet_name": "О1"                                
     },
     "Ренессанс_Прикрепление": {
+        "processor_name": "renessans_prikrep",
+        "dict": {
+            }
     },
     "Ренессанс_Скачано": {
         "email_folder": "Ренессанс",

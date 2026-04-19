@@ -159,9 +159,7 @@ def prepared_summary():
 
 def summary():
     
-    if os.path.exists(os.path.join(os.getcwd(),'~$Исходники и подготовленные.xlsx')):
-        return False
-    else:
+
         email_summary_df = email_summary()
         folders_summary_df = folders_summary()
         prepared_summary_df = prepared_summary()
@@ -198,7 +196,6 @@ def summary():
 
 
         wb.save('Исходники и подготовленные.xlsx')
-        return True
 
 
 

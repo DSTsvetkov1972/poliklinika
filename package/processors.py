@@ -195,8 +195,8 @@ def zetta_prikrep(folder, file, folders_rules_dict):
     file_path = os.path.join(os.getcwd(), "Исходники", folder, file)
     header_row = 17
     source_header = [
-        "", "№ ", "Фамилия", "Имя", "Отчество", "№ ИБ", "Дата рождения", "Пол \n(муж,\nжен)", "№ Полиса",
-        "Серия полиса", "Домашний адрес", "Телефон", "Категория", "Место работы", "Дата прикр.", "Дата откр."
+        "", "№ ", "Фамилия", "Имя", "Отчество", "№ ИБ", "Дата рождения", "Пол \n(муж,\nжен)",
+        "№ Полиса", "Серия полиса", "Домашний адрес", "Телефон", "Категория", "Место работы", "Дата прикр.", "Дата откр."
         ]
     codes_dict = folders_rules_dict[folder]['dict']
     
@@ -223,9 +223,10 @@ def zetta_prikrep(folder, file, folders_rules_dict):
         df['по программе'] = df.apply(lambda x: zetta_prikrep_conditions(x['shifted_1'], x['shifted_3']), axis=1)
         df['по программе'] = df['по программе'].ffill()
 
-        df=df[["Дата прикр.", "Дата откр.", "Дата рождения", "Фамилия", "Имя", "Отчество", "по программе"]]
+        df=df[["Серия полиса","Дата прикр.", "Дата откр.", "Дата рождения", "Фамилия", "Имя", "Отчество", "по программе"]]
         df=df.rename(
             columns={
+                "Серия полиса": "Номер полиса", 
                 "Дата прикр.": "Период обслуживания c",
                 "Дата откр.": "Период обслуживания по",
                 "DATE": "Дата рождения",
@@ -245,7 +246,71 @@ def zetta_prikrep(folder, file, folders_rules_dict):
     
 
 
+def renessans_conditions(npp_shifted_1, npp_shifted_3):
 
+    if npp_shifted_1 == 'npp' and npp_shifted_3 != 'по программе':
+        return npp_shifted_3
+    elif npp_shifted_1 == 'npp' and npp_shifted_3 != '':
+        raise ValueError('Ожидалось что через строку вверх от заголовка будет программа страхования')
+    else:
+        None
+
+
+def renessans_prikrep(folder, file, folders_rules_dict):
+
+        
+    try:
+        codes_dict = folders_rules_dict[folder]['dict']
+        expected_columns = ['npp', 'NAME1', 'NAME2', 'NAME3', 'NIB', 'DATE', 'SEX',
+                            'POLIC', 'POLIC SER', 'ADDRESS P', 'TEL1', 'PLACE', 'BEGIN', 'END']
+
+        file_path = os.path.join(os.getcwd(), "Исходники", folder, file)
+
+        df = pd.read_excel(file_path, header=None)
+        df =df.fillna('')
+        df_columns = list(df.iloc[6])
+        
+        if df_columns != expected_columns:
+            return (False,
+                    f"В файле заголовок:\n"
+                    f"{ df_columns }\n"
+                    f"Ожидалось:\n"
+                    f"{ expected_columns }")
+        
+        df.columns = df_columns
+
+        df['npp_shifted_1'] = df['npp'].shift(1)
+        df['npp_shifted_3'] = df['npp'].shift(3)        
+
+        df = df[(df['DATE']!='')&(df['DATE']!='DATE')]
+        df['по программе'] = df.apply(lambda x: renessans_conditions(x['npp_shifted_1'], x['npp_shifted_3']), axis=1)
+        
+        df['по программе'] = df['по программе'].ffill()
+        
+        df =df.fillna('')
+        df=df[['POLIC SER', 'BEGIN', 'END', 'DATE', 'NAME1', 'NAME2', 'NAME3', 'по программе']]
+        
+        df=df.rename(
+            columns={
+                'POLIC SER': 'Номер полиса',
+                'BEGIN': 'Период обслуживания c',
+                'END': 'Период обслуживания по',
+                'DATE': 'Дата рождения',
+                'NAME1': 'Фамилия',
+                'NAME2': 'Имя',
+                'NAME3': 'Отчество',
+                'по программе': 'Вид медицинского обслуживания' 
+                })
+        
+        df['Код ПИКОМЕД'] = df['Вид медицинского обслуживания'].apply(lambda k: codes_dict[k])
+        df['Папка'] = folder
+        df['Файл'] = file
+
+        return (True, df)
+
+    except Exception as e:
+        return (False, repr(e))
+    
 
 def reso_prikrep_2_conditions(npp_shifted_1, npp_shifted_2, NAME2_shifted_2):
 
@@ -263,7 +328,7 @@ def reso_prikrep_2(folder, file, folders_rules_dict):
     try:
     
         expected_columns = ['npp', 'NAME1', 'NAME2', 'NAME3', 'NIB', 'DATE', 'SEX', 'POLIC', 'POLIC SER', 'ADDRESS P', 'TEL1', 'KATEGORY ', 'PLACE', 'BEGIN', 'END']
-        file_path = os.path.join(os.getcwd(), "Исходники", "РЕСО_Прикрепление_2", file)
+        file_path = os.path.join(os.getcwd(), "Исходники", folder, file)
 
         df = pd.read_excel(file_path, header=None)
         df =df.fillna('')
@@ -285,9 +350,10 @@ def reso_prikrep_2(folder, file, folders_rules_dict):
         df['по программе'] = df.apply(lambda x: reso_prikrep_2_conditions(x['npp_shifted_1'], x['npp_shifted_2'], x['NAME2_shifted_2']), axis=1)
         df['по программе'] = df['по программе'].ffill()
         df =df.fillna('')
-        df=df[['BEGIN', 'END', 'DATE', 'NAME1', 'NAME2', 'NAME3', 'по программе']]
+        df=df[['POLIC SER', 'BEGIN', 'END', 'DATE', 'NAME1', 'NAME2', 'NAME3', 'по программе']]
         df=df.rename(
             columns={
+                'POLIC SER': 'Номер полиса',
                 'BEGIN': 'Период обслуживания c',
                 'END': 'Период обслуживания по',
                 'DATE': 'Дата рождения',
@@ -312,29 +378,16 @@ processors_dict = {
     'renessans_otkrep': renessans_otkrep,
     'soglasie_otkrep': soglasie_otkrep,
     'zetta_prikrep': zetta_prikrep,
+    'renessans_prikrep': renessans_prikrep,
     'reso_prikrep_2': reso_prikrep_2
     }
    
 if __name__ == '__main__':
     #folder, file = 'РЕСО_Прикрепление', 'p41894408.xlsx'
-    folder, file = 'ЗЕТТА_Прикрепление', '220_ММВП-210022737_(66004-66004)(1)(4770135).xlsx'
-    print(Fore.MAGENTA)
-    (zetta_prikrep(folder, file , folders_rules_dict))
 
 
-    print(Fore.CYAN)
-    folder, file = 'ЗЕТТА_Прикрепление', '220_ММВП-210022737_(74677-74754)(2)(4795856).xlsx'
-
-    (zetta_prikrep(folder, file , folders_rules_dict))
-
-    print(Fore.RESET)
+    folder, file = 'Ренессанс_Прикрепление', 'П7_001ДМС38433124_прикр_14_04_2026_1.xls'
 
 
+    print(renessans_prikrep(folder, file , folders_rules_dict))
 
-
-
-
-
-
-
-     

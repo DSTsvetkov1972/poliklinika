@@ -13,7 +13,7 @@ logo = Fore.MAGENTA + """
 
 
 
-version = " v.2026-04-15\n"
+version = " v.2026-04-19\n"
 
 advertisement = """
  Нужна быстрая автоматизация или аналитика
