@@ -67,12 +67,7 @@ def email_summary():
     
     return pd.DataFrame(email_folders_info)
 
-        
-
-        
-
-
-
+    
 def folders_summary():
     """Получаем датафрейм
     с количеством файлов в исходных папках
@@ -80,12 +75,13 @@ def folders_summary():
 
     downloaded_folders_info = []
     start_folders_info = []
+    start_folders_2_info = []
     finish_folders_info = []
 
     for folder in folders_rules_dict.keys():
         folder_parts = folder.split('_')
         ensurence_company = folder_parts[0]
-        file_type = folder_parts[1]
+        file_type = '_'.join(folder_parts[1:])
 
         files = list(os.walk(os.path.join(os.getcwd(), 'Исходники', folder)))[0][2]
         folder_dict = {'Компания': ensurence_company, file_type: len(files)}
@@ -94,18 +90,23 @@ def folders_summary():
             downloaded_folders_info.append(folder_dict)
         elif file_type == 'Прикрепление' in folder:
             start_folders_info.append(folder_dict)
+        elif file_type == 'Прикрепление_2' in folder:
+            start_folders_2_info.append(folder_dict)            
         elif file_type == 'Открепление' in folder:
             finish_folders_info.append(folder_dict)
 
     downloaded_df = pd.DataFrame(downloaded_folders_info)
     start_df = pd.DataFrame(start_folders_info)
+    start_2_df  = pd.DataFrame(start_folders_2_info)    
     finish_df = pd.DataFrame(finish_folders_info)
 
     res_df = pd.merge(downloaded_df, start_df, on='Компания', how='outer')
+    res_df = pd.merge(res_df, start_2_df, on='Компания', how='outer')    
     res_df = pd.merge(res_df, finish_df, on='Компания', how='outer')
 
-    return res_df 
+    res_df.fillna(0, inplace=True)
 
+    return res_df 
     
 
 def prepared_summary():
@@ -139,34 +140,40 @@ def prepared_summary():
     if prepared_files_info:
         total_df = pd.concat(prepared_files_info)
         total_df = total_df.reset_index('Папка')
+        total_df['Компания'] = total_df['Папка'].apply(lambda x: x.split('_')[0])
+        total_df['Тип файла'] = total_df['Папка'].apply(lambda x: '_'.join(x.split('_')[1:]))        
 
-        start_df = total_df[total_df['Папка'].str.contains('_Прикрепление')]
-        start_df['Компания'] = start_df['Папка'].apply(lambda x: x.split('_')[0])
-        start_df = start_df.rename(columns={'Файлов в подготовленном файле': 'Подготовлено прикреп'})
+        total_df = total_df.pivot(index='Компания', columns='Тип файла', values='Файлов в подготовленном файле')
+        total_df = total_df.fillna(0)
+        total_df = total_df.reset_index()
 
-        finish_df = total_df[total_df['Папка'].str.contains('_Открепление')]
-        finish_df['Компания'] = finish_df['Папка'].apply(lambda x : x.split('_')[0])
-        finish_df = finish_df.rename(columns={'Файлов в подготовленном файле': 'Подготовлено откреп'})
-
-        res_df = pd.merge(start_df, finish_df, on='Компания', how='outer')
-        res_df = res_df[['Компания', 'Подготовлено прикреп', 'Подготовлено откреп']]
-
-    else:
-        res_df = pd.DataFrame(columns=['Компания', 'Подготовлено прикреп', 'Подготовлено откреп'])
-    #total_df_grouped.columns = ['Папка', 'Подготовленных файлов']
-    return res_df
+        return total_df
 
 
 def summary():
     
 
         email_summary_df = email_summary()
+        #print(email_summary_df)
         folders_summary_df = folders_summary()
+        #print(folders_summary_df)
         prepared_summary_df = prepared_summary()
+        #print(prepared_summary_df)
 
         res_df = pd.merge(email_summary_df, folders_summary_df, on='Компания', how='outer')
         res_df = pd.merge(res_df, prepared_summary_df, on='Компания', how='outer')
         res_df = res_df.fillna(0)
+        res_df = res_df.rename(
+             columns = {
+                  'Прикрепление_x': 'Прикрепление',
+                  'Прикрепление_2_x': 'Прикрепление_2',
+                  'Открепление_x': 'Открепление',
+                  'Открепление_y': 'Открепление\nподготовленно',
+                  'Прикрепление_y': 'Прикрепление\nподготовленно',
+                  'Прикрепление_2_y': 'Прикрепление_2\nподготовленно'
+             }
+        )
+        print(res_df)
 
         res_df.to_excel('Исходники и подготовленные.xlsx', index=None)
 
@@ -184,14 +191,16 @@ def summary():
         ws.column_dimensions['E'].width = 20
         ws.column_dimensions['F'].width = 20
         ws.column_dimensions['G'].width = 20
+        ws.column_dimensions['H'].width = 20
+        ws.column_dimensions['I'].width = 20
 
-        for col in range(1, 8):
+        for col in range(1, 10):
             cell = ws.cell(column=col, row=1)
             cell.font = Font(bold=True)  # Жирный шрифт
             cell.alignment = Alignment(horizontal='center', vertical='center', wrap_text=True)  # Выравнивание по центру
 
         for row in range(2, ws.max_row+1):
-            for column in range(2, 8):
+            for column in range(2, 10):
                 ws.cell(column=column, row=row).alignment = Alignment(horizontal='center', vertical='center', wrap_text=True)
 
 
@@ -200,7 +209,8 @@ def summary():
 
 
 if __name__ == '__main__':
-    print(email_summary())
+    #print(email_summary())
 
     #print(folders_summary())
-    # sources_and_prepared_summary()
+    #print(prepared_summary())
+    summary()
