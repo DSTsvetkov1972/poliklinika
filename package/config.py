@@ -493,7 +493,7 @@ folders_rules_dict = {
     },    
     "СОГАЗ_Открепление": {
         "processor_name": "base",
-        "sheet_name": "Список",
+        "sheet_name": "Лист_1",
         "header_row": 22,
         "filter_not_in": {
             "column": "Фамилия",
@@ -581,7 +581,8 @@ folders_rules_dict = {
         "email_folder": "СОГАЗ",
         "separator_name": "email_by_file_name",
         "file_rules": [
-            {"pattern": "_Прикрепление_.*\.xls$", "target_folder": "СОГАЗ_Прикрепление"}
+            {"pattern": "_Прикрепление_.*\.xls$", "target_folder": "СОГАЗ_Прикрепление"},
+            {"pattern": "_Открепление_.*\.xls$", "target_folder": "СОГАЗ_Открепление"}            
         ]
     },
         
