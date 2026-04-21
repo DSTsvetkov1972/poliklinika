@@ -101,6 +101,10 @@ def base(folder, file, folders_rules_dict):
                         source_column_name = result_column_dict['source_column_name']
                         res_df[target_column] = df[source_column_name]
 
+                    if result_column_dict['source_type'] == 'date_column':
+                        source_column_name = result_column_dict['source_column_name']
+                        res_df[target_column] = df[source_column_name].apply(lambda x: x.replace(' 00:00:00', ''))
+
                     elif result_column_dict['source_type'] == 'concat_by_whitespace':
                         source_columns= result_column_dict['source_columns']
                         res_df[target_column] = df[source_columns].astype(str).agg(' '.join, axis=1)                    
@@ -332,6 +336,10 @@ def renessans_prikrep(folder, file, folders_rules_dict):
                 'по программе': 'Вид медицинского обслуживания' 
                 })
         
+        df['Период обслуживания c'] = df['Период обслуживания c'].apply(lambda x: x.replace(' 00:00:00', ''))
+        df['Период обслуживания по'] = df['Период обслуживания c'].apply(lambda x: x.replace(' 00:00:00', ''))
+        df['Дата рождения'] = df['Период обслуживания c'].apply(lambda x: x.replace(' 00:00:00', ''))
+        
         df['Код ПИКОМЕД'] = df['Вид медицинского обслуживания'].apply(lambda k: codes_dict[k])
         df['Папка'] = folder
         df['Файл'] = file
@@ -361,6 +369,7 @@ def reso_prikrep_2(folder, file, folders_rules_dict):
         file_path = os.path.join(os.getcwd(), "Исходники", folder, file)
 
         df = pd.read_excel(file_path, header=None, dtype=str)
+        #print(df.iloc[10:])
         df =df.fillna('')
         df_columns = list(df.iloc[7])
         
@@ -395,6 +404,11 @@ def reso_prikrep_2(folder, file, folders_rules_dict):
                 'ФИО': 'ФИО',
                 'по программе': 'Вид медицинского обслуживания' 
                 })
+        
+        df['Период обслуживания c'] = df['Период обслуживания c'].apply(lambda x: x.replace(' 00:00:00', ''))
+        df['Период обслуживания по'] = df['Период обслуживания c'].apply(lambda x: x.replace(' 00:00:00', ''))
+        df['Дата рождения'] = df['Период обслуживания c'].apply(lambda x: x.replace(' 00:00:00', ''))
+
         df['Код ПИКОМЕД'] = df['Вид медицинского обслуживания'].apply(lambda k: codes_dict[k])
         df['Папка'] = folder
         df['Файл'] = file
@@ -419,10 +433,10 @@ if __name__ == '__main__':
     #folder, file = 'РЕСО_Прикрепление', 'p41894408.xlsx'
 
 
-    folder, file = 'Ренессанс_Открепление', 'П7_001ДМС39299025с_43_откр_18_04_2026.xls'
+    folder, file = 'РЕСО_Прикрепление_2', 'p41959073.xlsx'
 
 
 
 
-    print(renessans_otkrep(folder, file, folders_rules_dict))
+    print(reso_prikrep_2(folder, file, folders_rules_dict))
 

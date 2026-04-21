@@ -35,11 +35,11 @@ folders_rules_dict = {
              "source_column_name": "№ полиса"
              },
             {"target_column": "Дата открепления",
-             "source_type": "column",
+             "source_type": "date_column",
              "source_column_name": "Дата открепления с (с данной даты не обслуживается)"
              },
             {"target_column": "Дата рождения",
-             "source_type": "column",
+             "source_type": "date_column",
              "source_column_name": "Дата рождения"
              },
             {"target_column": "ФИО",
@@ -69,15 +69,15 @@ folders_rules_dict = {
              "source_column_name": "№ полиса"
              },
             {"target_column": "Период обслуживания c",
-             "source_type": "column",
+             "source_type": "date_column",
              "source_column_name": "Период обслуживания"
              },
             {"target_column": "Период обслуживания по",
-             "source_type": "column",
+             "source_type": "date_column",
              "source_column_name": ""
              },
             {"target_column": "Дата рождения",
-             "source_type": "column",
+             "source_type": "date_column",
              "source_column_name": "Дата рождения"
              },
             {"target_column": "ФИО",
@@ -133,11 +133,11 @@ folders_rules_dict = {
              "source_column_name": "POLIC SER"
             },
             {"target_column": "Дата открепления",
-             "source_type": "column",
+             "source_type": "date_column",
              "source_column_name": "END"
             },
             {"target_column": "Дата рождения",
-             "source_type": "column",
+             "source_type": "date_column",
              "source_column_name": "DATE"
             },
             {"target_column": "ФИО",
@@ -168,15 +168,15 @@ folders_rules_dict = {
              "source_column_name": "POLIC"
              },
             {"target_column": "Период обслуживания c",
-             "source_type": "column",
+             "source_type": "date_column",
              "source_column_name": "BEGIN"
              },
             {"target_column": "Период обслуживания по",
-             "source_type": "column",
+             "source_type": "date_column",
              "source_column_name": "END"
              },
             {"target_column": "Дата рождения",
-             "source_type": "column",
+             "source_type": "date_column",
              "source_column_name": "DATE"
              },
             {"target_column": "ФИО",
@@ -227,7 +227,7 @@ folders_rules_dict = {
              "source_column_name": "Номер полиса"
             },
             {"target_column": "Дата открепления",
-             "source_type": "column",
+             "source_type": "date_column",
              "source_column_name": "Дата открепления                              (последний день обслуживания)"
             },
             {"target_column": "Дата рождения",
@@ -281,11 +281,11 @@ folders_rules_dict = {
              "source_column_name": "№ полиса"
             },
             {"target_column": "Дата открепления",
-             "source_type": "column",
+             "source_type": "date_column",
              "source_column_name": "Последний день обслуживания"
              },
             {"target_column": "Дата рождения",
-             "source_type": "column",
+             "source_type": "date_column",
              "source_column_name": "Дата рождения"
              },
             {"target_column": "ФИО",
@@ -316,15 +316,15 @@ folders_rules_dict = {
              "source_column_name": "№ полиса"
              },
             {"target_column": "Период обслуживания c",
-             "source_type": "column",
+             "source_type": "date_column",
              "source_column_name": "Дата начала обслуживания"
              },
             {"target_column": "Период обслуживания по",
-             "source_type": "column",
+             "source_type": "date_column",
              "source_column_name": "Последний день обслуживания"
              },
             {"target_column": "Дата рождения",
-             "source_type": "column",
+             "source_type": "date_column",
              "source_column_name": "Дата рождения"
              },
             {"target_column": "ФИО",
@@ -339,6 +339,10 @@ folders_rules_dict = {
              "source_type": "dict",
              "source_column_name": "Программа",
              "dict": {
+                 "АПП+ПНД": "031.136",
+                 "АПП": "030.136",
+                 "АПП+Стомат": "033.136",
+                 "Стомат": "033.136",
                  }
             }
         ]
@@ -397,11 +401,11 @@ folders_rules_dict = {
              "source_column_name": "№ полиса"
              },
             {"target_column": "Дата открепления",
-             "source_type": "column",
+             "source_type": "date_column",
              "source_column_name": "Открепление с"
              },
             {"target_column": "Дата рождения",
-             "source_type": "column",
+             "source_type": "date_column",
              "source_column_name": "Дата рождения"
              },
             {"target_column": "ФИО",
@@ -431,15 +435,15 @@ folders_rules_dict = {
              "source_column_name": "№ полиса"
              },
             {"target_column": "Период обслуживания c",
-             "source_type": "column",
+             "source_type": "date_column",
              "source_column_name": "Начало обслуживания"
              },
             {"target_column": "Период обслуживания по",
-             "source_type": "column",
+             "source_type": "date_column",
              "source_column_name": "Окончание обслуживания"
              },
             {"target_column": "Дата рождения",
-             "source_type": "column",
+             "source_type": "date_column",
              "source_column_name": "Дата рождения"
              },
             {"target_column": "ФИО",
@@ -454,6 +458,7 @@ folders_rules_dict = {
              "source_type": "dict",
              "source_column_name": "Программа мед.  обслуживания",
              "dict": {
+                 "СТОМАТОЛОГИЧЕСКАЯ ПОМОЩЬ (уровень стом. услуг 2)": "067.17",
                  "АМБУЛАТОРНАЯ ПОМОЩЬ, ПОМОЩЬ НА ДОМУ": "065.17",
                  "АМБУЛАТОРНАЯ ПОМОЩЬ, ПОМОЩЬ НА ДОМУ, СТОМАТОЛОГИЧЕСКАЯ ПОМОЩЬ (уровень стом. услуг 2)": "066.17",
                  "АМБУЛАТОРНАЯ ПОМОЩЬ": "068.17",
@@ -465,6 +470,7 @@ folders_rules_dict = {
     "РЕСО_Прикрепление_2": {
         "processor_name": "reso_prikrep_2",
         "dict": {
+            "СТОМАТОЛОГИЧЕСКАЯ ПОМОЩЬ (уровень стом. услуг 2)": "067.17",
             "АМБУЛАТОРНАЯ ПОМОЩЬ, ПОМОЩЬ НА ДОМУ": "065.17",
             "АМБУЛАТОРНАЯ ПОМОЩЬ, ПОМОЩЬ НА ДОМУ, СТОМАТОЛОГИЧЕСКАЯ ПОМОЩЬ (уровень стом. услуг 2)": "066.17",
             "АМБУЛАТОРНАЯ ПОМОЩЬ": "068.17",
@@ -502,11 +508,11 @@ folders_rules_dict = {
              "source_column_name": "№ полиса"
             },
             {"target_column": "Дата открепления",
-             "source_type": "column",
+             "source_type": "date_column",
              "source_column_name": "Окончание обслуживания"
              },
             {"target_column": "Дата рождения",
-             "source_type": "column",
+             "source_type": "date_column",
              "source_column_name": "Дата рождения"
              },
             {"target_column": "ФИО",
@@ -554,15 +560,15 @@ folders_rules_dict = {
              "source_column_name": "Полис"
              },
             {"target_column": "Период обслуживания c",
-             "source_type": "column",
+             "source_type": "date_column",
              "source_column_name": "Начало "
              },
             {"target_column": "Период обслуживания по",
-             "source_type": "column",
+             "source_type": "date_column",
              "source_column_name": "Конец "
              },
             {"target_column": "Дата рождения",
-             "source_type": "column",
+             "source_type": "date_column",
              "source_column_name": "Дата рождения"
              },
             {"target_column": "ФИО",
@@ -577,6 +583,8 @@ folders_rules_dict = {
              "source_type": "dict",
              "source_column_name": "Программа",
              "dict": {
+                 "Амбулаторно-поликлиническая помощь. Стоматологическая помощь. Помощь на дому в пределах МКАД.": "059.49",
+                 "Амбулаторно-поликлиническая помощь. Стоматологическая помощь.": "060.49",
                  "Амбулаторно-поликлиническая помощь. Помощь на дому в пределах МКАД.": "058.49",
                  "Амбулаторно-поликлиническая помощь.": "057.49"
                  }
@@ -613,11 +621,11 @@ folders_rules_dict = {
             "source_column_name": "Полис"
             },
             {"target_column": "Дата открепления",
-             "source_type": "column",
+             "source_type": "date_column",
              "source_column_name": "Дата открепления (последний день обслуживания)"
             },
             {"target_column": "Дата рождения",
-             "source_type": "column",
+             "source_type": "date_column",
              "source_column_name": "Дата рождения"
             },
             {"target_column": "ФИО",
@@ -648,15 +656,15 @@ folders_rules_dict = {
              "source_column_name": "№ полиса"
              },
             {"target_column": "Период обслуживания c",
-             "source_type": "column",
+             "source_type": "date_column",
              "source_column_name": "Дата прикрепления"
              },
             {"target_column": "Период обслуживания по",
-             "source_type": "column",
+             "source_type": "date_column",
              "source_column_name": "Дата открепления"
              },
             {"target_column": "Дата рождения",
-             "source_type": "column",
+             "source_type": "date_column",
              "source_column_name": "Дата рождения"
              },
             {"target_column": "ФИО",
@@ -671,6 +679,7 @@ folders_rules_dict = {
              "source_type": "dict",
              "source_column_name": "№ программы обслуживания",
              "dict": {
+                 "АПП": "009.23-06"
                  }
             }
         ]
