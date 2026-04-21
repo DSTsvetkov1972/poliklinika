@@ -627,13 +627,60 @@ folders_rules_dict = {
         ]
     },
     "Югория_Прикрепление": {
+        "processor_name": "base",
+        "sheet_name": "",
+        "header_row": 7,
+        "filter_not_in": {
+            "column": "Фамилия",
+            "conditions": ["", "Фамилия"]
+        },
+        "source_header": [
+            "№ п/п", "№ полиса", "Фамилия", "Имя", "Отчество", "Пол", "Дата рождения", "Адрес", "Телефон",
+            "Дата прикрепления", "Дата открепления", "№ программы обслуживания", "Наименование Страхователя", "Название страховой компании"
+        ],
+        "result_columns": [
+            {"target_column": "Серия полиса",
+             "source_type": "const",
+             "const": ""
+             },
+            {"target_column": "Номер полиса",
+             "source_type": "column",
+             "source_column_name": "№ полиса"
+             },
+            {"target_column": "Период обслуживания c",
+             "source_type": "column",
+             "source_column_name": "Дата прикрепления"
+             },
+            {"target_column": "Период обслуживания по",
+             "source_type": "column",
+             "source_column_name": "Дата открепления"
+             },
+            {"target_column": "Дата рождения",
+             "source_type": "column",
+             "source_column_name": "Дата рождения"
+             },
+            {"target_column": "ФИО",
+             "source_type": "concat_by_whitespace",
+             "source_columns": ["Фамилия", "Имя", "Отчество"]
+             },                 
+            {"target_column": "Вид медицинского обслуживания",
+             "source_type": "column",
+             "source_column_name": "№ программы обслуживания"
+             },
+            {"target_column": "Код ПИКОМЕД",
+             "source_type": "dict",
+             "source_column_name": "№ программы обслуживания",
+             "dict": {
+                 }
+            }
+        ]
     },
     "Югория_Скачано": {
         "email_folder": "Ф-1|Югория",
-        "separator_name": "email_base",
+        "separator_name": "email_by_file_name",
         "file_rules": [
-            {"pattern": "АО_ГСК_Югория_списки_прикрепление_ГБУЗ_ГП_№_220_ДЗМ_(Филиал_№1)_", "target_folder": "Югория_Прикрепление"},
-            {"pattern": "АО_ГСК_Югория_списки_открепление_ГБУЗ_ГП_№_220_ДЗМ_(Филиал_№1)_", "target_folder": "Югория_Открепление"}
+            {"pattern": "АО_ГСК_Югория_списки_прикрепление_ГБУЗ_ГП_№_220_ДЗМ_\(Филиал_№1\)_", "target_folder": "Югория_Прикрепление"},
+            {"pattern": "АО_ГСК_Югория_списки_открепление_ГБУЗ_ГП_№_220_ДЗМ_\(Филиал_№1\)_", "target_folder": "Югория_Открепление"}
         ]
     }
 }

@@ -158,11 +158,11 @@ def summary():
     
 
         email_summary_df = email_summary()
-        print(email_summary_df)
+        #print(email_summary_df)
         folders_summary_df = folders_summary()
-        print(folders_summary_df)
+        #print(folders_summary_df)
         prepared_summary_df = prepared_summary()
-        print(prepared_summary_df)
+        #print(prepared_summary_df)
 
         res_df = pd.merge(email_summary_df, folders_summary_df, on='Компания', how='outer')
         res_df = pd.merge(res_df, prepared_summary_df, on='Компания', how='outer')
@@ -177,7 +177,7 @@ def summary():
                   'Прикрепление_2_y': 'Прикрепление_2\nподготовленно'
              }
         )
-        print(res_df)
+        #print(res_df)
 
         res_df.to_excel('Исходники и подготовленные.xlsx', index=None)
 
