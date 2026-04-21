@@ -8,6 +8,12 @@ sys.path.append(os.getcwd())
 from package.config import folders_rules_dict
 from colorama import Fore
 
+from dateutil import parser
+
+def convert_date(date_string):
+    date_obj = parser.parse(date_string, dayfirst=True)
+    return date_obj.strftime('%d-%m-%Y')
+
 
 def is_date(string, date_format="%d.%m.%Y"):
     """Проверяет, можно ли преобразовать строку в дату"""
@@ -103,7 +109,7 @@ def base(folder, file, folders_rules_dict):
 
                     if result_column_dict['source_type'] == 'date_column':
                         source_column_name = result_column_dict['source_column_name']
-                        res_df[target_column] = df[source_column_name].apply(lambda x: x.replace(' 00:00:00', ''))
+                        res_df[target_column] = df[source_column_name].apply(lambda x: convert_date(x))
 
                     elif result_column_dict['source_type'] == 'concat_by_whitespace':
                         source_columns= result_column_dict['source_columns']
@@ -178,6 +184,10 @@ def renessans_otkrep(folder, file, folders_rules_dict):
         df.rename(columns={4:'Дата рождения', 5:'Номер полиса', 6:'Дата открепления', 8:'ФИО'}, inplace=True)
         df = df[['Номер полиса', 'Дата открепления', 'Дата рождения', 'ФИО']]
         
+        df['Дата открепления'] = df['Дата открепления'].apply(lambda x: convert_date(x))
+        df['Дата рождения'] = df['Дата рождения'].apply(lambda x: convert_date(x))
+
+
         df['Папка'] = folder
         df['Файл'] = file
         return (True, df)
@@ -203,6 +213,10 @@ def soglasie_otkrep(folder, file, folders_rules_dict):
 
         df.columns= [0, "Номер полиса", "ФИО", "Дата рождения", 4, "Дата открепления"]
         df = df[["Номер полиса", "Дата открепления", "Дата рождения", "ФИО"]]
+
+        df['Дата открепления'] = df['Дата открепления'].apply(lambda x: convert_date(x))
+        df['Дата рождения'] = df['Дата рождения'].apply(lambda x: convert_date(x))
+
         df['Папка'] = folder
         df['Файл'] = file
         return (True, df)
@@ -267,6 +281,12 @@ def zetta_prikrep(folder, file, folders_rules_dict):
                 "ФИО": "ФИО",
                 "по программе": "Вид медицинского обслуживания" 
                 })
+        
+        df['Период обслуживания c'] = df['Период обслуживания c'].apply(lambda x: convert_date(x))
+        df['Период обслуживания по'] = df['Период обслуживания по'].apply(lambda x: convert_date(x))        
+        df['Дата рождения'] = df['Дата рождения'].apply(lambda x: convert_date(x))
+
+
         df['Код ПИКОМЕД'] = df['Вид медицинского обслуживания'].apply(lambda k: codes_dict[k])
         df['Папка'] = folder
         df['Файл'] = file
@@ -336,9 +356,9 @@ def renessans_prikrep(folder, file, folders_rules_dict):
                 'по программе': 'Вид медицинского обслуживания' 
                 })
         
-        df['Период обслуживания c'] = df['Период обслуживания c'].apply(lambda x: x.replace(' 00:00:00', ''))
-        df['Период обслуживания по'] = df['Период обслуживания c'].apply(lambda x: x.replace(' 00:00:00', ''))
-        df['Дата рождения'] = df['Период обслуживания c'].apply(lambda x: x.replace(' 00:00:00', ''))
+        df['Период обслуживания c'] = df['Период обслуживания c'].apply(lambda x: convert_date(x))
+        df['Период обслуживания по'] = df['Период обслуживания по'].apply(lambda x: convert_date(x))        
+        df['Дата рождения'] = df['Дата рождения'].apply(lambda x: convert_date(x))
         
         df['Код ПИКОМЕД'] = df['Вид медицинского обслуживания'].apply(lambda k: codes_dict[k])
         df['Папка'] = folder
@@ -405,9 +425,9 @@ def reso_prikrep_2(folder, file, folders_rules_dict):
                 'по программе': 'Вид медицинского обслуживания' 
                 })
         
-        df['Период обслуживания c'] = df['Период обслуживания c'].apply(lambda x: x.replace(' 00:00:00', ''))
-        df['Период обслуживания по'] = df['Период обслуживания c'].apply(lambda x: x.replace(' 00:00:00', ''))
-        df['Дата рождения'] = df['Период обслуживания c'].apply(lambda x: x.replace(' 00:00:00', ''))
+        df['Период обслуживания c'] = df['Период обслуживания c'].apply(lambda x: convert_date(x))
+        df['Период обслуживания по'] = df['Период обслуживания по'].apply(lambda x: convert_date(x))        
+        df['Дата рождения'] = df['Дата рождения'].apply(lambda x: convert_date(x))
 
         df['Код ПИКОМЕД'] = df['Вид медицинского обслуживания'].apply(lambda k: codes_dict[k])
         df['Папка'] = folder

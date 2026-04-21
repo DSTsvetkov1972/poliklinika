@@ -231,7 +231,7 @@ folders_rules_dict = {
              "source_column_name": "Дата открепления                              (последний день обслуживания)"
             },
             {"target_column": "Дата рождения",
-             "source_type": "column",
+             "source_type": "date_column",
              "source_column_name": "Дата рождения"
             },
             {"target_column": "ФИО",
