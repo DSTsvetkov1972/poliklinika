@@ -116,6 +116,10 @@ def prepared_summary():
     """
 
     prepared_files = list(os.walk(os.path.join(os.getcwd(), 'Подготовленные')))[0][2]
+
+    if not prepared_files:
+         return pd.DataFrame(columns=['Компания'])
+
     prepared_files_info = []
 
     for file in prepared_files:
@@ -154,11 +158,11 @@ def summary():
     
 
         email_summary_df = email_summary()
-        #print(email_summary_df)
+        print(email_summary_df)
         folders_summary_df = folders_summary()
-        #print(folders_summary_df)
+        print(folders_summary_df)
         prepared_summary_df = prepared_summary()
-        #print(prepared_summary_df)
+        print(prepared_summary_df)
 
         res_df = pd.merge(email_summary_df, folders_summary_df, on='Компания', how='outer')
         res_df = pd.merge(res_df, prepared_summary_df, on='Компания', how='outer')

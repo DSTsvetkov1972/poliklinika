@@ -19,6 +19,7 @@ def email_by_file_name(folder, file, folders_rules_dict):
         # print(folders_rules_dict[folder]['file_actions'])
         
         for file_rule in folders_rules_dict[folder]['file_rules']:
+            #print(file_rule['pattern'], file, file_rule['pattern'] in file, re.search(file_rule['pattern'], file), sep = '\n')
             if re.search(file_rule['pattern'], file):
                 if file_rule['target_folder'] == 'удалён':
                     # Удаляем файл
@@ -67,7 +68,8 @@ separators_dict = {
 }
 
 if __name__ == '__main__':
-    folder = 'ЗЕТТА_Скачано'
-    file = '220_М5-230019355_(5987-5987)(1)(4751986).xlsx'
+
+    folder, file = 'Югория_Скачано', 'АО_ГСК_Югория_списки_прикрепление_ГБУЗ_ГП_№_220_ДЗМ_(Филиал_№1)_20_04_2026_14_55_59.xlsx'
+
     folders_rules_dict=folders_rules_dict
-    print(email_by_cell_value(folder, file, folders_rules_dict))
+    print(email_by_file_name(folder, file, folders_rules_dict))
