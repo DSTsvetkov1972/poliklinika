@@ -172,4 +172,4 @@ def separator():
     
 
 if __name__ == '__main__':
-    unzip_files()
+    folder, file = 'Лучи_Открепление', 'Открепление пациентов 17.04.2026.xlsx'

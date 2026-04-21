@@ -43,8 +43,8 @@ folders_rules_dict = {
              "source_column_name": "Дата рождения"
              },
             {"target_column": "ФИО",
-             "source_type": "column",
-             "source_column_name": "ФИО"}                                                       
+             "source_type": "concat_by_whitespace",
+             "source_column_name": ["ФИО"]}                                                       
         ]
     },
     "Альфа_Прикрепление": {
@@ -142,7 +142,7 @@ folders_rules_dict = {
             },
             {"target_column": "ФИО",
              "source_type": "concat_by_whitespace",
-             "source_columns": ["NAME1", "NAME2", "NAME3"]
+             "source_column_name": ["NAME1", "NAME2", "NAME3"]
              }                                    
         ]
     },
@@ -181,12 +181,11 @@ folders_rules_dict = {
              },
             {"target_column": "ФИО",
              "source_type": "concat_by_whitespace",
-             "source_columns": ["NAME1", "NAME2", "NAME3"]
-             },
+             "source_column_name": ["NAME1", "NAME2", "NAME3"]
+             }   
             {"target_column": "Вид медицинского обслуживания",
              "source_type": "column",
-             "source_column_name": "Holding"
-             },
+             "source_column_name": "Holding"},
             {"target_column": "Код ПИКОМЕД",
              "source_type": "dict",
              "source_column_name": "KATEGORY",
@@ -290,7 +289,7 @@ folders_rules_dict = {
              },
             {"target_column": "ФИО",
              "source_type": "concat_by_whitespace",
-             "source_columns": ["Фамилия", "Имя", "Отчество"]
+             "source_column_name": ["Фамилия", "Имя", "Отчество"]
              }                                                            
         ]
     },
@@ -329,7 +328,7 @@ folders_rules_dict = {
              },
             {"target_column": "ФИО",
              "source_type": "concat_by_whitespace",
-             "source_columns": ["Фамилия", "Имя", "Отчество"]
+             "source_column_name": ["Фамилия", "Имя", "Отчество"]
              },                   
             {"target_column": "Вид медицинского обслуживания",
              "source_type": "column",
@@ -511,7 +510,7 @@ folders_rules_dict = {
              },
             {"target_column": "ФИО",
              "source_type": "concat_by_whitespace",
-             "source_columns": ["Фамилия", "Имя", "Отчество"]
+             "source_column_name": ["Фамилия", "Имя", "Отчество"]
              }                                                               
         ]
     },
@@ -545,10 +544,6 @@ folders_rules_dict = {
             "Адрес ", "Телефон", "Программа", "Организация", "Начало ", "Конец "
             ],
         "result_columns": [
-            {"target_column": "Серия полиса",
-             "source_type": "column",
-             "source_column_name": "POLICSER"
-             },
             {"target_column": "Номер полиса",
              "source_type": "column",
              "source_column_name": "Полис"
@@ -567,12 +562,11 @@ folders_rules_dict = {
              },
             {"target_column": "ФИО",
              "source_type": "concat_by_whitespace",
-             "source_columns": ["Фамилия", "Имя", "Отчество"]
-             },                 
+             "source_column_name": ["Фамилия", "Имя", "Отчество"]
+             }                   
             {"target_column": "Вид медицинского обслуживания",
              "source_type": "column",
-             "source_column_name": "Программа"
-             },
+             "source_column_name": "Программа"},
             {"target_column": "Код ПИКОМЕД",
              "source_type": "dict",
              "source_column_name": "Программа",
@@ -622,7 +616,7 @@ folders_rules_dict = {
             },
             {"target_column": "ФИО",
              "source_type": "concat_by_whitespace",
-             "source_columns": ["Фамилия", "Имя", "Отчество"]
+             "source_column_name": ["Фамилия", "Имя", "Отчество"]
              }                                                               
         ]
     },

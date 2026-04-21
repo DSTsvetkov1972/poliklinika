@@ -61,7 +61,7 @@ def base(folder, file, folders_rules_dict):
         
         source_header = folders_rules_dict[folder]['source_header']
 
-        df = pd.read_excel(os.path.join('Исходники',folder, file), header=None, index_col=None)
+        df = pd.read_excel(os.path.join('Исходники',folder, file), header=None, index_col=None, dtype=str)
         if df.empty:
             return(False, 'Пустой исходный файл') 
         
@@ -96,18 +96,34 @@ def base(folder, file, folders_rules_dict):
                 for result_column_dict in folders_rules_dict[folder]['result_columns']:
                     #print(result_column_dict)
                     target_column  = result_column_dict['target_column']
-                    source_column_name = result_column_dict['source_column_name']
 
                     if result_column_dict['source_type'] == 'column':
+                        source_column_name = result_column_dict['source_column_name']
                         res_df[target_column] = df[source_column_name]
+
+                    elif result_column_dict['source_type'] == 'concat_by_whitespace':
+                        source_columns= result_column_dict['source_columns']
+                        res_df[target_column] = df[source_columns].astype(str).agg(' '.join, axis=1)                    
+
                     elif result_column_dict['source_type'] == 'surname_from_column':
+                        source_column_name = result_column_dict['source_column_name']
                         res_df[target_column] = df[source_column_name].apply(lambda fio: fio_splitter(fio)['surname'])
+
                     elif result_column_dict['source_type'] == 'name_from_column':
+                        source_column_name = result_column_dict['source_column_name']
                         res_df[target_column] = df[source_column_name].apply(lambda fio: fio_splitter(fio)['name'])
-                    elif result_column_dict['source_type'] == 'patronymic_from_column':                                                
+
+                    elif result_column_dict['source_type'] == 'patronymic_from_column':           
+                        source_column_name = result_column_dict['source_column_name']                                     
                         res_df[target_column] = df[source_column_name].apply(lambda fio: fio_splitter(fio)['patronymic'])
-                    elif result_column_dict['source_type'] == 'dict':                                                
-                        res_df[target_column] = df[source_column_name].apply(lambda k: result_column_dict['dict'][k])                            
+
+                    elif result_column_dict['source_type'] == 'dict':  
+                        source_column_name = result_column_dict['source_column_name']                                              
+                        res_df[target_column] = df[source_column_name].apply(lambda k: result_column_dict['dict'][k])
+
+                    elif result_column_dict['source_type'] == 'const':
+                        const = result_column_dict['const']                                              
+                        res_df[target_column] = const                           
 
                 res_df['Папка'] = folder
                 res_df['Файл'] = file        
@@ -126,20 +142,37 @@ def base(folder, file, folders_rules_dict):
     
 
 def renessans_otkrep(folder, file, folders_rules_dict):
-    
 
+    #if True:
     try:
+        source_header = ['№ п/п', 'Фамилия', 'Имя', 'Отчество', 'Дата рождения', 'Номер полиса']
+        header_row = 21
+        
         file_path = os.path.join(os.getcwd(), 'Исходники', folder, file)
-        df = pd.read_excel(file_path, header=None, sheet_name=folders_rules_dict[folder]['sheet_name'])
+        df = pd.read_excel(file_path, header=None, sheet_name=folders_rules_dict[folder]['sheet_name'], dtype=str)
+
+        df_columns = list(df.iloc[header_row-1])
+
+        if source_header != df_columns:
+            return (False,
+                    f"В файле заголовок:\n"
+                    f"{ df_columns }\n"
+                    f"Ожидалось:\n"
+                    f"{ source_header }")
+        
 
         df[6] = df[0].apply(lambda x: x[-88:-78] if 'просит Вас снять с' in str(x) and is_date(x[-88:-78]) else None)
         df[6] = df[6].ffill()
 
+        df =df.fillna('')
+
         df[7] = df[4].apply(lambda x: is_date(x))
         df = df[df[7]]
 
-        df.rename(columns={1:'Фамилия', 2:'Имя', 3:'Отчество', 4:'Дата рождения', 5:'Номер полиса', 6:'Дата открепления'}, inplace=True)
-        df = df[["Номер полиса", "Дата открепления", "Дата рождения", "Фамилия", "Имя", "Отчество"]]
+        # print(df)
+        df[8] = df[[1, 2, 3]].astype(str).agg(' '.join, axis=1) 
+        df.rename(columns={4:'Дата рождения', 5:'Номер полиса', 6:'Дата открепления', 8:'ФИО'}, inplace=True)
+        df = df[['Номер полиса', 'Дата открепления', 'Дата рождения', 'ФИО']]
         
         df['Папка'] = folder
         df['Файл'] = file
@@ -154,7 +187,7 @@ def soglasie_otkrep(folder, file, folders_rules_dict):
 
     try:
         file_path = os.path.join(os.getcwd(), 'Исходники', folder, file)
-        df = pd.read_excel(file_path, header=None, sheet_name=folders_rules_dict[folder]['sheet_name'])
+        df = pd.read_excel(file_path, header=None, sheet_name=folders_rules_dict[folder]['sheet_name'], dtype=str)
 
         df[4] = df[3].apply(lambda x: is_date(x))
 
@@ -164,14 +197,8 @@ def soglasie_otkrep(folder, file, folders_rules_dict):
 
         df = df[df[4]]
 
-
-        df['Фамилия'] = df[2].apply(lambda x: fio_splitter(x)['surname'])
-        df['Имя'] = df[2].apply(lambda x: fio_splitter(x)['name'])
-        df['Отчество'] = df[2].apply(lambda x: fio_splitter(x)['patronymic'])
-
-
-        df.columns= [0, "Номер полиса", 2, "Дата рождения", 4, "Дата открепления", "Фамилия", "Имя", "Отчество"]
-        df = df[["Номер полиса", "Дата открепления", "Дата рождения", "Фамилия", "Имя", "Отчество"]]
+        df.columns= [0, "Номер полиса", "ФИО", "Дата рождения", 4, "Дата открепления"]
+        df = df[["Номер полиса", "Дата открепления", "Дата рождения", "ФИО"]]
         df['Папка'] = folder
         df['Файл'] = file
         return (True, df)
@@ -202,7 +229,7 @@ def zetta_prikrep(folder, file, folders_rules_dict):
     
     # if True:
     try:
-        df = pd.read_excel(file_path, header=None)
+        df = pd.read_excel(file_path, header=None, dtype=str)
         df = df.fillna('')
         df_columns = list(df.iloc[header_row])
         
@@ -223,16 +250,17 @@ def zetta_prikrep(folder, file, folders_rules_dict):
         df['по программе'] = df.apply(lambda x: zetta_prikrep_conditions(x['shifted_1'], x['shifted_3']), axis=1)
         df['по программе'] = df['по программе'].ffill()
 
-        df=df[["Серия полиса","Дата прикр.", "Дата откр.", "Дата рождения", "Фамилия", "Имя", "Отчество", "по программе"]]
+        df['ФИО'] = df[["Фамилия", "Имя", "Отчество"]].astype(str).agg(' '.join, axis=1) 
+
+        df=df[["Серия полиса","№ Полиса","Дата прикр.", "Дата откр.", "Дата рождения", 'ФИО', "по программе"]]
         df=df.rename(
             columns={
-                "Серия полиса": "Номер полиса", 
+                "Серия полиса": "Серия полиса",                 
+                "№ Полиса": "Номер полиса", 
                 "Дата прикр.": "Период обслуживания c",
                 "Дата откр.": "Период обслуживания по",
                 "DATE": "Дата рождения",
-                "Фамилия": "Фамилия",
-                "Имя": "Имя",
-                "Отчество": "Отчество",
+                "ФИО": "ФИО",
                 "по программе": "Вид медицинского обслуживания" 
                 })
         df['Код ПИКОМЕД'] = df['Вид медицинского обслуживания'].apply(lambda k: codes_dict[k])
@@ -266,7 +294,7 @@ def renessans_prikrep(folder, file, folders_rules_dict):
 
         file_path = os.path.join(os.getcwd(), "Исходники", folder, file)
 
-        df = pd.read_excel(file_path, header=None)
+        df = pd.read_excel(file_path, header=None, dtype=str)
         df =df.fillna('')
         df_columns = list(df.iloc[6])
         
@@ -288,17 +316,19 @@ def renessans_prikrep(folder, file, folders_rules_dict):
         df['по программе'] = df['по программе'].ffill()
         
         df =df.fillna('')
-        df=df[['POLIC SER', 'BEGIN', 'END', 'DATE', 'NAME1', 'NAME2', 'NAME3', 'по программе']]
+
+        df['ФИО'] = df[['NAME1', 'NAME2', 'NAME3']].astype(str).agg(' '.join, axis=1) 
+        
+        df=df[['POLIC SER', 'POLIC', 'BEGIN', 'END', 'DATE', 'ФИО', 'по программе']]
         
         df=df.rename(
             columns={
-                'POLIC SER': 'Номер полиса',
+                'POLIC SER': 'Серия полиса',
+                'POLIC': 'Номер полиса',                
                 'BEGIN': 'Период обслуживания c',
                 'END': 'Период обслуживания по',
                 'DATE': 'Дата рождения',
-                'NAME1': 'Фамилия',
-                'NAME2': 'Имя',
-                'NAME3': 'Отчество',
+                'ФИО': 'ФИО',
                 'по программе': 'Вид медицинского обслуживания' 
                 })
         
@@ -330,7 +360,7 @@ def reso_prikrep_2(folder, file, folders_rules_dict):
         expected_columns = ['npp', 'NAME1', 'NAME2', 'NAME3', 'NIB', 'DATE', 'SEX', 'POLIC', 'POLIC SER', 'ADDRESS P', 'TEL1', 'KATEGORY ', 'PLACE', 'BEGIN', 'END']
         file_path = os.path.join(os.getcwd(), "Исходники", folder, file)
 
-        df = pd.read_excel(file_path, header=None)
+        df = pd.read_excel(file_path, header=None, dtype=str)
         df =df.fillna('')
         df_columns = list(df.iloc[7])
         
@@ -350,16 +380,19 @@ def reso_prikrep_2(folder, file, folders_rules_dict):
         df['по программе'] = df.apply(lambda x: reso_prikrep_2_conditions(x['npp_shifted_1'], x['npp_shifted_2'], x['NAME2_shifted_2']), axis=1)
         df['по программе'] = df['по программе'].ffill()
         df =df.fillna('')
-        df=df[['POLIC SER', 'BEGIN', 'END', 'DATE', 'NAME1', 'NAME2', 'NAME3', 'по программе']]
+        df['ФИО'] = df[['NAME1', 'NAME2', 'NAME3']].astype(str).agg(' '.join, axis=1) 
+        df=df[['POLIC SER', 'POLIC', 'BEGIN', 'END', 'DATE', 'ФИО', 'по программе']]
+
+
+
         df=df.rename(
             columns={
-                'POLIC SER': 'Номер полиса',
+                'POLIC SER': 'Серия полиса',
+                'POLIC': 'Номер полиса',
                 'BEGIN': 'Период обслуживания c',
                 'END': 'Период обслуживания по',
                 'DATE': 'Дата рождения',
-                'NAME1': 'Фамилия',
-                'NAME2': 'Имя',
-                'NAME3': 'Отчество',
+                'ФИО': 'ФИО',
                 'по программе': 'Вид медицинского обслуживания' 
                 })
         df['Код ПИКОМЕД'] = df['Вид медицинского обслуживания'].apply(lambda k: codes_dict[k])
@@ -386,8 +419,10 @@ if __name__ == '__main__':
     #folder, file = 'РЕСО_Прикрепление', 'p41894408.xlsx'
 
 
-    folder, file = 'Ренессанс_Прикрепление', 'П7_001ДМС38433124_прикр_14_04_2026_1.xls'
+    folder, file = 'Ренессанс_Открепление', 'П7_001ДМС39299025с_43_откр_18_04_2026.xls'
 
 
-    print(renessans_prikrep(folder, file , folders_rules_dict))
+
+
+    print(renessans_otkrep(folder, file, folders_rules_dict))
 
