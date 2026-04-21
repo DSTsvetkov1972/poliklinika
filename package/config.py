@@ -117,7 +117,7 @@ folders_rules_dict = {
     },
     "ВСК_Открепление": {
         "processor_name": "base",
-        "sheet_name": "",
+        "sheet_name": "Открепление",
         "header_row": 6,
         "filter_not_in": {
             "column": "NAME1",
@@ -148,7 +148,7 @@ folders_rules_dict = {
     },
     "ВСК_Прикрепление": {
         "processor_name": "base",
-        "sheet_name": "",
+        "sheet_name": "Прикрепление",
         "header_row": 8,
         "filter_not_in": {
             "column": "DATE",
@@ -522,13 +522,66 @@ folders_rules_dict = {
         ]
     },
     "СОГАЗ_Прикрепление": {
+        "processor_name": "base",
+        "sheet_name": "Лист_1",
+        "header_row": 22,
+        "filter_not_in": {
+            "column": "Дата рождения",
+            "conditions": ["", "Дата рождения"]
+            },
+        "source_header": [
+            "№ п/п", "Фамилия", "Имя", "Отчество", "Дата рождения", "Пол", "Адрес проживания", "Телефон домашний", "Телефон служебный", "Телефон мобильный",
+            "№ полиса", "Начало обслуживания", "Окончание обслуживания", "Программа мед. обслуживания", "Место работы (Страхователь)", "Должность"
+            ],
+        "result_columns": [
+            {"target_column": "Серия полиса",
+             "source_type": "const",
+             "const": ""
+             },            
+            {"target_column": "Номер полиса",
+             "source_type": "column",
+             "source_column_name": "№ полиса"
+             },
+            {"target_column": "Период обслуживания c",
+             "source_type": "date_column",
+             "source_column_name": "Начало обслуживания"
+             },
+            {"target_column": "Период обслуживания по",
+             "source_type": "date_column",
+             "source_column_name": "Окончание обслуживания"
+             },
+            {"target_column": "Дата рождения",
+             "source_type": "date_column",
+             "source_column_name": "Дата рождения"
+             },
+            {"target_column": "ФИО",
+             "source_type": "concat_by_whitespace",
+             "source_columns": ["Фамилия", "Имя", "Отчество"]
+             },
+            {"target_column": "Вид медицинского обслуживания",
+             "source_type": "column",
+             "source_column_name": "Программа мед. обслуживания"
+             },
+            {"target_column": "Код ПИКОМЕД",
+             "source_type": "dict",
+             "source_column_name": "Программа мед. обслуживания",
+             "dict": {
+                 "Амб. взрослые; ПНД в пределах МКАД; Стоматология в ЛПУ": "072.16 ",
+                 "Амб. взрослые": "071.16",
+                 "Амб. взрослые; Стоматология в ЛПУ": "073.16",
+                 "Амб. взрослые; ПНД в пределах административной границы города; Стоматология в ЛПУ": "072.16",
+                 "Амб. взрослые; ПНД в пределах МКАД": "070.16",
+                 "ПНД в пределах МКАД": "070.16"
+                 }
+            }
+        ]
+                           
     },
     "СОГАЗ_Скачано": {
         "email_folder": "СОГАЗ",
         "separator_name": "email_by_file_name",
         "file_rules": [
-            {"pattern": "_прикр_.*\.xls$", "target_folder": "Ренессанс_Прикрепление"},
-            {"pattern": "_откр_.*\.xls$", "target_folder": "Ренессанс_Открепление"}
+            {"pattern": "_Прикрепление_.*\.xls$", "target_folder": "СОГАЗ_Прикрепление"}
         ]
     },
         
@@ -540,7 +593,7 @@ folders_rules_dict = {
     },
     "СОГЛАСИЕ_Прикрепление": {
         "processor_name": "base",
-        "sheet_name": "",
+        "sheet_name": "Лист1",
         "header_row": 7,
         "filter_not_in": {
             "column": "Фамилия",
@@ -636,7 +689,7 @@ folders_rules_dict = {
     },
     "Югория_Прикрепление": {
         "processor_name": "base",
-        "sheet_name": "",
+        "sheet_name": "Лист_1",
         "header_row": 7,
         "filter_not_in": {
             "column": "Фамилия",

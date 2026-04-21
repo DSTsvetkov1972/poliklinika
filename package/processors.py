@@ -12,7 +12,7 @@ from dateutil import parser
 
 def convert_date(date_string):
     date_obj = parser.parse(date_string, dayfirst=True)
-    return date_obj.strftime('%d-%m-%Y')
+    return date_obj.strftime('%d.%m.%Y')
 
 
 def is_date(string, date_format="%d.%m.%Y"):
@@ -67,7 +67,13 @@ def base(folder, file, folders_rules_dict):
         
         source_header = folders_rules_dict[folder]['source_header']
 
-        df = pd.read_excel(os.path.join('Исходники',folder, file), header=None, index_col=None, dtype=str)
+        sheet_name = folders_rules_dict[folder]['sheet_name']
+
+        if sheet_name!="":
+            df = pd.read_excel(os.path.join('Исходники',folder, file), sheet_name=sheet_name, header=None, index_col=None, dtype=str)
+        else:
+            df = pd.read_excel(os.path.join('Исходники',folder, file), header=None, index_col=None, dtype=str)
+
         if df.empty:
             return(False, 'Пустой исходный файл') 
         
@@ -201,7 +207,7 @@ def soglasie_otkrep(folder, file, folders_rules_dict):
 
     try:
         file_path = os.path.join(os.getcwd(), 'Исходники', folder, file)
-        df = pd.read_excel(file_path, header=None, sheet_name=folders_rules_dict[folder]['sheet_name'], dtype=str)
+        df = pd.read_excel(file_path, header=None, sheet_name='TDSheet', dtype=str)
 
         df[4] = df[3].apply(lambda x: is_date(x))
 
