@@ -210,8 +210,86 @@ folders_rules_dict = {
     "Ингосстрах_Изменение": {
     },
     "Ингосстрах_Открепление": {
+        "processor_name": "base",
+        "sheet_name": "Лист1",
+        "header_row": 10,
+        "filter_not_in": {
+            "column": "Фамилия",
+            "conditions": ["","Фамилия"]
+            },
+        "source_header": [
+            "№ п/п", "Фамилия", "Имя", "Отчество", "Дата рождения", "Пол", "№ Истории болезни", "Адрес проживания",
+            "Телефон домашний", "Телефон рабочий", "Телефон мобильный", "№ полиса", "Начало обслуживания", "Конец обслуживания",
+            "Программа мед. обслуживания", "Место работы", "Должность", "Статус застрахованного"
+            ],
+        "result_columns": [
+            {"target_column": "Номер полиса",
+             "source_type": "column",
+             "source_column_name": "№ полиса"
+            },
+            {"target_column": "Дата открепления",
+             "source_type": "date_column",
+             "source_column_name": "Конец обслуживания"
+            },
+            {"target_column": "Дата рождения",
+             "source_type": "date_column",
+             "source_column_name": "Дата рождения"
+            },
+            {"target_column": "ФИО",
+             "source_type": "concat_by_whitespace",
+             "source_columns": ["Фамилия", "Имя", "Отчество"]
+             }
+        ]
     },
     "Ингосстрах_Прикрепление": {
+        "processor_name": "base",
+        "sheet_name": "Лист1",
+        "header_row": 10,
+        "filter_not_in": {
+            "column": "Фамилия",
+            "conditions": ["","Фамилия"]
+            },
+        "source_header": [
+            "№ п/п", "Фамилия", "Имя", "Отчество", "Дата рождения", "Пол", "№ Истории болезни", "Адрес проживания",
+            "Телефон домашний", "Телефон рабочий", "Телефон мобильный", "№ полиса", "Начало обслуживания", "Конец обслуживания",
+            "Программа мед. обслуживания", "Место работы", "Должность", "Статус застрахованного"
+            ],
+        "result_columns": [
+            {"target_column": "Серия полиса",
+             "source_type": "const",
+             "const": ""
+             },
+            {"target_column": "Номер полиса",
+             "source_type": "column",
+             "source_column_name": "№ полиса"
+             },
+            {"target_column": "Период обслуживания c",
+             "source_type": "date_column",
+             "source_column_name": "Начало обслуживания"
+             },
+            {"target_column": "Период обслуживания по",
+             "source_type": "date_column",
+             "source_column_name": "Конец обслуживания"
+             },
+            {"target_column": "Дата рождения",
+             "source_type": "date_column",
+             "source_column_name": "Дата рождения"
+             },
+         {"target_column": "ФИО",
+             "source_type": "concat_by_whitespace",
+             "source_columns": ["Фамилия", "Имя", "Отчество"]
+             },
+            {"target_column": "Вид медицинского обслуживания",
+             "source_type": "column",
+             "source_column_name": "Программа мед. обслуживания"
+             },
+            {"target_column": "Код ПИКОМЕД",
+             "source_type": "dict",
+             "source_column_name": "Программа мед. обслуживания",
+             "dict": {
+                 }
+            }                                                       
+        ]
     },
     "Ингосстрах_Скачано": {
         "email_folder": "Ингосстрах",
@@ -506,12 +584,187 @@ folders_rules_dict = {
         ]
     },
 
+    "Росгосстрах_Изменение": {
+    },    
+    "Росгосстрах_Открепление": {
+        "processor_name": "base",
+        "sheet_name": "Шаблон",
+        "header_row": 10,
+        "filter_not_in": {
+            "column": "Дата рожд.",
+            "conditions": ["", "Дата рожд.", "Начальник управления администрирования и сопровождения договоров личных видов страхования"]
+            },
+        "source_header": [
+            "п/п", "Полис №", "ФИО", "Дата рожд.", "Адрес", "Начало обслуживания", "Конец обслуживания",
+            "Программа", "Организация", "Город"
+        ],
+        "result_columns": [
+            {"target_column": "Номер полиса",
+             "source_type": "column",
+             "source_column_name": "Полис №"
+             },
+            {"target_column": "Дата открепления",
+             "source_type": "date_column",
+             "source_column_name": "Конец обслуживания"
+             },
+            {"target_column": "Дата рождения",
+             "source_type": "date_column",
+             "source_column_name": "Дата рожд."
+             },
+            {"target_column": "ФИО",
+             "source_type": "column",
+             "source_column_name": "ФИО"
+             }                                                         
+        ]
+    },
+    "Росгосстрах_Прикрепление": {  
+        "processor_name": "base",
+        "sheet_name": "Шаблон",
+        "header_row": 10,
+        "filter_not_in": {
+            "column": "Дата рожд.",
+            "conditions": ["", "Дата рожд.", "Начальник управления администрирования и сопровождения договоров личных видов страхования"]
+            },
+        "source_header": [
+            "п/п", "Полис №", "ФИО", "Дата рожд.", "Адрес", "Начало обслуживания", "Конец обслуживания",
+            "Программа", "Организация", "Город"
+            ],
+        "result_columns": [
+            {"target_column": "Серия полиса",
+             "source_type": "const",
+             "const": ""
+             },
+            {"target_column": "Номер полиса",
+             "source_type": "column",
+             "source_column_name": "Полис №"
+             },
+            {"target_column": "Период обслуживания c",
+             "source_type": "date_column",
+             "source_column_name": "Начало обслуживания"
+             },
+            {"target_column": "Период обслуживания по",
+             "source_type": "date_column",
+             "source_column_name": "Конец обслуживания"
+             },
+            {"target_column": "Дата рождения",
+             "source_type": "date_column",
+             "source_column_name": "Дата рожд."
+             },
+            {"target_column": "ФИО",
+             "source_type": "column",
+             "source_column_name": "ФИО"
+             },
+            {"target_column": "Вид медицинского обслуживания",
+             "source_type": "column",
+             "source_column_name": "Программа"
+             },
+            {"target_column": "Код ПИКОМЕД",
+             "source_type": "dict",
+             "source_column_name": "Программа",
+             "dict": {
+                 "АПП": "041.103",
+                 "АПП,ПНД,СТОМ": "043.103"
+                 }
+            }                                                       
+        ]
+           
+    },
+    "Росгосстрах_Скачано": {
+        "email_folder": "Росгосстрах",
+        "separator_name": "email_by_file_name",
+        "file_rules": [
+            {"pattern": "^.* пр .*\.xls$", "target_folder": "Росгосстрах_Прикрепление"},            
+            {"pattern": "^.* откр .*\.xls$", "target_folder": "Росгосстрах_Открепление"},
+            {"pattern": "^.* изм .*\.xls$", "target_folder": "Росгосстрах_Изменение"}
+        ]
+    },
+   
+
 
     "Совкомбанк_Изменение": {
     },    
     "Совкомбанк_Открепление": {
+        "processor_name": "base",
+        "sheet_name": "Шаблон",
+        "header_row": 10,
+        "filter_not_in": {
+            "column": "Дата рожд.",
+            "conditions": ["", "Дата рожд.", "Начальник управления администрирования и сопровождения договоров личных видов страхования"]
+            },
+        "source_header": [
+            "п/п", "Полис №", "ФИО", "Дата рожд.", "Адрес", "Начало обслуживания", "Конец обслуживания",
+            "Программа", "Организация", "Город"
+        ],
+        "result_columns": [
+            {"target_column": "Номер полиса",
+             "source_type": "column",
+             "source_column_name": "Полис №"
+             },
+            {"target_column": "Дата открепления",
+             "source_type": "date_column",
+             "source_column_name": "Конец обслуживания"
+             },
+            {"target_column": "Дата рождения",
+             "source_type": "date_column",
+             "source_column_name": "Дата рожд."
+             },
+            {"target_column": "ФИО",
+             "source_type": "column",
+             "source_column_name": "ФИО"
+             }                                                         
+        ]
     },
-    "Совкомбанк_Прикрепление": {             
+    "Совкомбанк_Прикрепление": {  
+        "processor_name": "base",
+        "sheet_name": "Шаблон",
+        "header_row": 10,
+        "filter_not_in": {
+            "column": "Дата рожд.",
+            "conditions": ["", "Дата рожд.", "Начальник управления администрирования и сопровождения договоров личных видов страхования"]
+            },
+        "source_header": [
+            "п/п", "Полис №", "ФИО", "Дата рожд.", "Адрес", "Начало обслуживания", "Конец обслуживания",
+            "Программа", "Организация", "Город"
+            ],
+        "result_columns": [
+            {"target_column": "Серия полиса",
+             "source_type": "const",
+             "const": ""
+             },
+            {"target_column": "Номер полиса",
+             "source_type": "column",
+             "source_column_name": "Полис №"
+             },
+            {"target_column": "Период обслуживания c",
+             "source_type": "date_column",
+             "source_column_name": "Начало обслуживания"
+             },
+            {"target_column": "Период обслуживания по",
+             "source_type": "date_column",
+             "source_column_name": "Конец обслуживания"
+             },
+            {"target_column": "Дата рождения",
+             "source_type": "date_column",
+             "source_column_name": "Дата рожд."
+             },
+            {"target_column": "ФИО",
+             "source_type": "column",
+             "source_column_name": "ФИО"
+             },
+            {"target_column": "Вид медицинского обслуживания",
+             "source_type": "column",
+             "source_column_name": "Программа"
+             },
+            {"target_column": "Код ПИКОМЕД",
+             "source_type": "dict",
+             "source_column_name": "Программа",
+             "dict": {
+                 "АПП": "041.103",
+                 "АПП,ПНД,СТОМ": "043.103"
+                 }
+            }                                                       
+        ]
+           
     },
     "Совкомбанк_Скачано": {
         "email_folder": "Савкомбанк",

@@ -10,9 +10,32 @@ from colorama import Fore
 
 from dateutil import parser
 
-def convert_date(date_string):
-    date_obj = parser.parse(date_string, dayfirst=True)
-    return date_obj.strftime('%d.%m.%Y')
+def convert_date(date_str):
+        patterns = ['%d-%m-%Y %H:%M:%S',
+                    '%d-%m-%Y %H:%M',
+                    '%d-%m-%Y',
+                    '%d.%m.%Y %H:%M:%S',
+                    '%d.%m.%Y %H:%M',
+                    '%d.%m.%Y',
+                    '%d.%m.%Y %H:%M:%S',
+                    '%d.%m.%Y %H:%M',
+                    '%d/%m/%Y',
+                    '%Y-%m-%d %H:%M:%S.%f',                    
+                    '%Y-%m-%d %H:%M:%S',
+                    '%Y-%m-%d %H:%M',
+                    '%Y-%m-%d',
+                    '%Y.%m.%d %H:%M:%S',                    
+                    '%Y.%m.%d'               
+                    ]
+                    
+        for pattern in patterns:
+            # print(date_str, pattern)
+            try:
+                dt = datetime.strptime(date_str, pattern)
+                return dt
+            except:
+                pass
+        raise ValueError (f"Значение {date_str} не соответствует ни одному паттерну даты функции convert_date!")
 
 
 def is_date(string, date_format="%d.%m.%Y"):
@@ -63,6 +86,8 @@ def base(folder, file, folders_rules_dict):
     """
 
     try:
+        date_columns = []
+
         header_row = folders_rules_dict[folder]['header_row']
         
         source_header = folders_rules_dict[folder]['source_header']
@@ -70,17 +95,15 @@ def base(folder, file, folders_rules_dict):
         sheet_name = folders_rules_dict[folder]['sheet_name']
 
         if sheet_name!="":
-            df = pd.read_excel(os.path.join('Исходники',folder, file), sheet_name=sheet_name, header=None, index_col=None) #, dtype=str)
+            df = pd.read_excel(os.path.join('Исходники',folder, file), sheet_name=sheet_name, header=None, index_col=None, dtype=str)
         else:
-            df = pd.read_excel(os.path.join('Исходники',folder, file), header=None, index_col=None) #, dtype=str)
+            df = pd.read_excel(os.path.join('Исходники',folder, file), header=None, index_col=None, dtype=str)
 
         if df.empty:
             return(False, 'Пустой исходный файл') 
         
         df = df.fillna('')
         df_columns = df.iloc[header_row-1].tolist()
-
-
 
         if source_header == df_columns:
             df = df.iloc[header_row:]
@@ -109,13 +132,13 @@ def base(folder, file, folders_rules_dict):
                     #print(result_column_dict)
                     target_column  = result_column_dict['target_column']
 
-                    if result_column_dict['source_type'] == 'column' or result_column_dict['source_type'] == 'date_column':
+                    if result_column_dict['source_type'] == 'column':
                         source_column_name = result_column_dict['source_column_name']
                         res_df[target_column] = df[source_column_name]
 
-                    #if result_column_dict['source_type'] == 'date_column':
-                    #    source_column_name = result_column_dict['source_column_name']
-                    #    res_df[target_column] = df[source_column_name].apply(lambda x: convert_date(x))
+                    elif result_column_dict['source_type'] == 'date_column':
+                        source_column_name = result_column_dict['source_column_name']
+                        res_df[target_column] = df[source_column_name].apply(lambda x: convert_date(x))
 
                     elif result_column_dict['source_type'] == 'concat_by_whitespace':
                         source_columns= result_column_dict['source_columns']
@@ -165,7 +188,7 @@ def renessans_otkrep(folder, file, folders_rules_dict):
         header_row = 21
         
         file_path = os.path.join(os.getcwd(), 'Исходники', folder, file)
-        df = pd.read_excel(file_path, header=None, sheet_name=folders_rules_dict[folder]['sheet_name']) #, dtype=str)
+        df = pd.read_excel(file_path, header=None, sheet_name=folders_rules_dict[folder]['sheet_name'], dtype=str)
 
         df_columns = list(df.iloc[header_row-1])
 
@@ -190,8 +213,8 @@ def renessans_otkrep(folder, file, folders_rules_dict):
         df.rename(columns={4:'Дата рождения', 5:'Номер полиса', 6:'Дата открепления', 8:'ФИО'}, inplace=True)
         df = df[['Номер полиса', 'Дата открепления', 'Дата рождения', 'ФИО']]
         
-        #df['Дата открепления'] = df['Дата открепления'].apply(lambda x: convert_date(x))
-        #df['Дата рождения'] = df['Дата рождения'].apply(lambda x: convert_date(x))
+        df['Дата открепления'] = df['Дата открепления'].apply(lambda x: convert_date(x))
+        df['Дата рождения'] = df['Дата рождения'].apply(lambda x: convert_date(x))
 
 
         df['Папка'] = folder
@@ -207,7 +230,7 @@ def soglasie_otkrep(folder, file, folders_rules_dict):
 
     try:
         file_path = os.path.join(os.getcwd(), 'Исходники', folder, file)
-        df = pd.read_excel(file_path, header=None, sheet_name='TDSheet') #, dtype=str)
+        df = pd.read_excel(file_path, header=None, sheet_name='TDSheet', dtype=str)
 
         df[4] = df[3].apply(lambda x: is_date(x))
 
@@ -220,8 +243,8 @@ def soglasie_otkrep(folder, file, folders_rules_dict):
         df.columns= [0, "Номер полиса", "ФИО", "Дата рождения", 4, "Дата открепления"]
         df = df[["Номер полиса", "Дата открепления", "Дата рождения", "ФИО"]]
 
-        #df['Дата открепления'] = df['Дата открепления'].apply(lambda x: convert_date(x))
-        #df['Дата рождения'] = df['Дата рождения'].apply(lambda x: convert_date(x))
+        df['Дата открепления'] = df['Дата открепления'].apply(lambda x: convert_date(x))
+        df['Дата рождения'] = df['Дата рождения'].apply(lambda x: convert_date(x))
 
         df['Папка'] = folder
         df['Файл'] = file
@@ -253,7 +276,7 @@ def zetta_prikrep(folder, file, folders_rules_dict):
     
     # if True:
     try:
-        df = pd.read_excel(file_path, header=None)#, dtype=str)
+        df = pd.read_excel(file_path, header=None, dtype=str)
         df = df.fillna('')
         df_columns = list(df.iloc[header_row])
         
@@ -288,9 +311,9 @@ def zetta_prikrep(folder, file, folders_rules_dict):
                 "по программе": "Вид медицинского обслуживания" 
                 })
         
-        #df['Период обслуживания c'] = df['Период обслуживания c'].apply(lambda x: convert_date(x))
-        #df['Период обслуживания по'] = df['Период обслуживания по'].apply(lambda x: convert_date(x))        
-        #df['Дата рождения'] = df['Дата рождения'].apply(lambda x: convert_date(x))
+        df['Период обслуживания c'] = df['Период обслуживания c'].apply(lambda x: convert_date(x))
+        df['Период обслуживания по'] = df['Период обслуживания по'].apply(lambda x: convert_date(x))        
+        df['Дата рождения'] = df['Дата рождения'].apply(lambda x: convert_date(x))
 
 
         df['Код ПИКОМЕД'] = df['Вид медицинского обслуживания'].apply(lambda k: codes_dict[k])
@@ -324,7 +347,7 @@ def renessans_prikrep(folder, file, folders_rules_dict):
 
         file_path = os.path.join(os.getcwd(), "Исходники", folder, file)
 
-        df = pd.read_excel(file_path, header=None) #, dtype=str)
+        df = pd.read_excel(file_path, header=None, dtype=str)
         df =df.fillna('')
         df_columns = list(df.iloc[6])
         
@@ -362,9 +385,9 @@ def renessans_prikrep(folder, file, folders_rules_dict):
                 'по программе': 'Вид медицинского обслуживания' 
                 })
         
-        #df['Период обслуживания c'] = df['Период обслуживания c'].apply(lambda x: convert_date(x))
-        #df['Период обслуживания по'] = df['Период обслуживания по'].apply(lambda x: convert_date(x))        
-        #df['Дата рождения'] = df['Дата рождения'].apply(lambda x: convert_date(x))
+        df['Период обслуживания c'] = df['Период обслуживания c'].apply(lambda x: convert_date(x))
+        df['Период обслуживания по'] = df['Период обслуживания по'].apply(lambda x: convert_date(x))        
+        df['Дата рождения'] = df['Дата рождения'].apply(lambda x: convert_date(x))
         
         df['Код ПИКОМЕД'] = df['Вид медицинского обслуживания'].apply(lambda k: codes_dict[k])
         df['Папка'] = folder
@@ -394,7 +417,7 @@ def reso_prikrep_2(folder, file, folders_rules_dict):
         expected_columns = ['npp', 'NAME1', 'NAME2', 'NAME3', 'NIB', 'DATE', 'SEX', 'POLIC', 'POLIC SER', 'ADDRESS P', 'TEL1', 'KATEGORY ', 'PLACE', 'BEGIN', 'END']
         file_path = os.path.join(os.getcwd(), "Исходники", folder, file)
 
-        df = pd.read_excel(file_path, header=None) #, dtype=str)
+        df = pd.read_excel(file_path, header=None, dtype=str)
         #print(df.iloc[10:])
         df =df.fillna('')
         df_columns = list(df.iloc[7])
@@ -431,9 +454,9 @@ def reso_prikrep_2(folder, file, folders_rules_dict):
                 'по программе': 'Вид медицинского обслуживания' 
                 })
         
-        #df['Период обслуживания c'] = df['Период обслуживания c'].apply(lambda x: convert_date(x))
-        #df['Период обслуживания по'] = df['Период обслуживания по'].apply(lambda x: convert_date(x))        
-        #df['Дата рождения'] = df['Дата рождения'].apply(lambda x: convert_date(x))
+        df['Период обслуживания c'] = df['Период обслуживания c'].apply(lambda x: convert_date(x))
+        df['Период обслуживания по'] = df['Период обслуживания по'].apply(lambda x: convert_date(x))        
+        df['Дата рождения'] = df['Дата рождения'].apply(lambda x: convert_date(x))
 
         df['Код ПИКОМЕД'] = df['Вид медицинского обслуживания'].apply(lambda k: codes_dict[k])
         df['Папка'] = folder
@@ -459,10 +482,11 @@ if __name__ == '__main__':
     #folder, file = 'РЕСО_Прикрепление', 'p41894408.xlsx'
 
 
-    folder, file = 'РЕСО_Прикрепление_2', 'p41959073.xlsx'
+    folder, file = 'Альфа_Открепление', '1007g_00349480_20-04-2026-20-24-54_1007gфв_snyat.xlsx'
 
 
 
 
-    print(reso_prikrep_2(folder, file, folders_rules_dict))
+    print(base(folder, file, folders_rules_dict))
 
+    print(convert_date('25.04.2026'))

@@ -39,11 +39,14 @@ def file_path_if_exists_2(file_name, target_folder):
 
 def extract_encrypted_zip(zip_path,
                           extract_path,
-                          password_file_path = os.path.join(os.getcwd(), "zetta_password.txt")):
+                          password_file_path=None):
 
     try:
-        with open(password_file_path) as password_file:
-            password =  password_file.readline()
+        if password_file_path:
+            with open(password_file_path) as password_file:
+                password =  password_file.readline()
+        else:
+            password=""
 
     
         with zipfile.ZipFile(zip_path, 'r') as zip_ref:
@@ -66,7 +69,7 @@ def extract_encrypted_zip(zip_path,
         return(False, f"❌ {extract_path}: {e}")
 
 
-def unzip_files(folder):
+def unzip_files(folder,  password_file_path):
     source_files = list(os.walk(os.path.join(os.getcwd(), 'Исходники', folder)))[0][2]
     zip_file_paths = [os.path.join(os.getcwd(), 'Исходники', folder, file) for file in source_files if file[-3:]=='zip']
 
@@ -75,7 +78,7 @@ def unzip_files(folder):
         if os.path.exists(extract_path):
             shutil.rmtree(extract_path)
 
-        extract_encrypted_zip_res = extract_encrypted_zip(zip_file_path, extract_path)
+        extract_encrypted_zip_res = extract_encrypted_zip(zip_file_path, extract_path,  password_file_path)
         unzipped_files = extract_encrypted_zip_res[0]
         
         if unzipped_files:
@@ -110,8 +113,11 @@ def processor_starter(folder, file):
 
 
 def separator():
-    unzip_files(folder='ЗЕТТА_Скачано')
-    unzip_files(folder='Совкомбанк_Скачано')
+    unzip_files(folder='ЗЕТТА_Скачано',  password_file_path=os.path.join(os.getcwd(), "zetta_password.txt"))
+    
+    unzip_files(folder='Росгосстрах_Скачано', password_file_path=os.path.join(os.getcwd(), "rgs_password.txt"))
+    
+    unzip_files(folder='Совкомбанк_Скачано', password_file_path=None)
     drop_files(
         folder='Совкомбанк_Скачано',
         extensions = ['png'])

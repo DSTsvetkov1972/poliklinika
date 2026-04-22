@@ -1,5 +1,6 @@
 import os, sys
 import pandas as pd
+from datetime import datetime
 
 sys.path.append(os.getcwd())
 
@@ -7,11 +8,14 @@ from package.config import folders_rules_dict
 from package.processors import processors_dict
 from openpyxl import load_workbook
 from openpyxl.styles import Alignment, Font
+from openpyxl.utils import get_column_letter
+
 # from tqdm import tqdm
 from progress.bar import FillingSquaresBar
 from colorama import Fore
+import warnings
 
-
+warnings.filterwarnings('ignore', category=UserWarning, module='openpyxl.styles.stylesheet')
 
 def processor_starter(folder, file):
     """
@@ -75,7 +79,29 @@ def prepared_maker():
 
                     if res_dfs:
                         res_df = pd.concat(res_dfs)
-                        res_df.to_excel(os.path.join(os.getcwd(), 'Подготовленные', f'{ folder }.xlsx'), index=False)
+
+                        prepared_file = os.path.join(os.getcwd(), 'Подготовленные', f'{ folder }.xlsx')
+                        res_df.to_excel(prepared_file, index=False)
+
+                        wb = load_workbook(prepared_file)
+                        ws = wb.active
+                        
+                        ws.freeze_panes = 'A2'
+                        ws.auto_filter.ref = ws.dimensions 
+
+                        for col in range(1, ws.max_column+1):
+                            header_cell = ws.cell(column=col, row=1)
+                            ws.column_dimensions[get_column_letter(col)].width = 24
+                            if header_cell.value in ['Дата рождения', 'Период обслуживания c', 'Период обслуживания по', 'Дата открепления']:
+                                for row in range(2, ws.max_row+1):
+                                    cell_to_format = ws.cell(row=row, column=col)
+                                    cell_to_format.number_format = 'DD.MM.YYYY'
+                                    cell_to_format.font = Font(bold=True)
+
+                        wb.save(prepared_file)            
+
+
+
                     bar.next()
                 
                 bar.finish()
