@@ -6,6 +6,14 @@ from imap_tools import MailBox, OR
 from package.config import IMAP_SERVER, IMAP_PORT, EMAIL, APP_PASSWORD, MARK_SEEN
 from package.config import folders_rules_dict
 
+def get_email_folders():
+     with MailBox(IMAP_SERVER, port=IMAP_PORT).login(EMAIL, APP_PASSWORD, 'INBOX') as mailbox:
+    
+        for folder_info in mailbox.folder.list():
+        
+           print(f"Имя папки: {folder_info.name}")
+
+
 
 def file_path_if_exists(file_path):
     while True:
@@ -72,7 +80,4 @@ def attachments_downloader():
     
 
 if __name__=='__main__':
-    #email_folder = 'Альянс'
-    #download_folder = 'ЗЕТТА_Скачано'
-    #get_attached_file(email_folder, download_folder)
-    attachments_downloader()
+    get_email_folders()
