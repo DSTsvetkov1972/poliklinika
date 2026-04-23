@@ -56,7 +56,7 @@ def extract_encrypted_zip(zip_path,
         os.remove(zip_path)
         unzipped_files =  list(os.walk(extract_path))[0][2]
         
-        return(unzipped_files, f"✅ Извлечены файлы из архива {zip_path}")
+        return(unzipped_files, f"✅ Извлечены файлы из архива {zip_path.replace(os.getcwd(), '')}")
 
        
             
