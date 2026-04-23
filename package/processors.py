@@ -224,6 +224,73 @@ def renessans_otkrep(folder, file, folders_rules_dict):
     except Exception as e:
         return(False, e)
 
+def rosgosstrah_conditions(shifted_1, shifted_2):
+
+    if shifted_1 == '№ п/п' and 'Просим снять с обслуживания с ' in shifted_2:
+        return(shifted_2[30:40])
+    elif shifted_1 == '№ п/п' and 'Просим снять с обслуживания с ' not in shifted_2:
+        raise KeyError('Неожиданная структура файла. Не возможно считать программу страхования')
+    else:
+        None
+
+def rosgosstrah_otkrep(folder, file, folders_rules_dict):
+
+    #if True:
+    try:
+        source_header = ['№ п/п', 'ФИО', 'Пол', 'Дата рождения', 'Полис']
+        sheet_name = 'SZO-00-1new1'
+        header_row = 6
+        
+        file_path = os.path.join(os.getcwd(), 'Исходники', folder, file)
+        
+        df = pd.read_excel(file_path, header=None, sheet_name=sheet_name, dtype=str)
+
+        df_columns = list(df.iloc[header_row-1])
+
+        if source_header != df_columns:
+            return (False,
+                    f"В файле заголовок:\n"
+                    f"{ df_columns }\n"
+                    f"Ожидалось:\n"
+                    f"{ source_header }")
+        
+
+        df.columns = source_header
+
+        df['shifted_1'] = df['№ п/п'].shift(1)
+        df['shifted_2'] = df['№ п/п'].shift(2)
+
+        df['finish_date'] = df.apply(lambda x: rosgosstrah_conditions(x['shifted_1'], x['shifted_2']), axis=1)
+        df['finish_date'] = df['finish_date'].ffill()
+
+        df =df.fillna('')
+
+        
+        df = df[(df['ФИО']!='')&(df['ФИО']!='ФИО')]
+
+        df = df.rename(
+            columns={
+                "Полис": "Номер полиса",
+                "finish_date": "Дата открепления",
+                "Дата рождения": "Дата рождения",
+                "ФИО": "ФИО"
+                }
+            )
+
+        df = df[['Номер полиса', 'Дата открепления', 'Дата рождения', 'ФИО']]
+        
+        df['Дата открепления'] = df['Дата открепления'].apply(lambda x: convert_date(x))
+        df['Дата рождения'] = df['Дата рождения'].apply(lambda x: convert_date(x))
+
+
+        df['Папка'] = folder
+        df['Файл'] = file
+        return (True, df)
+    
+    except Exception as e:
+        return(False, e)
+
+
 
 def soglasie_otkrep(folder, file, folders_rules_dict):
     
@@ -472,6 +539,7 @@ def reso_prikrep_2(folder, file, folders_rules_dict):
 processors_dict = {
     'base': base,
     'renessans_otkrep': renessans_otkrep,
+    'rosgosstrah_otkrep': rosgosstrah_otkrep,
     'soglasie_otkrep': soglasie_otkrep,
     'zetta_prikrep': zetta_prikrep,
     'renessans_prikrep': renessans_prikrep,
@@ -482,11 +550,12 @@ if __name__ == '__main__':
     #folder, file = 'РЕСО_Прикрепление', 'p41894408.xlsx'
 
 
-    folder, file = 'Альфа_Открепление', '1007g_00349480_20-04-2026-20-24-54_1007gфв_snyat.xlsx'
+    folder, file = 'Росгосстрах_Открепление', '17-04 откр 010-1.xls'
 
 
 
 
-    print(base(folder, file, folders_rules_dict))
 
-    print(convert_date('25.04.2026'))
+    print(rosgosstrah_otkrep(folder, file, folders_rules_dict))
+
+
