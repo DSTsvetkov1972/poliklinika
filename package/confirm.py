@@ -10,6 +10,8 @@ from openpyxl.styles import Alignment, Font
 
 from colorama import Fore
 
+from progress.bar import FillingSquaresBar
+
 def is_excel_file_open(filepath):
     try:
         # Попытка открыть файл для записи (режим 'rb' тоже сработает)
@@ -26,6 +28,16 @@ def get_files_to_confirm():
 
     files_to_confirm = {}
     files = list(os.walk(os.path.join(os.getcwd(), 'Подготовленные')))[0][2]
+    
+    print(Fore.BLACK)
+    bar = FillingSquaresBar(
+        'Читаем подготовленные файлы:',
+        max=len(files),
+        suffix = '%(index)d/%(max)d',
+        fill='█', empty_fill='░',
+        width = 50)  
+    
+    
     
     for file in files:
         df = pd.read_excel(os.path.join(os.getcwd(), 'Подготовленные', file))
@@ -46,6 +58,10 @@ def get_files_to_confirm():
         files_to_confirm[file] = {'files_in_file': files_in_file,
                                   'backup_file_name': backup_file_name}
         
+        bar.next()
+    
+    print(Fore.RESET)    
+    bar.finish()
     return files_to_confirm
 
 
@@ -88,6 +104,7 @@ def check_opened_files_to_confirm():
 def confirm_files(files_to_confirm):
     
     confirm_files_qty = 0
+  
 
     for downloaded_file, downloaded_file_data in files_to_confirm.items():
         downloaded_folder = downloaded_file[:-5]
@@ -99,7 +116,7 @@ def confirm_files(files_to_confirm):
         backup_file_path = os.path.join(os.getcwd(), 'Загруженные', downloaded_file_data['backup_file_name'])
         shutil.move(downloaded_file_path, backup_file_path)
         confirm_files_qty += len(downloaded_file_data['files_in_file'])
-        
+          
     return confirm_files_qty
         
         

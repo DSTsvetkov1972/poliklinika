@@ -10,7 +10,6 @@ from openpyxl import load_workbook
 from openpyxl.styles import Alignment, Font
 from openpyxl.utils import get_column_letter
 
-# from tqdm import tqdm
 from progress.bar import FillingSquaresBar
 from colorama import Fore
 import warnings

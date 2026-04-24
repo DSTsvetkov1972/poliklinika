@@ -83,7 +83,7 @@ while True:
 
             files_to_confirm = get_files_to_confirm()
             confirmed_files_qty = confirm_files(files_to_confirm)
-            print(Fore.GREEN + f'Подтверждена загрузка файлов: { confirmed_files_qty }' + Fore.RESET)
+            print(Fore.GREEN + f'Подтверждена загрузка в Пикомед для\nподготовленных файлов: {len(files_to_confirm)} содержащих скачанных файлов: { confirmed_files_qty }' + Fore.RESET)
         elif choise == '5':
             open_file()
              
