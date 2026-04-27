@@ -245,7 +245,7 @@ def rosgosstrah_otkrep(folder, file, folders_rules_dict):
         
         file_path = os.path.join(os.getcwd(), 'Исходники', folder, file)
         
-        df = pd.read_excel(file_path, header=None, sheet_name=sheet_name, dtype=str)
+        df = pd.read_excel(file_path, header=None, sheet_name=sheet_name, dtype=str, engine = 'calamine')
 
         df_columns = list(df.iloc[header_row-1])
 
