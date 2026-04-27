@@ -37,7 +37,7 @@ def get_files_to_confirm():
         fill='█', empty_fill='░',
         width = 50)  
     
-    
+    bar.start()
     
     for file in files:
         df = pd.read_excel(os.path.join(os.getcwd(), 'Подготовленные', file))

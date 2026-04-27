@@ -66,6 +66,8 @@ def prepared_maker():
                     fill='█', empty_fill='░',
                     width = 50)    
 
+                bar.start()
+
                 # for file in tqdm(files, desc=folder, unit='Файл', leave=True):
                 for file in files:     
                     processor_starter_res = processor_starter(folder, file)

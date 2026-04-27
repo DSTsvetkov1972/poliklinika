@@ -54,6 +54,7 @@ def email_summary():
         fill='█', empty_fill='░',
         width = 50) 
     
+    bar.start()
 
     for ensurence_company, email_folder in email_folders.items():
         #if ensurence_company!='Югория':

@@ -62,7 +62,9 @@ def get_attached_file(email_folder, download_folder, max_folders_len):
         finish_message = '\033[F\033[' + start_message + summary
         print(finish_message)
     except Exception as e:
-        return(False, e)
+        summary = Fore.RED+ f'получено писем: {msg_qty:3}, загружено файлов: {att_qty:4} ОШИБКА { repr(e) }' + Fore.RESET
+        finish_message = '\033[F\033[' + start_message + summary
+        print(finish_message)
 
 
 def attachments_downloader():

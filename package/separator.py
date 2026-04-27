@@ -145,7 +145,8 @@ def separator():
                     suffix = '%(index)d/%(max)d',
                     fill='█', empty_fill='░',
                     width = 50)    
-
+                
+                bar.start()
 
                 for file in files:
                     processor_starter_res = processor_starter(folder, file)
