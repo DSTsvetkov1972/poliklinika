@@ -1,8 +1,8 @@
 import os, sys
-import re
 sys.path.append(os.getcwd())
 from colorama import Fore
 from imap_tools import MailBox, OR
+from package.fns import get_file_path
 
 from package.config import IMAP_SERVER, IMAP_PORT, EMAIL, APP_PASSWORD, MARK_SEEN
 from package.config import folders_rules_dict
@@ -67,12 +67,12 @@ def get_attached_file(email_folder, download_folder, max_folders_len):
                         # Если всё же нужна подстраховка, можно принудительно закодировать/раскодировать
                         # safe_name = att.filename.encode('utf-8').decode('utf-8')
                         
-                        file_path = os.path.join(os.getcwd(), 'Исходники', download_folder, att.filename)
+                        file_name = att.filename
 
                         # если файл с таким названием существует,
                         # добавляем в конце суффикс _copy
                         # пока не получится уникальное имя файла
-                        file_path = file_path_if_exists(file_path)
+                        file_path = get_file_path(file_name, download_folder)
 
                         with open(file_path, 'wb') as f:
                             f.write(att.payload)
@@ -83,34 +83,6 @@ def get_attached_file(email_folder, download_folder, max_folders_len):
         summary = Fore.RED+ f'получено писем: {msg_qty:3}, загружено файлов: {att_qty:4} ОШИБКА { repr(e) }' + Fore.RESET
         finish_message = '\033[F\033[' + start_message + summary
         print(finish_message)
-
-
-def file_path_if_exists(file_path):
-    pattern_capture_1 = r'(.*)\[(\d+)\]\.(\w+)$'
-    pattern_capture_2 = r'(.*)\.(\w+)$'  
-
-    new_file_path = file_path  
-    
-    while True:
-        if os.path.exists(new_file_path):
-            match_1 = re.match(pattern_capture_1, new_file_path)
-            match_2 = re.match(pattern_capture_2, new_file_path)
-
-            if match_1:
-                path = match_1.group(1)
-                number = match_1.group(2)
-                extension = match_1.group(3)
-                new_file_path = f"{path}[{ int(number)+1 }].{extension}"
- 
-            elif match_2:
-                path = match_2.group(1)
-                extension = match_2.group(2)
-                new_file_path = f"{path}[0].{extension}"
-            else:
-                raise ValueError('имя файла не соответствует шаблону')
-            continue
-        else:
-            return new_file_path
 
 
 if __name__=='__main__':

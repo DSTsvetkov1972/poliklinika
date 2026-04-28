@@ -4,7 +4,7 @@ import pandas as pd
 import os
 from package.project_starter import folders_maker
 from package.logo import logo_colored
-from package.service import open_file
+from package.fns import open_file
 from package.email_downloader import attachments_downloader
 from package.summary import summary
 from package.separator import separator

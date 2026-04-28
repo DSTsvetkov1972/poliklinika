@@ -8,9 +8,11 @@ from package.config import folders_rules_dict
 from package.email_separators import separators_dict
 from openpyxl import load_workbook
 from openpyxl.styles import Alignment, Font
+from package.fns import get_file_path
 import re
 from progress.bar import FillingSquaresBar
 from colorama import Fore
+
 
 def drop_files(folder, extensions):
     files = list(os.walk(os.path.join(os.getcwd(), 'Исходники', folder)))[0][2]
@@ -19,51 +21,7 @@ def drop_files(folder, extensions):
         extension = file.split('.')[-1]
         if extension in extensions:
             os.remove(os.path.join(os.getcwd(), 'Исходники', folder, file))
-
-
-"""
-def file_path_if_exists_2(file_name, target_folder):
-
-    target_file_path = os.path.join(target_folder, file_name)
-
-    while True:
-        target_file_path_parts = target_file_path.split('.')
-        target_file_path_short = '.'.join(target_file_path_parts[0:-1])
-        target_file_path_extension = target_file_path_parts[-1]
-
-        if os.path.exists(target_file_path):
-            target_file_path = f'{ target_file_path_short }_copy.{target_file_path_extension}'
-        else:
-            return target_file_path
-"""
-
-def file_path_if_exists_2(file_path, target_folder):
-    pattern_capture_1 = r'(.*)\[(\d+)\]\.(\w+)$'
-    pattern_capture_2 = r'(.*)\.(\w+)$'  
-
-    new_file_path = os.path.join(target_folder, file_path)
     
-    while True:
-        if os.path.exists(new_file_path):
-            match_1 = re.match(pattern_capture_1, new_file_path)
-            match_2 = re.match(pattern_capture_2, new_file_path)
-
-            if match_1:
-                path = match_1.group(1)
-                number = match_1.group(2)
-                extension = match_1.group(3)
-                new_file_path = f"{path}[{ int(number)+1 }].{extension}"
- 
-            elif match_2:
-                path = match_2.group(1)
-                extension = match_2.group(2)
-                new_file_path = f"{path}[0].{extension}"
-            else:
-                raise ValueError('имя файла не соответствует шаблону')
-            continue
-        else:
-            return new_file_path
-        
 
 def extract_encrypted_zip(zip_path,
                           extract_path,
@@ -112,7 +70,8 @@ def unzip_files(folder,  password_file_path):
         if unzipped_files:
             for unzipped_file in unzipped_files:
                 unzipped_file_path = os.path.join(extract_path, unzipped_file)
-                unzipped_file_path_checked = file_path_if_exists_2(unzipped_file, os.path.join(os.getcwd(), 'Исходники', folder))
+                unzipped_file_path_checked = get_file_path(file_name=unzipped_file, downloaded_folder=folder)
+                # unzipped_file_path_checked = file_path_if_exists_2(unzipped_file, os.path.join(os.getcwd(), 'Исходники', folder))
                 shutil.move(unzipped_file_path, unzipped_file_path_checked)
         
             shutil.rmtree(extract_path)
