@@ -61,38 +61,74 @@ def email_by_cell_value(folder, file, folders_rules_dict):
         return(False, e)
 
 
+def look_insight_rgs_tek_file(
+        file_path = os.path.join(
+            os.getcwd(),
+            "Исходники",
+            "Росгосстрах ТЭК_Скачано",
+            '25.02.21 1 Ю761(010-1).xlsx')):
+
+    password = 'rgs2023'
+
+    # 1. Открываем encrypted-файл и дешифруем его в объект BytesIO
+    decrypted = io.BytesIO()
+    with open(file_path, 'rb') as f:
+        office_file = msoffcrypto.OfficeFile(f)
+        office_file.load_key(password=password)  # Применяем пароль
+        office_file.decrypt(decrypted)           # Расшифровываем в память
+
+    # 2. Переводим "курсор" в начало потока и читаем файл через pandas
+    decrypted.seek(0)
+    df = pd.read_excel(decrypted, header=None) # engine указывать необязательно
+
+    # 3. Готово!
+    print(df)
+
+
+
 def email_rgs_tek(folder, file, folders_rules_dict):
+
     password_file_path=os.path.join(os.getcwd(), "rgs_tek_password.txt")
     with open(password_file_path) as password_file:
         password =  password_file.readline()
-        
+
+    if file.split('.')[-1] in ('png'):    
+        return(True, "удалён")
+
     try:
     # if True:
         file_path = os.path.join(os.getcwd(), 'Исходники', folder, file)
+        
+
         # 1. Открываем encrypted-файл и дешифруем его в объект BytesIO
         decrypted = io.BytesIO()
         
         with open(file_path, 'rb') as f:
             office_file = msoffcrypto.OfficeFile(f)
-            office_file.load_key(password=password)  # Применяем пароль
-            office_file.decrypt(decrypted)           # Расшифровываем в память
+            if office_file.is_encrypted():
+                office_file.load_key(password=password)  # Применяем пароль
+                office_file.decrypt(decrypted)           # Расшифровываем в память
 
-        # 2. Переводим "курсор" в начало потока и читаем файл через pandas
-        decrypted.seek(0)
-        df = pd.read_excel(decrypted, header=None) # engine указывать необязательно
-
-        # 3. Готово!
+                # 2. Переводим "курсор" в начало потока и читаем файл через pandas
+                decrypted.seek(0)
+                df = pd.read_excel(decrypted, header=None)
+            else:
+                df = pd.read_excel(file_path, header=None)
 
         for file_rule in folders_rules_dict[folder]['file_rules']:
-
-            if re.search(file_rule["pattern"], df.iloc[file_rule["row"]].loc[file_rule["column"]]):
-                new_file_path = os.path.join(os.getcwd(), 'Исходники', file_rule['target_folder'], file)
-                shutil.move(file_path, new_file_path)
-                return (True, file_rule['target_folder'])
+            try:
+                if re.search(file_rule["pattern"], df.iloc[file_rule["row"]].loc[file_rule["column"]]):
+                    new_file_path = os.path.join(os.getcwd(), 'Исходники', file_rule['target_folder'], file)
+                    shutil.move(file_path, new_file_path)
+                    return (True, file_rule['target_folder'])
+            except IndexError:
+                continue
+            except TypeError:
+                continue
         
         return (True, 'Не установлены правила обработки файла')    
-    except msoffcrypto.exceptions.FileFormatError:
-        return(True, "удалён")
+    #except msoffcrypto.exceptions.FileFormatError:
+    #    return(True, "удалён")
     except Exception as e:
         return(False, repr(e))
 

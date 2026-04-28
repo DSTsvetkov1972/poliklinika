@@ -1,8 +1,14 @@
 import io
 import pandas as pd
 import msoffcrypto
+import os
 
-file_path = '26.04.27 Лебедев Ю890(010).xlsx'
+file_path = os.path.join(
+    os.getcwd(),
+    "Исходники",
+    "Росгосстрах ТЭК_Скачано",
+    '25.02.21 1 Ю761(010-1).xlsx')
+
 password = 'rgs2023'
 
 # 1. Открываем encrypted-файл и дешифруем его в объект BytesIO
@@ -17,4 +23,6 @@ decrypted.seek(0)
 df = pd.read_excel(decrypted, header=None) # engine указывать необязательно
 
 # 3. Готово!
-print(df.iloc[15].loc[1])
+print(df)
+
+print(df.iloc[5].loc[0])

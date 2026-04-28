@@ -1,6 +1,7 @@
 import os, sys, shutil
 import pandas as pd
 import zipfile
+import py7zr
 
 sys.path.append(os.getcwd())
 
@@ -44,9 +45,6 @@ def extract_encrypted_zip(zip_path,
         
         return(unzipped_files, f"✅ Извлечены файлы из архива {zip_path.replace(os.getcwd(), '')}")
 
-       
-            
-    
     except RuntimeError as e:
         return (False, f"❌ {extract_path}: Неверный пароль или архив поврежден. {e}")
     except zipfile.BadZipFile:
@@ -55,16 +53,42 @@ def extract_encrypted_zip(zip_path,
         return(False, f"❌ {extract_path}: {e}")
 
 
-def unzip_files(folder,  password_file_path):
+def extract_encrypted_7z(archive_path,
+                         extract_to_folder,
+                         password_file_path=None):
+    try:
+        if password_file_path:
+            with open(password_file_path) as password_file:
+                password =  password_file.readline()
+        else:
+            password = ""
+
+        with py7zr.SevenZipFile(archive_path, mode='r', password=password) as archive:
+            archive.extractall(path=extract_to_folder)
+
+        os.remove(archive_path)
+        unzipped_files =  list(os.walk(extract_to_folder))[0][2]
+        
+        return(unzipped_files, f"✅ Извлечены файлы из архива {archive_path.replace(os.getcwd(), '')}")
+    except Exception as e:
+        return(False, f"❌ {archive_path}: {e}")   
+    
+
+
+def unzip_files(folder, password_file_path):
     source_files = list(os.walk(os.path.join(os.getcwd(), 'Исходники', folder)))[0][2]
-    zip_file_paths = [os.path.join(os.getcwd(), 'Исходники', folder, file) for file in source_files if file[-3:]=='zip']
+    zip_file_paths = [os.path.join(os.getcwd(), 'Исходники', folder, file) for file in source_files if file.split(".")[-1] in ('zip', '7z')]
 
     for zip_file_path in zip_file_paths:
         extract_path =  os.path.join(os.getcwd(), 'Исходники', folder, "unzipped")
         if os.path.exists(extract_path):
             shutil.rmtree(extract_path)
 
-        extract_encrypted_zip_res = extract_encrypted_zip(zip_file_path, extract_path,  password_file_path)
+        if zip_file_path.split('.')[-1] == 'zip':
+            extract_encrypted_zip_res = extract_encrypted_zip(zip_file_path, extract_path,  password_file_path)
+        elif zip_file_path.split('.')[-1] == '7z':
+            extract_encrypted_zip_res = extract_encrypted_7z(zip_file_path, extract_path,  password_file_path)
+
         unzipped_files = extract_encrypted_zip_res[0]
         
         if unzipped_files:
@@ -100,8 +124,10 @@ def processor_starter(folder, file):
 
 
 def separator():
-    unzip_files(folder='ЗЕТТА_Скачано',  password_file_path=os.path.join(os.getcwd(), "zetta_password.txt"))
+    unzip_files(folder='ЗЕТТА_Скачано', password_file_path=os.path.join(os.getcwd(), "zetta_password.txt"))
     
+    unzip_files(folder='Росгосстрах ТЭК_Скачано', password_file_path=None)
+
     unzip_files(folder='Росгосстрах_Скачано', password_file_path=os.path.join(os.getcwd(), "rgs_password.txt"))
     
     unzip_files(folder='Совкомбанк_Скачано', password_file_path=None)
