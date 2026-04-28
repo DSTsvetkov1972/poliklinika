@@ -86,6 +86,6 @@ def get_attached_file(email_folder, download_folder, max_folders_len):
 
 
 if __name__=='__main__':
-    file_path = 'c:\\sss\\file123_name[75].xlss'
+    get_email_folders()
 
 

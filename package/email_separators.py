@@ -2,7 +2,8 @@ import pandas as pd
 import os, sys, shutil
 sys.path.append(os.getcwd())
 import re
-import zipfile
+import msoffcrypto
+import io
 
 from datetime import datetime
 from package.config import folders_rules_dict
@@ -60,16 +61,52 @@ def email_by_cell_value(folder, file, folders_rules_dict):
         return(False, e)
 
 
+def email_rgs_tek(folder, file, folders_rules_dict):
+    password_file_path=os.path.join(os.getcwd(), "rgs_tek_password.txt")
+    with open(password_file_path) as password_file:
+        password =  password_file.readline()
+        
+    try:
+    # if True:
+        file_path = os.path.join(os.getcwd(), 'Исходники', folder, file)
+        # 1. Открываем encrypted-файл и дешифруем его в объект BytesIO
+        decrypted = io.BytesIO()
+        
+        with open(file_path, 'rb') as f:
+            office_file = msoffcrypto.OfficeFile(f)
+            office_file.load_key(password=password)  # Применяем пароль
+            office_file.decrypt(decrypted)           # Расшифровываем в память
+
+        # 2. Переводим "курсор" в начало потока и читаем файл через pandas
+        decrypted.seek(0)
+        df = pd.read_excel(decrypted, header=None) # engine указывать необязательно
+
+        # 3. Готово!
+
+        for file_rule in folders_rules_dict[folder]['file_rules']:
+
+            if re.search(file_rule["pattern"], df.iloc[file_rule["row"]].loc[file_rule["column"]]):
+                new_file_path = os.path.join(os.getcwd(), 'Исходники', file_rule['target_folder'], file)
+                shutil.move(file_path, new_file_path)
+                return (True, file_rule['target_folder'])
+        
+        return (True, 'Не установлены правила обработки файла')    
+    except msoffcrypto.exceptions.FileFormatError:
+        return(True, "удалён")
+    except Exception as e:
+        return(False, repr(e))
+
 
 
 separators_dict = {
     "email_by_file_name": email_by_file_name,
-    "email_by_cell_value": email_by_cell_value
+    "email_by_cell_value": email_by_cell_value,
+    "email_rgs_tek": email_rgs_tek
 }
 
 if __name__ == '__main__':
 
-    folder, file = 'Югория_Скачано', 'АО_ГСК_Югория_списки_прикрепление_ГБУЗ_ГП_№_220_ДЗМ_(Филиал_№1)_20_04_2026_14_55_59.xlsx'
+    folder, file = 'Росгосстрах ТЭК_Скачано', 'image001.png'
 
     folders_rules_dict=folders_rules_dict
-    print(email_by_file_name(folder, file, folders_rules_dict))
+    print(email_rgs_tek(folder, file, folders_rules_dict))
