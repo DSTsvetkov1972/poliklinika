@@ -1,4 +1,5 @@
 import os, sys
+import re
 sys.path.append(os.getcwd())
 from colorama import Fore
 from imap_tools import MailBox, OR
@@ -25,6 +26,23 @@ def file_path_if_exists(file_path):
             file_path = f'{ file_path_short }_copy.{file_path_extension}'
         else:
             return file_path
+
+
+
+def attachments_downloader():
+        folders = list(os.walk('Исходники'))[0][1]
+        downloaded_folders = [folder for folder in folders if '_Скачано' in folder]
+
+        folders_len = [len(download_folder + folders_rules_dict[download_folder]['email_folder']) for download_folder in downloaded_folders]
+        max_folders_len = max(folders_len)
+
+        for download_folder in downloaded_folders:
+            email_folder = folders_rules_dict[download_folder]['email_folder']
+            
+            get_attached_file(email_folder, download_folder, max_folders_len)
+
+
+
 
 
 def get_attached_file(email_folder, download_folder, max_folders_len):
@@ -67,19 +85,35 @@ def get_attached_file(email_folder, download_folder, max_folders_len):
         print(finish_message)
 
 
-def attachments_downloader():
-        folders = list(os.walk('Исходники'))[0][1]
-        downloaded_folders = [folder for folder in folders if '_Скачано' in folder]
+def file_path_if_exists(file_path):
+    pattern_capture_1 = r'(.*)\[(\d+)\]\.(\w+)$'
+    pattern_capture_2 = r'(.*)\.(\w+)$'  
 
-        folders_len = [len(download_folder + folders_rules_dict[download_folder]['email_folder']) for download_folder in downloaded_folders]
-        max_folders_len = max(folders_len)
-
-        for download_folder in downloaded_folders:
-            email_folder = folders_rules_dict[download_folder]['email_folder']
-            
-            get_attached_file(email_folder, download_folder, max_folders_len)
-
+    new_file_path = file_path  
     
+    while True:
+        if os.path.exists(new_file_path):
+            match_1 = re.match(pattern_capture_1, new_file_path)
+            match_2 = re.match(pattern_capture_2, new_file_path)
+
+            if match_1:
+                path = match_1.group(1)
+                number = match_1.group(2)
+                extension = match_1.group(3)
+                new_file_path = f"{path}[{ int(number)+1 }].{extension}"
+ 
+            elif match_2:
+                path = match_2.group(1)
+                extension = match_2.group(2)
+                new_file_path = f"{path}[0].{extension}"
+            else:
+                raise ValueError('имя файла не соответствует шаблону')
+            continue
+        else:
+            return new_file_path
+
 
 if __name__=='__main__':
-    get_email_folders()
+    file_path = 'c:\\sss\\file123_name[75].xlss'
+
+
