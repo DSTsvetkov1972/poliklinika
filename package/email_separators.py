@@ -92,7 +92,7 @@ def email_rgs_tek(folder, file, folders_rules_dict):
     with open(password_file_path) as password_file:
         password =  password_file.readline()
 
-    if file.split('.')[-1] in ('png'):    
+    if file.split('.')[-1] in ('png'):
         return(True, "удалён")
 
     try:
