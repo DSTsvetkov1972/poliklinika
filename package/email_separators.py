@@ -142,7 +142,7 @@ separators_dict = {
 
 if __name__ == '__main__':
 
-    folder, file = 'Росгосстрах ТЭК_Скачано', 'image001.png'
+    folder, file = 'Росгосстрах ТЭК_Прикрепление', '25 02 07 1 Ю721(010-1).xlsx'
 
-    folders_rules_dict=folders_rules_dict
-    print(email_rgs_tek(folder, file, folders_rules_dict))
+
+    look_insight_rgs_tek_file(os.path.join(os.getcwd(), 'Исходники', folder, file))

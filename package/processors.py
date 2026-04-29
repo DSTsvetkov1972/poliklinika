@@ -237,6 +237,7 @@ def rosgosstrah_otkrep_conditions(shifted_1, shifted_2):
         None
 
 
+
 def rosgosstrah_otkrep(folder, file, folders_rules_dict):
 
     #if True:
@@ -244,10 +245,28 @@ def rosgosstrah_otkrep(folder, file, folders_rules_dict):
         source_header = ['№ п/п', 'ФИО', 'Пол', 'Дата рождения', 'Полис']
         sheet_name = 'SZO-00-1new1'
         header_row = 6
-        
+
+        password_file_path=os.path.join(os.getcwd(), "rgs_tek_password.txt")
+        with open(password_file_path) as password_file:
+            password =  password_file.readline()
+
         file_path = os.path.join(os.getcwd(), 'Исходники', folder, file)
+        # print(Fore.GREEN, file_path, os.path.exists(file_path), Fore.RESET)
+
+        # 1. Открываем encrypted-файл и дешифруем его в объект BytesIO
+        decrypted = io.BytesIO()
         
-        df = pd.read_excel(file_path, header=None, sheet_name=sheet_name, dtype=str, engine = 'calamine')
+        with open(file_path, 'rb') as f:
+            office_file = msoffcrypto.OfficeFile(f)
+            if office_file.is_encrypted():
+                office_file.load_key(password=password)  # Применяем пароль
+                office_file.decrypt(decrypted)           # Расшифровываем в память
+
+                # 2. Переводим "курсор" в начало потока и читаем файл через pandas
+                decrypted.seek(0)
+                df = pd.read_excel(decrypted, header=None, sheet_name=sheet_name, dtype=str)
+            else:
+                df = pd.read_excel(file_path, header=None, sheet_name=sheet_name, dtype=str, engine='calamine')
 
         df_columns = list(df.iloc[header_row-1])
 
@@ -295,91 +314,15 @@ def rosgosstrah_otkrep(folder, file, folders_rules_dict):
         return(False, e)
 
 
-def rosgosstrah_tek_otkrep(folder, file, folders_rules_dict):
-    try:
-        source_header = ['№ п/п', 'ФИО', 'Пол', 'Дата рождения', 'Полис']
-        sheet_name = 'SZO-00-1new1'
-        header_row = 6
-
-        #if True:
-        password_file_path=os.path.join(os.getcwd(), "rgs_tek_password.txt")
-        with open(password_file_path) as password_file:
-            password =  password_file.readline()
-
-        #try:
-        if True:
-            file_path = os.path.join(os.getcwd(), 'Исходники', folder, file)
-            # print(Fore.GREEN, file_path, os.path.exists(file_path), Fore.RESET)
-
-            # 1. Открываем encrypted-файл и дешифруем его в объект BytesIO
-            decrypted = io.BytesIO()
-            
-            with open(file_path, 'rb') as f:
-                office_file = msoffcrypto.OfficeFile(f)
-                if office_file.is_encrypted():
-                    office_file.load_key(password=password)  # Применяем пароль
-                    office_file.decrypt(decrypted)           # Расшифровываем в память
-
-                    # 2. Переводим "курсор" в начало потока и читаем файл через pandas
-                    decrypted.seek(0)
-                    df = pd.read_excel(decrypted, header=None, sheet_name=sheet_name, dtype=str)
-                else:
-                    df = pd.read_excel(file_path, header=None, sheet_name=sheet_name, dtype=str)
-
-            df_columns = list(df.iloc[header_row-1])
-
-            if source_header != df_columns:
-                return (False,
-                        f"В файле заголовок:\n"
-                        f"{ df_columns }\n"
-                        f"Ожидалось:\n"
-                        f"{ source_header }")
-            
-
-            df.columns = source_header
-
-            df['shifted_1'] = df['№ п/п'].shift(1)
-            df['shifted_2'] = df['№ п/п'].shift(2)
-
-            df['finish_date'] = df.apply(lambda x: rosgosstrah_otkrep_conditions(x['shifted_1'], x['shifted_2']), axis=1)
-            df['finish_date'] = df['finish_date'].ffill()
-
-            df =df.fillna('')
-
-            
-            df = df[(df['ФИО']!='')&(df['ФИО']!='ФИО')]
-
-            df = df.rename(
-                columns={
-                    "Полис": "Номер полиса",
-                    "finish_date": "Дата открепления",
-                    "Дата рождения": "Дата рождения",
-                    "ФИО": "ФИО"
-                    }
-                )
-
-            df = df[['Номер полиса', 'Дата открепления', 'Дата рождения', 'ФИО']]
-            
-            df['Дата открепления'] = df['Дата открепления'].apply(lambda x: convert_date(x))
-            df['Дата рождения'] = df['Дата рождения'].apply(lambda x: convert_date(x))
-
-
-            df['Папка'] = folder
-            df['Файл'] = file
-            return (True, df)
-    
-    except Exception as e:
-        return(False, e)
-
-
 def rosgosstrah_prikrep_conditions(shifted_1, shifted_2):
 
     if shifted_1 == '№ п/п' and 'По факту: ' in shifted_2:
         return(shifted_2)
     elif shifted_1 == '№ п/п' and 'По факту: ' not in shifted_2:
-        raise KeyError('Неожиданная структура файла. Не возможно считать программу страхования')
+        raise KeyError('Неожиданная структура файла. Невозможно считать программу страхования')
     else:
         None
+
 
 def rosgosstrah_prikrep(folder, file, folders_rules_dict):
     
@@ -390,10 +333,26 @@ def rosgosstrah_prikrep(folder, file, folders_rules_dict):
                          "ADDRESS P", "TEL1", "KATEGORY", "PLACE", "BEGIN", "END"]
         sheet_name = '010_prik_new'
         header_row = 9
+
+        password_file_path=os.path.join(os.getcwd(), "rgs_tek_password.txt")
+        with open(password_file_path) as password_file:
+            password =  password_file.readline()
         
         file_path = os.path.join(os.getcwd(), 'Исходники', folder, file)
 
-        df = pd.read_excel(file_path, header=None, sheet_name=sheet_name, dtype=str, engine = 'calamine')
+        decrypted = io.BytesIO()
+            
+        with open(file_path, 'rb') as f:
+            office_file = msoffcrypto.OfficeFile(f)
+            if office_file.is_encrypted():
+                office_file.load_key(password=password)  # Применяем пароль
+                office_file.decrypt(decrypted)           # Расшифровываем в память
+
+                # 2. Переводим "курсор" в начало потока и читаем файл через pandas
+                decrypted.seek(0)
+                df = pd.read_excel(decrypted, header=None, sheet_name=sheet_name, dtype=str)
+            else:
+                df = pd.read_excel(file_path, header=None, sheet_name=sheet_name, dtype=str, engine='calamine')
         
         df_columns = list(df.iloc[header_row-1])
 
@@ -700,7 +659,7 @@ processors_dict = {
     'base': base,
     'renessans_otkrep': renessans_otkrep,
     'rosgosstrah_otkrep': rosgosstrah_otkrep,
-    'rosgosstrah_tek_otkrep': rosgosstrah_tek_otkrep,
+    # 'rosgosstrah_tek_otkrep': rosgosstrah_tek_otkrep,
     'rosgosstrah_prikrep': rosgosstrah_prikrep,
     'soglasie_otkrep': soglasie_otkrep,
     'zetta_prikrep': zetta_prikrep,
