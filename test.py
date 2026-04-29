@@ -1,28 +1,14 @@
-import io
-import pandas as pd
-import msoffcrypto
 import os
+from pathlib import Path
 
-file_path = os.path.join(
-    os.getcwd(),
-    "Исходники",
-    "Росгосстрах ТЭК_Скачано",
-    '25.02.21 1 Ю761(010-1).xlsx')
+s1 = 'C:\\Users\\tsvetkovds\\Documents\\.PROJECTS\\AS\\Исходники\\Ингосстрах_Прикрепление\\ИГС_ПРИКР_21-04-2026_15-18-20_1730196_ГП № 220_KDP4.XLS'
+s2 = 'C:\\Users\\tsvetkovds\\Documents\\.PROJECTS\\AS\\Исходники\\Ингосстрах_Прикрепление\\ИГС_ПРИКР_21-04-2026_15-18-20_1730196_ГП № 220_KDP4.XLS'
 
-password = 'rgs2023'
+print(os.path.exists(s1))
+print(os.path.exists(s2))
 
-# 1. Открываем encrypted-файл и дешифруем его в объект BytesIO
-decrypted = io.BytesIO()
-with open(file_path, 'rb') as f:
-    office_file = msoffcrypto.OfficeFile(f)
-    office_file.load_key(password=password)  # Применяем пароль
-    office_file.decrypt(decrypted)           # Расшифровываем в память
+#for ss1, ss2 in zip(s1,s2):
+ #   print(ss1, ss2, ss1==ss2)
 
-# 2. Переводим "курсор" в начало потока и читаем файл через pandas
-decrypted.seek(0)
-df = pd.read_excel(decrypted, header=None) # engine указывать необязательно
-
-# 3. Готово!
-print(df)
-
-print(df.iloc[5].loc[0])
+l = list(os.walk('C:\\Users\\tsvetkovds\\Documents\\.PROJECTS\\AS\\Исходники\\Ингосстрах_Прикрепление\\'))
+print(l)

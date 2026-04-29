@@ -1,4 +1,4 @@
-import os, sys
+import os, sys, shutil
 import pandas as pd
 from datetime import datetime
 
@@ -42,6 +42,10 @@ def prepared_maker():
         if os.path.exists(os.path.join(os.getcwd(), 'Сводка по подготовке файлов к загрузке.xlsx')):
             with open(os.path.join(os.getcwd(), 'Сводка по подготовке файлов к загрузке.xlsx'), 'r+b'):
                 pass
+    
+        prepared_folder = os.path.join(os.getcwd(), 'Подготовленные')
+        shutil.rmtree(prepared_folder)
+        os.mkdir(prepared_folder)    
 
         processor_log = []
 
