@@ -9,6 +9,8 @@ sys.path.append(os.getcwd())
 from package.config import folders_rules_dict
 from colorama import Fore
 
+from dotenv import load_dotenv
+load_dotenv(os.path.join(os.getcwd(), '.config'))
 
 
 
@@ -246,9 +248,10 @@ def rosgosstrah_otkrep(folder, file, folders_rules_dict):
         sheet_name = 'SZO-00-1new1'
         header_row = 6
 
-        password_file_path=os.path.join(os.getcwd(), "rgs_tek_password.txt")
-        with open(password_file_path) as password_file:
-            password =  password_file.readline()
+        # password_file_path=os.path.join(os.getcwd(), "rgs_tek_password.txt")
+        # with open(password_file_path) as password_file:
+        #     password =  password_file.readline()
+        password = os.getenv('RGS_PASSWORD')    
 
         file_path = os.path.join(os.getcwd(), 'Исходники', folder, file)
         # print(Fore.GREEN, file_path, os.path.exists(file_path), Fore.RESET)
@@ -334,9 +337,10 @@ def rosgosstrah_prikrep(folder, file, folders_rules_dict):
         sheet_name = '010_prik_new'
         header_row = 9
 
-        password_file_path=os.path.join(os.getcwd(), "rgs_tek_password.txt")
-        with open(password_file_path) as password_file:
-            password =  password_file.readline()
+        # password_file_path=os.path.join(os.getcwd(), "rgs_tek_password.txt")
+        # with open(password_file_path) as password_file:
+        #     password =  password_file.readline()
+        password = os.getenv('RGS_PASSWORD')    
         
         file_path = os.path.join(os.getcwd(), 'Исходники', folder, file)
 
@@ -678,6 +682,6 @@ if __name__ == '__main__':
 
 
 
-    print(rosgosstrah_tek_otkrep(folder, file, folders_rules_dict))
+    # print(rosgosstrah_tek_otkrep(folder, file, folders_rules_dict))
 
 
