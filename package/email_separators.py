@@ -103,7 +103,7 @@ def email_rgs_tek(folder, file, folders_rules_dict):
         with open(file_path, 'rb') as f:
             office_file = msoffcrypto.OfficeFile(f)
             if office_file.is_encrypted():
-                office_file.load_key(password=os.getenv(os.path.join(os.getcwd('RGS_TEK_PASSWORD'), '.config')))  # Применяем пароль
+                office_file.load_key(password=os.getenv('RGS_TEK_PASSWORD'))  # Применяем пароль
                 office_file.decrypt(decrypted)           # Расшифровываем в память
 
                 # 2. Переводим "курсор" в начало потока и читаем файл через pandas
