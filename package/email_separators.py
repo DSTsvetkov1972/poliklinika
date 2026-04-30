@@ -69,7 +69,7 @@ def look_insight_rgs_tek_file(
             "Росгосстрах ТЭК_Скачано",
             '25.02.21 1 Ю761(010-1).xlsx')):
 
-    password = os.getenv(os.path.join(os.getcwd('RGS_TEK_PASSWORD'), '.config'))
+    password = os.getenv('RGS_TEK_PASSWORD')
 
     # 1. Открываем encrypted-файл и дешифруем его в объект BytesIO
     decrypted = io.BytesIO()
