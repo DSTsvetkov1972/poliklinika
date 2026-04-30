@@ -4,8 +4,12 @@ from colorama import Fore
 from imap_tools import MailBox, OR
 from package.fns import get_file_path
 
-from package.config import IMAP_SERVER, IMAP_PORT, EMAIL, APP_PASSWORD, MARK_SEEN
+from package.config import IMAP_SERVER, IMAP_PORT, EMAIL, APP_PASSWORD
 from package.config import folders_rules_dict
+
+
+MARK_SEEN = os.getenv('MARK_SEEN')
+
 
 def get_email_folders():
      with MailBox(IMAP_SERVER, port=IMAP_PORT).login(EMAIL, APP_PASSWORD, 'INBOX') as mailbox:

@@ -10,7 +10,8 @@ from package.config import folders_rules_dict
 from colorama import Fore
 from openpyxl import load_workbook
 
-
+from dotenv import load_dotenv
+load_dotenv(os.path.join(os.getcwd(), '.comfig'))
 
     
 
@@ -68,7 +69,7 @@ def look_insight_rgs_tek_file(
             "Росгосстрах ТЭК_Скачано",
             '25.02.21 1 Ю761(010-1).xlsx')):
 
-    password = 'rgs2023'
+    password = os.getenv(os.path.join(os.getcwd('RGS_TEK_PASSWORD'), '.config'))
 
     # 1. Открываем encrypted-файл и дешифруем его в объект BytesIO
     decrypted = io.BytesIO()
@@ -88,10 +89,6 @@ def look_insight_rgs_tek_file(
 
 def email_rgs_tek(folder, file, folders_rules_dict):
 
-    password_file_path=os.path.join(os.getcwd(), "rgs_tek_password.txt")
-    with open(password_file_path) as password_file:
-        password =  password_file.readline()
-
     if file.split('.')[-1] in ('png'):
         return(True, "удалён")
 
@@ -106,7 +103,7 @@ def email_rgs_tek(folder, file, folders_rules_dict):
         with open(file_path, 'rb') as f:
             office_file = msoffcrypto.OfficeFile(f)
             if office_file.is_encrypted():
-                office_file.load_key(password=password)  # Применяем пароль
+                office_file.load_key(password=os.getenv(os.path.join(os.getcwd('RGS_TEK_PASSWORD'), '.config')))  # Применяем пароль
                 office_file.decrypt(decrypted)           # Расшифровываем в память
 
                 # 2. Переводим "курсор" в начало потока и читаем файл через pandas

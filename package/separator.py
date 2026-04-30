@@ -13,6 +13,9 @@ from package.fns import get_file_path
 import re
 from progress.bar import FillingSquaresBar
 from colorama import Fore
+from dotenv import load_dotenv
+
+load_dotenv(os.path.join(os.getcwd(), '.config'))
 
 
 def drop_files(folder, extensions):
@@ -26,16 +29,10 @@ def drop_files(folder, extensions):
 
 def extract_encrypted_zip(zip_path,
                           extract_path,
-                          password_file_path=None):
+                          password):
 
     try:
-        if password_file_path:
-            with open(password_file_path) as password_file:
-                password =  password_file.readline()
-        else:
-            password=""
-
-    
+  
         with zipfile.ZipFile(zip_path, 'r') as zip_ref:
             # Пароль нужно передать в байтовом формате
             zip_ref.extractall(path=extract_path, pwd=password.encode('utf-8'))
@@ -55,14 +52,8 @@ def extract_encrypted_zip(zip_path,
 
 def extract_encrypted_7z(archive_path,
                          extract_to_folder,
-                         password_file_path=None):
+                         password):
     try:
-        if password_file_path:
-            with open(password_file_path) as password_file:
-                password =  password_file.readline()
-        else:
-            password = ""
-
         with py7zr.SevenZipFile(archive_path, mode='r', password=password) as archive:
             archive.extractall(path=extract_to_folder)
 
@@ -75,7 +66,7 @@ def extract_encrypted_7z(archive_path,
     
 
 
-def unzip_files(folder, password_file_path):
+def unzip_files(folder, password=''):
     source_files = list(os.walk(os.path.join(os.getcwd(), 'Исходники', folder)))[0][2]
     zip_file_paths = [os.path.join(os.getcwd(), 'Исходники', folder, file) for file in source_files if file.split(".")[-1] in ('zip', '7z')]
 
@@ -85,9 +76,9 @@ def unzip_files(folder, password_file_path):
             shutil.rmtree(extract_path)
 
         if zip_file_path.split('.')[-1] == 'zip':
-            extract_encrypted_zip_res = extract_encrypted_zip(zip_file_path, extract_path,  password_file_path)
+            extract_encrypted_zip_res = extract_encrypted_zip(zip_file_path, extract_path, password)
         elif zip_file_path.split('.')[-1] == '7z':
-            extract_encrypted_zip_res = extract_encrypted_7z(zip_file_path, extract_path,  password_file_path)
+            extract_encrypted_zip_res = extract_encrypted_7z(zip_file_path, extract_path, password)
 
         unzipped_files = extract_encrypted_zip_res[0]
         
@@ -124,16 +115,14 @@ def processor_starter(folder, file):
 
 
 def separator():
-    unzip_files(folder='ЗЕТТА_Скачано', password_file_path=os.path.join(os.getcwd(), "zetta_password.txt"))
+    unzip_files(folder='ЗЕТТА_Скачано', password=os.getenv("ZETTA_PASSWORD"))
     
-    unzip_files(folder='Росгосстрах ТЭК_Скачано', password_file_path=None)
+    unzip_files(folder='Росгосстрах ТЭК_Скачано', password=os.getenv("RGS_TEK_PASSWORD"))
 
-    unzip_files(folder='Росгосстрах_Скачано', password_file_path=os.path.join(os.getcwd(), "rgs_password.txt"))
+    unzip_files(folder='Росгосстрах_Скачано', password=os.getenv("RGS_PASSWORD"))
     
-    unzip_files(folder='Совкомбанк_Скачано', password_file_path=None)
-    drop_files(
-        folder='Совкомбанк_Скачано',
-        extensions = ['png'])
+    unzip_files(folder='Совкомбанк_Скачано')
+    drop_files(folder='Совкомбанк_Скачано', extensions = ['png'])
 
 
     try:
