@@ -459,7 +459,7 @@ folders_rules_dict = {
             {"pattern": "Открепление.*.pdf", "target_folder":  "удалён"},            
             {"pattern": "Прикрепление.*.xls", "target_folder": "Капитал_Прикрепление"},
             {"pattern": "Прикрепление.*.pdf", "target_folder": "удалён"},            
-            {"pattern": "Изменение.*.xls", "target_folder": "Капитал_Прикрепление"},
+            {"pattern": "Изменение.*.xls", "target_folder": "Капитал_Изменение"},
             {"pattern": "Изменение.*.pdf", "target_folder": "удалён"},                        
         ]
     },
