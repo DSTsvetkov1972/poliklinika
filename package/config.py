@@ -455,7 +455,11 @@ folders_rules_dict = {
         "separator_name": "email_by_file_name",
         "file_rules": [
             {"pattern": "Открепление.*.xls", "target_folder":  "Капитал_Открепление"},
+            {"pattern": "Открепление.*.pdf", "target_folder":  "удалён"},            
             {"pattern": "Прикрепление.*.xls", "target_folder": "Капитал_Прикрепление"},
+            {"pattern": "Прикрепление.*.pdf", "target_folder": "удалён"},            
+            {"pattern": "Изменение.*.xls", "target_folder": "Капитал_Прикрепление"},
+            {"pattern": "Изменение.*.pdf", "target_folder": "удалён"},                        
         ]
     },
 
