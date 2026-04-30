@@ -304,7 +304,7 @@ folders_rules_dict = {
         "separator_name": "email_by_file_name",
         "file_rules": [
             {"pattern": "^ИГС_ИЗМЕН_.*.XLS", "target_folder": "Ингосстрах_Изменение"},
-            {"pattern": "^ИГС_.*FULLRISKCHANGE.XLS", "target_folder": "Ингосстрах_Изменение"},            
+            {"pattern": "^ИГС_.*FULLRISKCHANGE.*.XLS", "target_folder": "Ингосстрах_Изменение"},            
             {"pattern": "^ИГС_ОТКР_.*.XLS", "target_folder":  "Ингосстрах_Открепление"},
             {"pattern": "^ИГС_ПРИКР_.*.XLS", "target_folder":  "Ингосстрах_Прикрепление"}            
         ]
