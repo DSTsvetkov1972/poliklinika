@@ -80,7 +80,7 @@ def get_attached_file(email_folder, download_folder, max_folders_len):
 
                         with open(file_path, 'wb') as f:
                             f.write(att.payload)
-        summary = Fore.GREEN + f'получено писем: {msg_qty:3}, 2файлов: {att_qty:4}' + Fore.RESET
+        summary = Fore.GREEN + f'получено писем: {msg_qty:3}, файлов: {att_qty:4}' + Fore.RESET
         finish_message = '\033[F\033[' + start_message + summary
         print(finish_message)
     except Exception as e:
