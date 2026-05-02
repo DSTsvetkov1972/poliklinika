@@ -88,12 +88,12 @@ def unzip_files(folder, password=''):
                 unzipped_file_path_checked = get_file_path(file_name=unzipped_file, downloaded_folder=folder)
                 # unzipped_file_path_checked = file_path_if_exists_2(unzipped_file, os.path.join(os.getcwd(), 'Исходники', folder))
                 shutil.move(unzipped_file_path, unzipped_file_path_checked)
-        
-            shutil.rmtree(extract_path)
 
             print(Fore.GREEN, extract_encrypted_zip_res[1], Fore.RESET)
         else:
-            print(Fore.RED, extract_encrypted_zip_res[1], Fore.RESET)   
+            print(Fore.RED, extract_encrypted_zip_res[1], Fore.RESET)
+        
+        shutil.rmtree(extract_path)    
 
 
 def processor_starter(folder, file):
@@ -195,4 +195,4 @@ def separator():
     
 
 if __name__ == '__main__':
-    separator()
+    unzip_files(folder='ЗЕТТА_Скачано', password=("ZETTA_PASSWORD"))
