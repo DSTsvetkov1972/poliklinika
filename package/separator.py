@@ -43,9 +43,9 @@ def extract_encrypted_zip(zip_path,
         return(unzipped_files, f"✅ Извлечены файлы из архива {zip_path.replace(os.getcwd(), '')}")
 
     except RuntimeError as e:
-        return (False, f"❌ Неверный пароль или архив поврежден {zip_path.replace(os.getcwd(), '')}. Ошибка {repr(e)}")
+        return (False, f"❌ Неверный пароль или архив поврежден {zip_path.replace(os.getcwd(), '')}.")
     except zipfile.BadZipFile:
-        return(False, f"❌ Файл не является ZIP-архивом или поврежден {zip_path.replace(os.getcwd(), '')}. Ошибка {repr(e)}")
+        return(False, f"❌ Файл не является ZIP-архивом или поврежден {zip_path.replace(os.getcwd(), '')}.")
     except Exception as e:
         return(False, f"❌ Не удалось распаковать {zip_path.replace(os.getcwd(), '')}. Ошибка {repr(e)}")
 
