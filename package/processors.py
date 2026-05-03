@@ -251,7 +251,7 @@ def rosgosstrah_otkrep(folder, file, folders_rules_dict):
         # password_file_path=os.path.join(os.getcwd(), "rgs_tek_password.txt")
         # with open(password_file_path) as password_file:
         #     password =  password_file.readline()
-        password = os.getenv('RGS_PASSWORD')    
+        password = os.getenv('RGS_TEK_PASSWORD')    
 
         file_path = os.path.join(os.getcwd(), 'Исходники', folder, file)
         # print(Fore.GREEN, file_path, os.path.exists(file_path), Fore.RESET)
@@ -340,7 +340,7 @@ def rosgosstrah_prikrep(folder, file, folders_rules_dict):
         # password_file_path=os.path.join(os.getcwd(), "rgs_tek_password.txt")
         # with open(password_file_path) as password_file:
         #     password =  password_file.readline()
-        password = os.getenv('RGS_PASSWORD')    
+        password = os.getenv('RGS_TEK_PASSWORD')    
         
         file_path = os.path.join(os.getcwd(), 'Исходники', folder, file)
 
