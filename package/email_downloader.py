@@ -50,8 +50,8 @@ def attachments_downloader():
 
 
 def get_attached_file(email_folder, download_folder, max_folders_len):
-    start_message = Fore.BLUE + f'Загружаем из { email_folder } в {download_folder}...'.ljust(max_folders_len+20)
-    print(start_message)
+    start_message = Fore.BLACK + f'Загружаем из { email_folder } в {download_folder}...'.ljust(max_folders_len+20)
+    print(start_message+'\033[F\033[')
     try:
         with MailBox(IMAP_SERVER, port=IMAP_PORT).login(EMAIL, APP_PASSWORD, 'INBOX') as mailbox:
             # print("Подключение успешно! Обработка писем...")
@@ -81,11 +81,11 @@ def get_attached_file(email_folder, download_folder, max_folders_len):
                         with open(file_path, 'wb') as f:
                             f.write(att.payload)
         summary = Fore.GREEN + f'получено писем: {msg_qty:3}, файлов: {att_qty:4}' + Fore.RESET
-        finish_message = '\033[F\033[' + start_message + summary
+        finish_message = start_message + summary
         print(finish_message)
     except Exception as e:
         summary = Fore.RED+ f'получено писем: {msg_qty:3}, загружено файлов: {att_qty:4} ОШИБКА { repr(e) }' + Fore.RESET
-        finish_message = '\033[F\033[' + start_message + summary
+        finish_message = start_message + summary
         print(finish_message)
 
 
