@@ -8,7 +8,7 @@ from package.config import folders_rules_dict
 
 def folders_maker(): 
 
-    print(Fore.BLUE + f'Проверяем наличие нужных папок в проекте...' + Fore.RESET, end='')  
+    print(Fore.BLACK + f'Проверяем наличие нужных папок в проекте...' + Fore.RESET, end='')  
     folders_created = False
 
     for folder in ['Исходники', 'Подготовленные', 'Загруженные']:
