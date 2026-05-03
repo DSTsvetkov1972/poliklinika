@@ -108,9 +108,9 @@ def email_rgs_tek(folder, file, folders_rules_dict):
 
                 # 2. Переводим "курсор" в начало потока и читаем файл через pandas
                 decrypted.seek(0)
-                df = pd.read_excel(decrypted, header=None)
+                df = pd.read_excel(decrypted, header=None, dtype=str)
             else:
-                df = pd.read_excel(file_path, header=None)
+                df = pd.read_excel(file_path, header=None, dtype=str, engine='calamine')
 
         for file_rule in folders_rules_dict[folder]['file_rules']:
             try:

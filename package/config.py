@@ -712,11 +712,12 @@ folders_rules_dict = {
     },
     "Росгосстрах_Скачано": {
         "email_folder": "Росгосстрах",
-        "separator_name": "email_by_file_name",
+        "separator_name": "email_rgs_tek",
         "file_rules": [
-            {"pattern": "^.* пр .*\.xls$", "target_folder": "Росгосстрах_Прикрепление"},            
-            {"pattern": "^.* откр .*\.xls$", "target_folder": "Росгосстрах_Открепление"},
-            {"pattern": "^.* изм .*\.xls$", "target_folder": "Росгосстрах_Изменение"}
+            {"row": 15, "column": 1, "pattern": "^Просим изменить программу с .*", "target_folder": "Росгосстрах_Изменение"},
+            {"row": 6, "column": 0, "pattern": ".*просим Вас принять на медицинское обслуживание.*", "target_folder": "Росгосстрах_Прикрепление"},            
+            {"row": 5, "column": 0, "pattern": ".*просим Вас принять на медицинское обслуживание.*", "target_folder": "Росгосстрах_Прикрепление"},
+            {"row": 4, "column": 0, "pattern": ".*Просим снять с обслуживания.*", "target_folder": "Росгосстрах_Открепление"}
         ]
     },
     "Росгосстрах ТЭК_Скачано": {
