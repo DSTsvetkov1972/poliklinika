@@ -49,10 +49,14 @@ def attachments_downloader():
         folders_len = [len(download_folder + folders_rules_dict[download_folder]['email_folder']) for download_folder in downloaded_folders]
         max_folders_len = max(folders_len)
 
+        print(Fore.BLACK)
         for download_folder in downloaded_folders:
             email_folder = folders_rules_dict[download_folder]['email_folder']
             
+            
             get_attached_file(email_folder, download_folder, max_folders_len)
+        
+        print(Fore.RESET)
 
 
 
@@ -81,9 +85,8 @@ def get_attached_file(email_folder, download_folder, max_folders_len):
                 max=unseen_qty,
                 suffix='%(index)d/%(max)d',
                 fill='█', empty_fill='░',
-                width = 50)    
+                width = 20)    
 
-            print(Fore.BLACK)
             bar.start()
 
             for msg in mailbox.fetch(OR(new=True, seen=False), mark_seen=MARK_SEEN):
@@ -107,16 +110,12 @@ def get_attached_file(email_folder, download_folder, max_folders_len):
                             f.write(att.payload)
 
                 bar.next()
-                print(Fore.RESET)
-
             bar.finish()                
         #summary = Fore.GREEN + f'получено писем: {msg_qty:3}, файлов: {att_qty:4}' + Fore.RESET
         #finish_message = start_message + summary
         #print(finish_message)
     except Exception as e:
-        summary = Fore.RED+ f'получено писем: {msg_qty:3}, загружено файлов: {att_qty:4} ОШИБКА { repr(e) }' + Fore.RESET
-        finish_message = start_message + summary
-        print(finish_message)
+        print(Fore.RED+ f'получено писем: {msg_qty:3}, загружено файлов: {att_qty:4} ОШИБКА { repr(e) }' + Fore.RESET)
 
 
 if __name__=='__main__':
