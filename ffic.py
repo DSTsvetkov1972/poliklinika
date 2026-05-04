@@ -30,7 +30,7 @@ while True:
         print(Fore.WHITE + '4' + Fore.BLUE + ' - подтвердить загрузку файлов в Пикомед' + Fore.RESET)
         print(Fore.WHITE + '5' + Fore.BLUE + ' - открыть файл на рабочем столе' + Fore.RESET)
 
-        print(Fore.MAGENTA, "Ваш выбор: ", Fore.RESET, end='')
+        print(Fore.MAGENTA + "Ваш выбор: " + Fore.RESET, end='')
         choise = input()
 
         if datetime.now()>datetime(2026, 5, 31):
