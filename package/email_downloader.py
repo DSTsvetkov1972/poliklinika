@@ -7,16 +7,25 @@ from package.fns import get_file_path
 from package.config import IMAP_SERVER, IMAP_PORT, EMAIL, APP_PASSWORD
 from package.config import folders_rules_dict
 
+from progress.bar import FillingSquaresBar
+
 
 MARK_SEEN = os.getenv('MARK_SEEN')
 
+def get_email_folder_letters_qty():
+    with MailBox(IMAP_SERVER, port=IMAP_PORT).login(EMAIL, APP_PASSWORD, 'INBOX') as mailbox:
+        status = mailbox.folder.status("Ресо-Гарантия")['UNSEEN']
+
+
+    return status
+
 
 def get_email_folders():
-     with MailBox(IMAP_SERVER, port=IMAP_PORT).login(EMAIL, APP_PASSWORD, 'INBOX') as mailbox:
-    
+    with MailBox(IMAP_SERVER, port=IMAP_PORT).login(EMAIL, APP_PASSWORD, 'INBOX') as mailbox:
+
         for folder_info in mailbox.folder.list():
-        
-           print(f"Имя папки: {folder_info.name}")
+
+            print(f"Имя папки: {folder_info.name}")
 
 
 
@@ -50,16 +59,32 @@ def attachments_downloader():
 
 
 def get_attached_file(email_folder, download_folder, max_folders_len):
-    start_message = Fore.BLACK + f'Загружаем из { email_folder } в {download_folder}...'.ljust(max_folders_len+20)
-    print(start_message+'\033[F\033[')
+    #start_message = Fore.BLACK + f'Загружаем из { email_folder } в {download_folder}...'.ljust(max_folders_len+20)
+    #print(start_message+'\033[F\033[')
+    folders = list(os.walk('Исходники'))[0][1]
+    downloaded_folders = [folder for folder in folders if '_Скачано' in folder]
+    folders_len = [len(download_folder + folders_rules_dict[download_folder]['email_folder']) for download_folder in downloaded_folders]
+    max_folders_len = max(folders_len)
+
     try:
         with MailBox(IMAP_SERVER, port=IMAP_PORT).login(EMAIL, APP_PASSWORD, 'INBOX') as mailbox:
             # print("Подключение успешно! Обработка писем...")
 
-            mailbox.folder.set(email_folder)     
+            mailbox.folder.set(email_folder)
+            unseen_qty = mailbox.folder.status(email_folder)['UNSEEN']  
            
             msg_qty = 0
             att_qty = 0
+
+            bar = FillingSquaresBar(
+                f'Загружаем письма из папки {email_folder} в {download_folder}'.rjust(max_folders_len+29),
+                max=unseen_qty,
+                suffix='%(index)d/%(max)d',
+                fill='█', empty_fill='░',
+                width = 50)    
+
+            print(Fore.BLACK)
+            bar.start()
 
             for msg in mailbox.fetch(OR(new=True, seen=False), mark_seen=MARK_SEEN):
                 msg_qty += 1
@@ -80,9 +105,14 @@ def get_attached_file(email_folder, download_folder, max_folders_len):
 
                         with open(file_path, 'wb') as f:
                             f.write(att.payload)
-        summary = Fore.GREEN + f'получено писем: {msg_qty:3}, файлов: {att_qty:4}' + Fore.RESET
-        finish_message = start_message + summary
-        print(finish_message)
+
+                bar.next()
+                print(Fore.RESET)
+
+            bar.finish()                
+        #summary = Fore.GREEN + f'получено писем: {msg_qty:3}, файлов: {att_qty:4}' + Fore.RESET
+        #finish_message = start_message + summary
+        #print(finish_message)
     except Exception as e:
         summary = Fore.RED+ f'получено писем: {msg_qty:3}, загружено файлов: {att_qty:4} ОШИБКА { repr(e) }' + Fore.RESET
         finish_message = start_message + summary
@@ -90,6 +120,6 @@ def get_attached_file(email_folder, download_folder, max_folders_len):
 
 
 if __name__=='__main__':
-    get_email_folders()
+    print(get_email_folder_letters_qty())
 
 
