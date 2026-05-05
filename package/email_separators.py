@@ -7,6 +7,9 @@ import io
 
 from datetime import datetime
 from package.config import folders_rules_dict
+
+from openpyxl.utils.cell import coordinate_from_string, column_index_from_string
+
 from colorama import Fore
 from openpyxl import load_workbook
 
@@ -36,7 +39,7 @@ def email_by_file_name(folder, file, folders_rules_dict):
         return(False, e)
 
 
-def email_by_cell_value(folder, file, folders_rules_dict):
+def email_by_cell_value_bkp(folder, file, folders_rules_dict):
     if file[-4:] not in ['.xls', 'xlsx']:
         return (True, 'Не установлены правила обработки файла')
     
@@ -61,6 +64,39 @@ def email_by_cell_value(folder, file, folders_rules_dict):
     except Exception as e:
         return(False, e)
 
+
+def email_by_cell_value(folder, file, folders_rules_dict):
+    if file[-4:] not in ['.xls', 'xlsx']:
+        return (True, 'Не установлены правила обработки файла')
+    
+    try:
+    # if True:
+        file_path = os.path.join(os.getcwd(), 'Исходники', folder, file)
+        
+        with pd.ExcelFile(file_path) as wb:
+            wb_sheet_names = wb.sheet_names
+
+        for file_rule in folders_rules_dict[folder]['file_rules']:
+            sheet_name = file_rule['sheet_name']
+            if not sheet_name in wb_sheet_names:
+                continue
+
+            col_letter, row_num = coordinate_from_string(file_rule['cell'])
+            col_num = column_index_from_string(col_letter)  
+
+            df = pd.read_excel(file_path, sheet_name=sheet_name, header=None,  engine='calamine')
+            cell_value = df.iat[row_num-1, col_num-1]
+            
+            if re.search(file_rule['pattern'], cell_value):
+                new_file_path = os.path.join(os.getcwd(), 'Исходники', file_rule['target_folder'], file)
+                shutil.move(file_path, new_file_path)
+                return (True, file_rule['target_folder'])
+        
+        return (True, 'Не установлены правила обработки файла')    
+
+    except Exception as e:
+        return(False, e)
+    
 
 def look_insight_rgs_tek_file(
         file_path = os.path.join(
@@ -138,8 +174,9 @@ separators_dict = {
 }
 
 if __name__ == '__main__':
+    #look_insight_rgs_tek_file(os.path.join(os.getcwd(), 'Исходники', folder, file))        
 
-    folder, file = 'Росгосстрах ТЭК_Прикрепление', '25 02 07 1 Ю721(010-1).xlsx'
+    folder, file = 'СОГАЗ ЭДО_Скачано', '$R2I4ZAB.xls'
+    
+    print(email_by_cell_value(folder, file, folders_rules_dict))
 
-
-    look_insight_rgs_tek_file(os.path.join(os.getcwd(), 'Исходники', folder, file))

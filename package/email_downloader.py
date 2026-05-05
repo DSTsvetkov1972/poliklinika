@@ -53,8 +53,8 @@ def attachments_downloader():
         for download_folder in downloaded_folders:
             email_folder = folders_rules_dict[download_folder]['email_folder']
             
-            
-            get_attached_file(email_folder, download_folder, max_folders_len)
+            if email_folder:
+                get_attached_file(email_folder, download_folder, max_folders_len)
         
         print(Fore.RESET)
 
