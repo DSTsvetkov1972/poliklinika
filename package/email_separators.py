@@ -69,8 +69,8 @@ def email_by_cell_value(folder, file, folders_rules_dict):
     if file[-4:] not in ['.xls', 'xlsx']:
         return (True, 'Не установлены правила обработки файла')
     
-    try:
-    # if True:
+    #try:
+    if True:
         file_path = os.path.join(os.getcwd(), 'Исходники', folder, file)
         
         with pd.ExcelFile(file_path) as wb:
@@ -84,18 +84,20 @@ def email_by_cell_value(folder, file, folders_rules_dict):
             col_letter, row_num = coordinate_from_string(file_rule['cell'])
             col_num = column_index_from_string(col_letter)  
 
-            df = pd.read_excel(file_path, sheet_name=sheet_name, header=None,  engine='calamine')
+            df = pd.read_excel(file_path, sheet_name=sheet_name, dtype=str, header=None,  engine='calamine')
+
             cell_value = df.iat[row_num-1, col_num-1]
+            # print(cell_value)
             
-            if re.search(file_rule['pattern'], cell_value):
+            if re.search(file_rule['pattern'], str(cell_value)):
                 new_file_path = os.path.join(os.getcwd(), 'Исходники', file_rule['target_folder'], file)
                 shutil.move(file_path, new_file_path)
                 return (True, file_rule['target_folder'])
         
         return (True, 'Не установлены правила обработки файла')    
 
-    except Exception as e:
-        return(False, e)
+    #except Exception as e:
+    #    return(False, e)
     
 
 def look_insight_rgs_tek_file(
@@ -176,7 +178,7 @@ separators_dict = {
 if __name__ == '__main__':
     #look_insight_rgs_tek_file(os.path.join(os.getcwd(), 'Исходники', folder, file))        
 
-    folder, file = 'СОГАЗ ЭДО_Скачано', '$R2I4ZAB.xls'
+    folder, file = 'ЗЕТТА_Скачано',	'220_ММВН-240005226_(200-200)(1)(4907666)[0].xlsx'
     
-    print(email_by_cell_value(folder, file, folders_rules_dict))
+    email_by_cell_value(folder, file, folders_rules_dict)
 
