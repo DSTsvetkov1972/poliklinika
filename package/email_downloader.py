@@ -15,6 +15,8 @@ from progress.bar import FillingSquaresBar
 
 MARK_SEEN = os.getenv('MARK_SEEN')
 
+
+
 def get_email_folder_letters_qty():
     with MailBox(IMAP_SERVER, port=IMAP_PORT).login(EMAIL, APP_PASSWORD, 'INBOX') as mailbox:
         status = mailbox.folder.status("Ресо-Гарантия")['UNSEEN']
