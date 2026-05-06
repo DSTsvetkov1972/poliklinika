@@ -102,7 +102,7 @@ def get_attached_file(email_folder, download_folder, max_folders_len):
                         
                         file_name = att.filename
                         file_name = file_name.replace('/', '~').replace('\\', '~').replace('|', '~').replace('?', '~').replace('"', '~').replace(':', '~').replace('*', '~').replace('<', '~').replace('>', '~')
-                        print(file_name)
+                        #print(file_name)
                         # если файл с таким названием существует,
                         # добавляем в конце суффикс _copy
                         # пока не получится уникальное имя файла
