@@ -13,9 +13,10 @@ from package.fns import get_file_path
 import re
 from progress.bar import FillingSquaresBar
 from colorama import Fore
-from dotenv import load_dotenv
 
-load_dotenv(os.path.join(os.getcwd(), '.config'))
+#from dotenv import load_dotenv
+#if not load_dotenv(os.path.join(os.getcwd(), '.config')):
+#    print(Fore.RED, 'Файл конфигурации .config отсутствует в папке с ffic.exe', Fore.RESET)
 
 
 def drop_files(folder, extensions):

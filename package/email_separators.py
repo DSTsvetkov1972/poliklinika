@@ -13,8 +13,9 @@ from openpyxl.utils.cell import coordinate_from_string, column_index_from_string
 from colorama import Fore
 from openpyxl import load_workbook
 
-from dotenv import load_dotenv
-load_dotenv(os.path.join(os.getcwd(), '.comfig'))
+#from dotenv import load_dotenv
+#if not load_dotenv(os.path.join(os.getcwd(), '.config')):
+#    print(Fore.RED, 'Файл конфигурации .config отсутствует в папке с ffic.exe', Fore.RESET)
 
     
 
@@ -69,8 +70,8 @@ def email_by_cell_value(folder, file, folders_rules_dict):
     if file[-4:] not in ['.xls', 'xlsx']:
         return (True, 'Не установлены правила обработки файла')
     
-    #try:
-    if True:
+    try:
+    #if True:
         file_path = os.path.join(os.getcwd(), 'Исходники', folder, file)
         
         with pd.ExcelFile(file_path) as wb:
@@ -96,8 +97,8 @@ def email_by_cell_value(folder, file, folders_rules_dict):
         
         return (True, 'Не установлены правила обработки файла')    
 
-    #except Exception as e:
-    #    return(False, e)
+    except Exception as e:
+        return(False, e)
     
 
 def look_insight_rgs_tek_file(

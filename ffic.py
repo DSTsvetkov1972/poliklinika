@@ -14,83 +14,92 @@ from datetime import datetime
 
 from colorama import Fore, Style, init
 
+
 init()
 print(Style.BRIGHT)
 print(logo_colored)
 
-folders_maker()
+from dotenv import load_dotenv
+if not load_dotenv(os.path.join(os.getcwd(), '.config')):
+    print(Fore.RED + 'Файл конфигурации .config отсутствует в папке с ffic.exe' + Fore.RESET)
+    while True:
+        pass
     
-while True:
-    try:
-        print()
-        print(Fore.WHITE + '0' + Fore.BLUE + ' - получить сводку по исходникам и подготовленным к загрузке' + Fore.RESET)
-        print(Fore.WHITE + '1' + Fore.BLUE + ' - скачать вложения из писем электронной почты' + Fore.RESET)
-        print(Fore.WHITE + '2' + Fore.BLUE + ' - разобрать скаченные вложения по папкам' + Fore.RESET)                
-        print(Fore.WHITE + '3' + Fore.BLUE + ' - подготовить файлы для загрузки в Пикомед' + Fore.RESET)
-        print(Fore.WHITE + '4' + Fore.BLUE + ' - подтвердить загрузку файлов в Пикомед' + Fore.RESET)
-        print(Fore.WHITE + '5' + Fore.BLUE + ' - открыть файл на рабочем столе' + Fore.RESET)
+else:
 
-        print(Fore.MAGENTA + "Ваш выбор: " + Fore.RESET, end='')
-        choise = input()
-
-        if datetime.now()>datetime(2026, 5, 31):
-            print(Fore.RED, 'Что-то пошло не так...', Fore.RESET)
-            continue
-
-
-        if choise == '0':
-            if not os.path.exists(os.path.join(os.getcwd(),'~$Исходники и подготовленные.xlsx')):
-                summary()
-                print(Fore.GREEN + 'Файл "Исходники и подготовленные.xlsx" сформирован и открыт на рабочем столе.' + Fore.RESET)
-            else:
-                print(Fore.RED + 'Файл "Исходники и подготовленные.xlsx" уже открыт на рабочем столе. Закройте его и повторите попытку.' + Fore.RESET)             
-            os.startfile('Исходники и подготовленные.xlsx')
-
-        elif choise == '1':
-            attachments_downloader()
-
-        elif choise == '2':
-
-            if os.path.exists(os.path.join(os.getcwd(), "~$Сводка по распределению файлов.xlsx")):
-                print(Fore.RED + 'Файл "Сводка по распределению файлов.xlsx" уже открыт на рабочем столе. Закройте его и повторите попытку.' + Fore.RESET)                
-                os.startfile('Сводка по распределению файлов.xlsx')
-                continue
-
-            separator()
-            print(Fore.GREEN + 'Файл "Сводка по распределению файлов.xlsx" сформирован и открыт на рабочем столе.' + Fore.RESET)
-            os.startfile('Сводка по распределению файлов.xlsx')
+    folders_maker()
         
-        elif choise == '3':
+    while True:
+        try:
+            print()
+            print(Fore.WHITE + '0' + Fore.BLUE + ' - получить сводку по исходникам и подготовленным к загрузке' + Fore.RESET)
+            print(Fore.WHITE + '1' + Fore.BLUE + ' - скачать вложения из писем электронной почты' + Fore.RESET)
+            print(Fore.WHITE + '2' + Fore.BLUE + ' - разобрать скаченные вложения по папкам' + Fore.RESET)                
+            print(Fore.WHITE + '3' + Fore.BLUE + ' - подготовить файлы для загрузки в Пикомед' + Fore.RESET)
+            print(Fore.WHITE + '4' + Fore.BLUE + ' - подтвердить загрузку файлов в Пикомед' + Fore.RESET)
+            print(Fore.WHITE + '5' + Fore.BLUE + ' - открыть файл на рабочем столе' + Fore.RESET)
 
-            if not os.path.exists(os.path.join(os.getcwd(), '~$Сводка по подготовке файлов к загрузке.xlsx')):
-                prepared_maker_res = prepared_maker()
-                                        
-                if prepared_maker_res[0]:
-                    print(Fore.GREEN + 'Файл "Сводка по подготовке файлов к загрузке.xlsx" сформирован и открыт на рабочем столе.' + Fore.RESET)
-                    os.startfile('Сводка по подготовке файлов к загрузке.xlsx')  
-                else:
-                    print(Fore.RED + prepared_maker_res[1], Fore.RESET)
-            else:
-                print(Fore.RED + 'Файл "Исходники и подготовленные.xlsx" уже открыт на рабочем столе. Закройте его и повторите попытку.' + Fore.RESET)     
-                os.startfile('Сводка по подготовке файлов к загрузке.xlsx')  
-                      
-            
-        elif choise == '4':
-            check_opened_files_to_confirm_res = check_opened_files_to_confirm()
-            if check_opened_files_to_confirm_res:
-                print(Fore.RED + f'Закройте файлы:\n{check_opened_files_to_confirm_res}\n и повторите попытку' + Fore.RESET)
+            print(Fore.MAGENTA + "Ваш выбор: " + Fore.RESET, end='')
+            choise = input()
+
+            if datetime.now()>datetime(2026, 5, 31):
+                print(Fore.RED, 'Что-то пошло не так...', Fore.RESET)
                 continue
 
-            files_to_confirm = get_files_to_confirm()
-            confirmed_files_qty = confirm_files(files_to_confirm)
-            print(Fore.GREEN + f'Подтверждена загрузка в Пикомед для\nподготовленных файлов: {len(files_to_confirm)} содержащих скачанных файлов: { confirmed_files_qty }' + Fore.RESET)
-        elif choise == '5':
-            open_file()
-             
+
+            if choise == '0':
+                if not os.path.exists(os.path.join(os.getcwd(),'~$Исходники и подготовленные.xlsx')):
+                    summary()
+                    print(Fore.GREEN + 'Файл "Исходники и подготовленные.xlsx" сформирован и открыт на рабочем столе.' + Fore.RESET)
+                else:
+                    print(Fore.RED + 'Файл "Исходники и подготовленные.xlsx" уже открыт на рабочем столе. Закройте его и повторите попытку.' + Fore.RESET)             
+                os.startfile('Исходники и подготовленные.xlsx')
+
+            elif choise == '1':
+                attachments_downloader()
+
+            elif choise == '2':
+
+                if os.path.exists(os.path.join(os.getcwd(), "~$Сводка по распределению файлов.xlsx")):
+                    print(Fore.RED + 'Файл "Сводка по распределению файлов.xlsx" уже открыт на рабочем столе. Закройте его и повторите попытку.' + Fore.RESET)                
+                    os.startfile('Сводка по распределению файлов.xlsx')
+                    continue
+
+                separator()
+                print(Fore.GREEN + 'Файл "Сводка по распределению файлов.xlsx" сформирован и открыт на рабочем столе.' + Fore.RESET)
+                os.startfile('Сводка по распределению файлов.xlsx')
+            
+            elif choise == '3':
+
+                if not os.path.exists(os.path.join(os.getcwd(), '~$Сводка по подготовке файлов к загрузке.xlsx')):
+                    prepared_maker_res = prepared_maker()
+                                            
+                    if prepared_maker_res[0]:
+                        print(Fore.GREEN + 'Файл "Сводка по подготовке файлов к загрузке.xlsx" сформирован и открыт на рабочем столе.' + Fore.RESET)
+                        os.startfile('Сводка по подготовке файлов к загрузке.xlsx')  
+                    else:
+                        print(Fore.RED + prepared_maker_res[1], Fore.RESET)
+                else:
+                    print(Fore.RED + 'Файл "Исходники и подготовленные.xlsx" уже открыт на рабочем столе. Закройте его и повторите попытку.' + Fore.RESET)     
+                    os.startfile('Сводка по подготовке файлов к загрузке.xlsx')  
+                        
+                
+            elif choise == '4':
+                check_opened_files_to_confirm_res = check_opened_files_to_confirm()
+                if check_opened_files_to_confirm_res:
+                    print(Fore.RED + f'Закройте файлы:\n{check_opened_files_to_confirm_res}\n и повторите попытку' + Fore.RESET)
+                    continue
+
+                files_to_confirm = get_files_to_confirm()
+                confirmed_files_qty = confirm_files(files_to_confirm)
+                print(Fore.GREEN + f'Подтверждена загрузка в Пикомед для\nподготовленных файлов: {len(files_to_confirm)} содержащих скачанных файлов: { confirmed_files_qty }' + Fore.RESET)
+            elif choise == '5':
+                open_file()
+                
 
 
-    except Exception as e:
-        print(Fore.RED, str(e), Fore.RESET)
+        except Exception as e:
+            print(Fore.RED, str(e), Fore.RESET)
 
 
 

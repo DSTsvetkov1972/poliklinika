@@ -9,6 +9,9 @@ from package.config import folders_rules_dict
 
 from progress.bar import FillingSquaresBar
 
+#from dotenv import load_dotenv
+#if not load_dotenv(os.path.join(os.getcwd(), '.config')):
+#    print(Fore.RED, 'Файл конфигурации .config отсутствует в папке с ffic.exe', Fore.RESET)
 
 MARK_SEEN = os.getenv('MARK_SEEN')
 
