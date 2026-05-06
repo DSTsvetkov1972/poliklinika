@@ -71,6 +71,7 @@ def get_attached_file(email_folder, download_folder, max_folders_len):
     max_folders_len = max(folders_len)
 
     try:
+    #if 1==1:
         with MailBox(IMAP_SERVER, port=IMAP_PORT).login(EMAIL, APP_PASSWORD, 'INBOX') as mailbox:
             # print("Подключение успешно! Обработка писем...")
 
@@ -100,11 +101,13 @@ def get_attached_file(email_folder, download_folder, max_folders_len):
                         # safe_name = att.filename.encode('utf-8').decode('utf-8')
                         
                         file_name = att.filename
-
+                        file_name = file_name.replace('/', '~').replace('\\', '~').replace('|', '~').replace('?', '~').replace('"', '~').replace(':', '~').replace('*', '~').replace('<', '~').replace('>', '~')
+                        print(file_name)
                         # если файл с таким названием существует,
                         # добавляем в конце суффикс _copy
                         # пока не получится уникальное имя файла
                         file_path = get_file_path(file_name, download_folder)
+                        #print(file_path)
 
                         with open(file_path, 'wb') as f:
                             f.write(att.payload)
@@ -115,10 +118,11 @@ def get_attached_file(email_folder, download_folder, max_folders_len):
         #finish_message = start_message + summary
         #print(finish_message)
     except Exception as e:
-        print(Fore.RED+ f'получено писем: {msg_qty:3}, загружено файлов: {att_qty:4} ОШИБКА { repr(e) }' + Fore.RESET)
+        print(Fore.RED+ f'получено писем: {msg_qty:3}, загружено файлов: {att_qty:4} ОШИБКА { repr(e) }' + Fore.BLACK)
 
 
 if __name__=='__main__':
-    print(get_email_folder_letters_qty())
-
+    email_folder, download_folder = 'капитал лайф', 'Капитал_Скачано'
+    max_folders_len=100
+    get_attached_file(email_folder, os.path.join(os.getcwd(), 'Исходники', download_folder), max_folders_len)
 

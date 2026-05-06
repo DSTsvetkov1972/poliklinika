@@ -1,7 +1,4 @@
-from openpyxl.utils.cell import coordinate_from_string, column_index_from_string
+file_path = r'C:\Users\tsvetkovds\Documents\.PROJECTS\AS\Исходники\Капитал_Скачано\Дополнительное соглашение к договору 77-ПС-НА19/279 от 15.07.2019.doc'
 
-cell_coord = 'AA4'
-col_letter, row_num = coordinate_from_string(cell_coord)  # ('D', 4)
-col_num = column_index_from_string(col_letter)            # 4
-
-print(f"Строка: {row_num}, Столбец: {col_num}")
+with open(file_path, 'wb') as f:
+    pass
