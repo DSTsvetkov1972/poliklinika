@@ -90,7 +90,7 @@ def base(folder, file, folders_rules_dict):
     """
 
     try:
-        date_columns = []
+
 
         header_row = folders_rules_dict[folder]['header_row']
         
