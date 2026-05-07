@@ -2,7 +2,7 @@
 from colorama import Fore, init
 import pandas as pd
 import os
-from package.project_starter import folders_maker
+from package.project_starter import folders_maker, db_starter
 from package.logo import logo_colored
 from package.fns import open_file
 from package.email_downloader import attachments_downloader
@@ -28,6 +28,7 @@ if not load_dotenv(os.path.join(os.getcwd(), '.config')):
 else:
 
     folders_maker()
+    db_starter()
         
     while True:
         try:

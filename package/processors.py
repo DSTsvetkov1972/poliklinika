@@ -7,6 +7,7 @@ import io
 
 sys.path.append(os.getcwd())
 from package.config import folders_rules_dict
+from package.fns import get_code_by_category
 from colorama import Fore
 
 from dotenv import load_dotenv
@@ -162,7 +163,8 @@ def base(folder, file, folders_rules_dict):
 
                     elif result_column_dict['source_type'] == 'dict':  
                         source_column_name = result_column_dict['source_column_name']                                              
-                        res_df[target_column] = df[source_column_name].apply(lambda k: result_column_dict['dict'].get(k) if result_column_dict['dict'].get(k) else '')
+                        #res_df[target_column] = df[source_column_name].apply(lambda k: result_column_dict['dict'].get(k) if result_column_dict['dict'].get(k) else '')
+                        res_df[target_column] = df[source_column_name].apply(lambda category: get_code_by_category(folder, category))
 
                     elif result_column_dict['source_type'] == 'const':
                         const = result_column_dict['const']                                              
@@ -331,7 +333,7 @@ def rosgosstrah_prikrep(folder, file, folders_rules_dict):
     
     #if True:
     try:
-        codes_dict = folders_rules_dict[folder]['dict']
+        # codes_dict = folders_rules_dict[folder]['dict']
         source_header = ["№ п/п", "NAME1", "NAME2", "NAME3", "NIB", "DATE", "SEX", "POLIC", "POLIC\nSER",
                          "ADDRESS P", "TEL1", "KATEGORY", "PLACE", "BEGIN", "END"]
         sheet_name = '010_prik_new'
@@ -384,7 +386,8 @@ def rosgosstrah_prikrep(folder, file, folders_rules_dict):
 
         df['ФИО'] = df[['NAME1', 'NAME2', 'NAME3']].astype(str).agg(' '.join, axis=1)
 
-        df['pikomed_code'] = df['service_conditions'].apply(lambda k: codes_dict.get(k) if codes_dict.get(k) else '')
+        # df['pikomed_code'] = df['service_conditions'].apply(lambda k: codes_dict.get(k) if codes_dict.get(k) else '')
+        df['pikomed_code'] = df['service_conditions'].apply(lambda category: get_code_by_category(folder, category))
       
         df = df.rename(
             columns={
@@ -467,7 +470,7 @@ def zetta_prikrep(folder, file, folders_rules_dict):
         "", "№ ", "Фамилия", "Имя", "Отчество", "№ ИБ", "Дата рождения", "Пол \n(муж,\nжен)",
         "№ Полиса", "Серия полиса", "Домашний адрес", "Телефон", "Категория", "Место работы", "Дата прикр.", "Дата откр."
         ]
-    codes_dict = folders_rules_dict[folder]['dict']
+    # codes_dict = folders_rules_dict[folder]['dict']
     
     #if True:
     try:
@@ -510,7 +513,8 @@ def zetta_prikrep(folder, file, folders_rules_dict):
         df['Период обслуживания по'] = df['Период обслуживания по'].apply(lambda x: convert_date(x))        
         df['Дата рождения'] = df['Дата рождения'].apply(lambda x: convert_date(x))
 
-        df['Код ПИКОМЕД'] = df['Вид медицинского обслуживания'].apply(lambda k: codes_dict.get(k) if codes_dict.get(k) else '')
+        #df['Код ПИКОМЕД'] = df['Вид медицинского обслуживания'].apply(lambda k: codes_dict.get(k) if codes_dict.get(k) else '')
+        df['Код ПИКОМЕД'] = df['Вид медицинского обслуживания'].apply(lambda category: get_code_by_category(folder, category))
         df['Папка'] = folder
         df['Файл'] = file
 
@@ -534,7 +538,7 @@ def renessans_conditions(npp_shifted_1, npp_shifted_3):
 def renessans_prikrep(folder, file, folders_rules_dict):
         
     try:
-        codes_dict = folders_rules_dict[folder]['dict']
+        # codes_dict = folders_rules_dict[folder]['dict']
         expected_columns = ['npp', 'NAME1', 'NAME2', 'NAME3', 'NIB', 'DATE', 'SEX',
                             'POLIC', 'POLIC SER', 'ADDRESS P', 'TEL1', 'PLACE', 'BEGIN', 'END']
 
@@ -582,7 +586,8 @@ def renessans_prikrep(folder, file, folders_rules_dict):
         df['Период обслуживания по'] = df['Период обслуживания по'].apply(lambda x: convert_date(x))        
         df['Дата рождения'] = df['Дата рождения'].apply(lambda x: convert_date(x))
         
-        df['Код ПИКОМЕД'] = df['Вид медицинского обслуживания'].apply(lambda k: codes_dict.get(k) if codes_dict.get(k) else '')
+        #df['Код ПИКОМЕД'] = df['Вид медицинского обслуживания'].apply(lambda k: codes_dict.get(k) if codes_dict.get(k) else '')
+        df['Код ПИКОМЕД'] = df['Вид медицинского обслуживания'].apply(lambda category: get_code_by_category(folder, category))
         df['Папка'] = folder
         df['Файл'] = file
 
@@ -603,7 +608,7 @@ def reso_prikrep_2_conditions(npp_shifted_1, npp_shifted_2, NAME2_shifted_2):
 
 
 def reso_prikrep_2(folder, file, folders_rules_dict):
-    codes_dict = folders_rules_dict[folder]['dict']
+    # codes_dict = folders_rules_dict[folder]['dict']
         
     try:
     
@@ -651,7 +656,8 @@ def reso_prikrep_2(folder, file, folders_rules_dict):
         df['Период обслуживания по'] = df['Период обслуживания по'].apply(lambda x: convert_date(x))        
         df['Дата рождения'] = df['Дата рождения'].apply(lambda x: convert_date(x))
 
-        df['Код ПИКОМЕД'] = df['Вид медицинского обслуживания'].apply(lambda k: codes_dict.get(k) if codes_dict.get(k) else '')
+        # df['Код ПИКОМЕД'] = df['Вид медицинского обслуживания'].apply(lambda k: codes_dict.get(k) if codes_dict.get(k) else '')
+        df['Код ПИКОМЕД'] = df['Вид медицинского обслуживания'].apply(lambda category: get_code_by_category(folder, category))
         df['Папка'] = folder
         df['Файл'] = file
 

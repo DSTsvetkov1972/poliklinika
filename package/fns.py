@@ -1,6 +1,7 @@
 import pyperclip
 import os, re
 from colorama import Fore
+import sqlite3
 
 def open_file():
     path = None
@@ -66,5 +67,21 @@ def get_file_path(file_name, downloaded_folder):
             new_file_path = os.path.join(os.getcwd(), 'Исходники', downloaded_folder, new_file_name)
             return new_file_path               
 
+
+def get_code_by_category(folder, category):
+    with sqlite3.connect(os.path.join(os.getcwd(), 'project.db')) as conn:
+        sql = f"SELECT code FROM folder_category_code WHERE folder='{folder}' AND category='{category}'"
+        cur = conn.cursor()
+        cur.execute(sql)
+        res = cur.fetchone()
+    if res:
+        return res[0]
+    else:
+        return ''
+
 if __name__ == '__main__':
-    open_file()
+    
+    folder =  'ЗЕТТА_Прикрепление'
+    category = 'Программа "СТАНДАРТ". Поликлиническое обслуживание со стоматологией, без вызова врача на дом.'
+    
+    print(get_code_by_category(folder, category))

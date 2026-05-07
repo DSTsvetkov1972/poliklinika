@@ -1,6 +1,8 @@
 
 import os
 import sys
+import sqlite3
+
 from colorama import Fore
 sys.path.append(os.getcwd())
 
@@ -30,6 +32,21 @@ def folders_maker():
         print(Fore.GREEN + f'Ok' + Fore.RESET, end='')  
 
     print() 
+
+
+def db_starter():
+    with sqlite3.connect(os.path.join(os.getcwd(), 'project.db')) as conn:
+        sql = """CREATE TABLE IF NOT EXISTS folder_category_code (
+    folder TEXT,
+    category TEXT,
+    code TEXT,
+    UNIQUE(folder, category)
+);"""
+        
+        cur = conn.cursor()
+        cur.execute(sql)
+
+    print(Fore.BLACK + 'База соответствия кодов ПИКОМЕД...' + Fore.GREEN + 'Ok' + Fore.RESET)          
 
 if __name__ == '__main__':
     folders_maker()
