@@ -445,9 +445,14 @@ def soglasie_otkrep(folder, file, folders_rules_dict):
 
 def zetta_prikrep_conditions(shifted_1, shifted_3):
 
-    if shifted_1 == 'npp' and 'Программа' in shifted_3:
+    if (shifted_1 == 'npp' and
+        ('Программа' in shifted_3 or
+         'программа' in shifted_3)):
         return(shifted_3)
-    elif shifted_1 == 'npp' and 'Программа' not in shifted_3:
+    elif (shifted_1 == 'npp' and
+          'Программа' not in shifted_3 and
+          'программа' not in shifted_3
+          ):
         raise KeyError('Неожиданная структура файла. Не возможно считать программу страхования')
     else:
         None
@@ -464,7 +469,7 @@ def zetta_prikrep(folder, file, folders_rules_dict):
         ]
     codes_dict = folders_rules_dict[folder]['dict']
     
-    # if True:
+    #if True:
     try:
         df = pd.read_excel(file_path, header=None, dtype=str)
         df = df.fillna('')
@@ -504,7 +509,6 @@ def zetta_prikrep(folder, file, folders_rules_dict):
         df['Период обслуживания c'] = df['Период обслуживания c'].apply(lambda x: convert_date(x))
         df['Период обслуживания по'] = df['Период обслуживания по'].apply(lambda x: convert_date(x))        
         df['Дата рождения'] = df['Дата рождения'].apply(lambda x: convert_date(x))
-
 
         df['Код ПИКОМЕД'] = df['Вид медицинского обслуживания'].apply(lambda k: codes_dict[k])
         df['Папка'] = folder
@@ -675,13 +679,16 @@ if __name__ == '__main__':
     #folder, file = 'РЕСО_Прикрепление', 'p41894408.xlsx'
 
 
-    folder, file = 'Росгосстрах ТЭК_Открепление', '25.02.21 1 Ю761(010-1).xlsx'
+    folder = 'ЗЕТТА_Прикрепление'
+    file = '220_ММВН-260001999_(87-87)(1)(4971063).xlsx'
+    # file = '220_ММВН-190029645_(10108-10109)(2)(4980656).xlsx'
 
 
 
 
 
 
-    # print(rosgosstrah_tek_otkrep(folder, file, folders_rules_dict))
+
+    print(zetta_prikrep(folder, file, folders_rules_dict))
 
 
