@@ -76,11 +76,40 @@ def prepared_maker():
                 for file in files:     
                     processor_starter_res = processor_starter(folder, file)
                     # print(file, processor_starter_res)
+
                     if processor_starter_res[0]:
-                        res_dfs.append(processor_starter_res[1])
-                        processor_log.append([folder, file, len(processor_starter_res[1])])
+                        res_df = processor_starter_res[1]
+
+                        if 'Код ПИКОМЕД' in res_df.columns:
+                            no_code_df = res_df[res_df['Код ПИКОМЕД']=='']
+                        else:
+                            no_code_df =pd.DataFrame()
+
+                        if no_code_df.empty:
+                            processor_log.append({
+                                'Папка': folder,
+                                'Файл': file,
+                                'Результат обработки': 'Ok',
+                                'Строк без кода ПИКОМЕД': 0,
+                                'Строк в файле': len(res_df)
+                                })
+                        else:
+                            processor_log.append({
+                                'Папка': folder,
+                                'Файл': file,
+                                'Результат обработки': 'Не все коды сопоставлены',
+                                'Строк без кода ПИКОМЕД': len(no_code_df),
+                                'Строк в файле': len(res_df)
+                                })
+                        res_dfs.append(res_df)
                     else:
-                        processor_log.append([folder, file, processor_starter_res[1]])
+                        processor_log.append({
+                            'Папка': folder,
+                            'Файл': file,
+                            'Результат обработки': processor_starter_res[1],
+                            'Строк без кода ПИКОМЕД': None,
+                            'Строк в файле': None
+                            })
 
                     if res_dfs:
                         res_df = pd.concat(res_dfs)
@@ -113,7 +142,7 @@ def prepared_maker():
 
         print(Fore.RESET)                
 
-        log_df = pd.DataFrame(processor_log, columns=['Папка', 'Файл', 'Результат обработки'])
+        log_df = pd.DataFrame(processor_log)
         log_df.to_excel('Сводка по подготовке файлов к загрузке.xlsx', index=None)
             
         wb = load_workbook('Сводка по подготовке файлов к загрузке.xlsx')
@@ -125,19 +154,22 @@ def prepared_maker():
         # Устанавливаем ширину для конкретной колонки
         ws.column_dimensions['A'].width = 36
         ws.column_dimensions['B'].width = 42
-        ws.column_dimensions['C'].width = 64
+        ws.column_dimensions['C'].width = 48
+        ws.column_dimensions['D'].width = 48
+        ws.column_dimensions['E'].width = 48                
 
 
-        for col in range(1, 4):
+        for col in range(1, 6):
             cell = ws.cell(column=col, row=1)
             cell.font = Font(bold=True)  # Жирный шрифт
             cell.alignment = Alignment(horizontal='center', vertical='center', wrap_text=True)  # Выравнивание по центру
 
-        ws.auto_filter.ref = ws.dimensions  
-        #for row in range(2, ws.max_row+1):
-        #    ws.cell(column=2, row=row).alignment = Alignment(horizontal='center', vertical='center', wrap_text=True)
-        #    ws.cell(column=3, row=row).alignment = Alignment(horizontal='center', vertical='center', wrap_text=True)
-        #    ws.cell(column=4, row=row).alignment = Alignment(horizontal='center', vertical='center', wrap_text=True)
+        ws.auto_filter.ref = ws.dimensions
+
+        for row in range(2, ws.max_row+1):
+            for column in range(3, 6):
+                ws.cell(column=column, row=row).alignment = Alignment(horizontal='center', vertical='center', wrap_text=True)
+
 
         wb.save('Сводка по подготовке файлов к загрузке.xlsx')
         return (True,)
