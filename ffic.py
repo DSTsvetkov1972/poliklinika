@@ -39,6 +39,7 @@ else:
             print(Fore.WHITE + '3' + Fore.BLUE + ' - подготовить файлы для загрузки в Пикомед' + Fore.RESET)
             print(Fore.WHITE + '4' + Fore.BLUE + ' - подтвердить загрузку файлов в Пикомед' + Fore.RESET)
             print(Fore.WHITE + '5' + Fore.BLUE + ' - открыть файл на рабочем столе' + Fore.RESET)
+            print(Fore.WHITE + '6' + Fore.BLUE + ' - добавить/изменить код категории обслуживания' + Fore.RESET)
 
             print(Fore.MAGENTA + "Ваш выбор: " + Fore.RESET, end='')
             choise = input()
@@ -77,9 +78,11 @@ else:
                                             
                     if prepared_maker_res[0]:
                         print(Fore.GREEN + 'Файл "Сводка по подготовке файлов к загрузке.xlsx" сформирован и открыт на рабочем столе.' + Fore.RESET)
-                        os.startfile('Сводка по подготовке файлов к загрузке.xlsx')  
+                        os.startfile('Сводка по подготовке файлов к загрузке.xlsx')
                     else:
                         print(Fore.RED + prepared_maker_res[1], Fore.RESET)
+                        if prepared_maker_res[1] == 'Есть виды медицинского обслуживания с несопоставленными кодами':
+                            os.startfile('Категории без кодов.xlsx')  
                 else:
                     print(Fore.RED + 'Файл "Исходники и подготовленные.xlsx" уже открыт на рабочем столе. Закройте его и повторите попытку.' + Fore.RESET)     
                     os.startfile('Сводка по подготовке файлов к загрузке.xlsx')  
