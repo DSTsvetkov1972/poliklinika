@@ -86,6 +86,7 @@ def get_code_by_category(folder, category):
 
 def add_codes():
     try:
+        all_correct = True
     # if True:
         df = pd.read_excel(os.path.join(os.getcwd(), 'Категории и коды.xlsx'), dtype=str)
 
@@ -95,7 +96,15 @@ def add_codes():
             code = row[3]
 
             if code in [None, '',  '-']:
-                return(False, f'Папка: "{folder}", категория: "{category}". Не задан код в файле "Категории без кода.xlsx"!')
+                all_correct = False
+                print(Fore.RED + 'Неправильный код в файле "Категории без кода.xlsx"!\nПапка: ' +
+                      Fore.WHITE + folder +
+                      Fore.RED + '\nКатегория: ' +
+                      Fore.WHITE + category +
+                      Fore.RED + '\nКод: ' +
+                      Fore.WHITE + code +
+                      '\n')
+                
             else:
                 with sqlite3.connect(os.path.join(os.getcwd(), 'project.db')) as conn:
                     cur = conn.cursor()
@@ -103,13 +112,13 @@ def add_codes():
                     cur.execute(f"INSERT OR REPLACE INTO folder_category_code (folder, category, code) VALUES ('{folder}', '{category}', '{code}')")
             
             
-            print(Fore.GREEN + 'Папка: ' +
-                  Fore.WHITE + folder + 
-                  Fore.GREEN + '; категория: ' +
-                  Fore.WHITE + category +
-                  Fore.GREEN + '; сопоставили код: ' +
-                  Fore.WHITE + code +
-                  Fore.RESET)
+                print(Fore.GREEN + 'Папка: ' +
+                    Fore.WHITE + folder + 
+                    Fore.GREEN + '; категория: ' +
+                    Fore.WHITE + category +
+                    Fore.GREEN + '; сопоставили код: ' +
+                    Fore.WHITE + code +
+                    Fore.RESET)
 
         with sqlite3.connect(os.path.join(os.getcwd(), 'project.db')) as conn:
             cur = conn.cursor()
@@ -120,6 +129,7 @@ def add_codes():
             cur.execute('ALTER TABLE folder_category_code_tmp RENAME TO folder_category_code')
 
         return (True, "Загрузка кодов завершена")
+        
     except Exception as e:
         return(False, repr(e))
 

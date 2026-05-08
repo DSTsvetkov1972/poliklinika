@@ -138,7 +138,7 @@ else:
                 if add_codes_res[0]:
                     print(Fore.GREEN + add_codes_res[1] + Fore.RESET)
                 else:
-                    print(Fore.RED, add_codes_res[1] + Fore.RESET)
+                    print(add_codes_res[1])
 
             elif choise == '7':
                 print(Fore.YELLOW + 'Выгружаем список категорий и кодов из БД программы...' + Fore.RESET)                    
