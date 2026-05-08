@@ -136,9 +136,9 @@ else:
                 add_codes_res = add_codes()
 
                 if add_codes_res[0]:
-                    print(Fore.GREEN, add_codes_res[1], Fore.RESET)
+                    print(Fore.GREEN + add_codes_res[1] + Fore.RESET)
                 else:
-                    print(Fore.RED, add_codes_res[1], Fore.RESET)
+                    print(Fore.RED, add_codes_res[1] + Fore.RESET)
 
             elif choise == '7':
                 print(Fore.YELLOW + 'Выгружаем список категорий и кодов из БД программы...' + Fore.RESET)                    
@@ -151,7 +151,7 @@ else:
                 download_codes_res = download_codes()
 
                 if download_codes_res[0]:
-                    print(Fore.GREEN, download_codes_res[1], Fore.RESET)
+                    print(Fore.GREEN + download_codes_res[1] + Fore.RESET)
                     os.startfile('Категории и коды.xlsx')
                 else:
                     print(Fore.RED, download_codes_res[1], Fore.RESET)         

@@ -157,7 +157,7 @@ def download_codes():
             df.columns = ['Папка','Вид медицинского обслуживания', 'Код ПИКОМЕД']
             df.to_excel(os.path.join(os.getcwd(), 'Категории и коды.xlsx'), index=None)
             format_folder_category_code_table()
-        return (True, 'Коды выгружены в таблицу "Категории и коды"')
+        return (True, 'Коды выгружены в файл "Категории и коды.xlsx", файл открыт на рабочем столе.')
     except Exception as e:
         return(False, repr(e))
  
@@ -165,4 +165,4 @@ def download_codes():
 if __name__ == '__main__':
 
     
-    print(add_codes())
+    print(download_codes())
