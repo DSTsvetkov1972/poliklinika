@@ -97,11 +97,12 @@ def add_codes():
 
             if code in [None, '',  '-']:
                 all_correct = False
-                print(Fore.RED + 'Неправильный код в файле "Категории без кода.xlsx"!\nПапка: ' +
+                print(Fore.RED + 'Неправильный код в файле "Категории без кода.xlsx"!\n' +
+                      Fore.RED + '      Папка: ' +
                       Fore.WHITE + folder +
                       Fore.RED + '\nКатегория: ' +
                       Fore.WHITE + category +
-                      Fore.RED + '\nКод: ' +
+                      Fore.RED + '\n      Код: ' +
                       Fore.WHITE + code +
                       '\n')
                 
