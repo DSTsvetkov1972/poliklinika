@@ -2,6 +2,7 @@ import pyperclip
 import os, re
 from colorama import Fore
 import sqlite3
+import pandas as pd
 
 def open_file():
     path = None
@@ -79,9 +80,40 @@ def get_code_by_category(folder, category):
     else:
         return ''
 
+
+def add_codes():
+    #try:
+    if True:
+        df = pd.read_excel(os.path.join(os.getcwd(), 'Категории без кодов.xlsx'), dtype=str)
+
+        for row in df.itertuples():
+            folder = row[1]
+            category = row[2]
+            code = row[3]
+
+            if code in [None, '',  '-']:
+                return(False, f'Папка: "{folder}", категория: "{category}". Не задан код в файле "Категории без кода.xlsx"!')
+            else:
+                with sqlite3.connect(os.path.join(os.getcwd(), 'project.db')) as conn:
+                    sql = f"INSERT OR REPLACE INTO folder_category_code (folder, category, code) VALUES ('{folder}', '{category}', '{code}')"
+                    cur = conn.cursor()
+                    cur.execute(sql)
+            
+            print(Fore.GREEN, f'Папка: {folder}, категория: {category}. Сопоставили код {code}', Fore.RESET)
+
+        with sqlite3.connect(os.path.join(os.getcwd(), 'project.db')) as conn:
+            cur = conn.cursor()
+
+            cur.execute("DROP TABLE IF EXISTS folder_category_code_tmp")
+            cur.execute("CREATE TABLE folder_category_code_tmp AS SELECT * FROM folder_category_code ORDER BY folder, category")
+            cur.execute('DROP TABLE IF EXISTS folder_category_code')
+            cur.execute('ALTER TABLE folder_category_code_tmp RENAME TO folder_category_code')
+
+        return (True, "Загрузка кодов завершена")
+    #except Exception as e:
+    #    return(False, repr(e))
+    
 if __name__ == '__main__':
+
     
-    folder =  'ЗЕТТА_Прикрепление'
-    category = 'Программа "СТАНДАРТ". Поликлиническое обслуживание со стоматологией, без вызова врача на дом.'
-    
-    print(get_code_by_category(folder, category))
+    print(add_codes())

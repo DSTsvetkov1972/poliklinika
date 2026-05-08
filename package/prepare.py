@@ -181,7 +181,7 @@ def prepared_maker():
 
             wb.save(no_code_res_file)
         else:    
-            pd.DataFrame().to_excel(no_code_res_file)
+            pd.DataFrame(columns=['Папка','Вид медицинского обслуживания','Код ПИКОМЕД']).to_excel(no_code_res_file, index=None)
 
         log_df = pd.DataFrame(processor_log)
         log_df.to_excel('Сводка по подготовке файлов к загрузке.xlsx', index=None)

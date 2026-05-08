@@ -4,7 +4,7 @@ import pandas as pd
 import os
 from package.project_starter import folders_maker, db_starter
 from package.logo import logo_colored
-from package.fns import open_file
+from package.fns import open_file, add_codes
 from package.email_downloader import attachments_downloader
 from package.summary import summary
 from package.separator import separator
@@ -29,6 +29,9 @@ else:
 
     folders_maker()
     db_starter()
+    if not os.path.exists(os.path.join(os.getcwd(), "Категории без кодов.xlsx")):
+        pd.DataFrame(columns=['Папка','Вид медицинского обслуживания','Код ПИКОМЕД']). \
+            to_excel(os.path.join(os.getcwd(), "Категории без кодов.xlsx"), index=None)   
         
     while True:
         try:
@@ -99,8 +102,23 @@ else:
                 print(Fore.GREEN + f'Подтверждена загрузка в Пикомед для\nподготовленных файлов: {len(files_to_confirm)} содержащих скачанных файлов: { confirmed_files_qty }' + Fore.RESET)
             elif choise == '5':
                 open_file()
-                
 
+            elif choise == '6':
+                if os.path.exists(os.path.join(os.getcwd(), "~$Категории без кодов.xlsx")):
+                    print(Fore.RED + 'Файл "Категории без кодов.xlsx" открыт на рабочем столе. Закройте его и повторите попытку.' + Fore.RESET)                
+                    os.startfile('Категории без кодов.xlsx')
+                    continue    
+                elif not os.path.exists(os.path.join(os.getcwd(), "Категории без кодов.xlsx")):
+                    print(Fore.RED + 'Файл "Категории без кодов.xlsx" отсутствует в папке проекта.' + Fore.RESET)                
+                    os.startfile('Категории без кодов.xlsx')
+                    continue
+
+                add_codes_res = add_codes()
+
+                if add_codes_res[0]:
+                    print(Fore.GREEN, add_codes_res[1], Fore.RESET)
+                else:
+                    print(Fore.RED, add_codes_res[1], Fore.RESET)
 
         except Exception as e:
             print(Fore.RED, str(e), Fore.RESET)
