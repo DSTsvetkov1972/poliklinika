@@ -3,6 +3,9 @@ import os, re
 from colorama import Fore
 import sqlite3
 import pandas as pd
+from openpyxl import load_workbook
+from openpyxl.styles import Alignment, Font
+
 
 def open_file():
     path = None
@@ -82,9 +85,9 @@ def get_code_by_category(folder, category):
 
 
 def add_codes():
-    #try:
-    if True:
-        df = pd.read_excel(os.path.join(os.getcwd(), 'Категории без кодов.xlsx'), dtype=str)
+    try:
+    # if True:
+        df = pd.read_excel(os.path.join(os.getcwd(), 'Категории и коды.xlsx'), dtype=str)
 
         for row in df.itertuples():
             folder = row[1]
@@ -95,9 +98,10 @@ def add_codes():
                 return(False, f'Папка: "{folder}", категория: "{category}". Не задан код в файле "Категории без кода.xlsx"!')
             else:
                 with sqlite3.connect(os.path.join(os.getcwd(), 'project.db')) as conn:
-                    sql = f"INSERT OR REPLACE INTO folder_category_code (folder, category, code) VALUES ('{folder}', '{category}', '{code}')"
                     cur = conn.cursor()
-                    cur.execute(sql)
+                    cur.execute(f"DELETE FROM folder_category_code WHERE folder='{folder}' AND category='{category}'")
+                    cur.execute(f"INSERT OR REPLACE INTO folder_category_code (folder, category, code) VALUES ('{folder}', '{category}', '{code}')")
+            
             
             print(Fore.GREEN, f'Папка: {folder}, категория: {category}. Сопоставили код {code}', Fore.RESET)
 
@@ -110,8 +114,47 @@ def add_codes():
             cur.execute('ALTER TABLE folder_category_code_tmp RENAME TO folder_category_code')
 
         return (True, "Загрузка кодов завершена")
-    #except Exception as e:
-    #    return(False, repr(e))
+    except Exception as e:
+        return(False, repr(e))
+
+   
+def format_folder_category_code_table(no_code_res_file=os.path.join(os.getcwd(), 'Категории и коды.xlsx')):
+            wb = load_workbook(no_code_res_file)
+            ws = wb.active
+            
+            ws.freeze_panes = 'A2'
+            ws.auto_filter.ref = ws.dimensions 
+
+            # Устанавливаем ширину для конкретной колонки
+            ws.column_dimensions['A'].width = 36
+            ws.column_dimensions['B'].width = 72
+            ws.column_dimensions['C'].width = 20
+
+            for col in range(1, 4):
+                cell = ws.cell(column=col, row=1)
+                cell.font = Font(bold=True)  # Жирный шрифт
+                cell.alignment = Alignment(horizontal='center', vertical='center', wrap_text=True)  # Выравнивание по центру
+
+            for row in range(2, ws.max_row+1):
+                ws.cell(column=1, row=row).alignment = Alignment(horizontal='left', vertical='center', wrap_text=True)
+                ws.cell(column=2, row=row).alignment = Alignment(horizontal='left', vertical='top', wrap_text=True)
+                ws.cell(column=3, row=row).alignment = Alignment(horizontal='center', vertical='center', wrap_text=True)
+
+            wb.save(no_code_res_file)    
+
+
+def download_codes():
+    try:
+    # if True:
+        with sqlite3.connect(os.path.join(os.getcwd(), 'project.db')) as conn:
+            df = pd.read_sql_query("SELECT * FROM folder_category_code ORDER BY folder, category", conn)
+            df.columns = ['Папка','Вид медицинского обслуживания', 'Код ПИКОМЕД']
+            df.to_excel(os.path.join(os.getcwd(), 'Категории и коды.xlsx'), index=None)
+            format_folder_category_code_table()
+        return (True, 'Коды выгружены в таблицу "Категории и коды"')
+    except Exception as e:
+        return(False, repr(e))
+ 
     
 if __name__ == '__main__':
 

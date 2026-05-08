@@ -6,6 +6,8 @@ sys.path.append(os.getcwd())
 
 from package.config import folders_rules_dict
 from package.processors import processors_dict
+from package.fns import format_folder_category_code_table
+
 from openpyxl import load_workbook
 from openpyxl.styles import Alignment, Font
 from openpyxl.utils import get_column_letter
@@ -147,7 +149,7 @@ def prepared_maker():
         print(Fore.RESET)
 
         
-        no_code_res_file = os.path.join(os.getcwd(), 'Категории без кодов.xlsx')           
+        no_code_res_file = os.path.join(os.getcwd(), 'Категории и коды.xlsx')           
         if no_code_dfs:
             no_code_res_df = pd.concat(no_code_dfs)
             no_code_res_df = no_code_res_df[['Папка','Вид медицинского обслуживания']]
@@ -157,29 +159,8 @@ def prepared_maker():
 
             
             no_code_res_df.to_excel(no_code_res_file, index=False)
-
-            wb = load_workbook(no_code_res_file)
-            ws = wb.active
+            format_folder_category_code_table()
             
-            ws.freeze_panes = 'A2'
-            ws.auto_filter.ref = ws.dimensions 
-
-            # Устанавливаем ширину для конкретной колонки
-            ws.column_dimensions['A'].width = 36
-            ws.column_dimensions['B'].width = 72
-            ws.column_dimensions['C'].width = 20
-
-            for col in range(1, 4):
-                cell = ws.cell(column=col, row=1)
-                cell.font = Font(bold=True)  # Жирный шрифт
-                cell.alignment = Alignment(horizontal='center', vertical='center', wrap_text=True)  # Выравнивание по центру
-
-            for row in range(2, ws.max_row+1):
-                ws.cell(column=1, row=row).alignment = Alignment(horizontal='left', vertical='center', wrap_text=True)
-                ws.cell(column=2, row=row).alignment = Alignment(horizontal='left', vertical='top', wrap_text=True)
-                ws.cell(column=3, row=row).alignment = Alignment(horizontal='center', vertical='center', wrap_text=True)
-
-            wb.save(no_code_res_file)
         else:    
             pd.DataFrame(columns=['Папка','Вид медицинского обслуживания','Код ПИКОМЕД']).to_excel(no_code_res_file, index=None)
 

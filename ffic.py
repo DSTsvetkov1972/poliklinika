@@ -4,7 +4,7 @@ import pandas as pd
 import os
 from package.project_starter import folders_maker, db_starter
 from package.logo import logo_colored
-from package.fns import open_file, add_codes
+from package.fns import open_file, add_codes, download_codes
 from package.email_downloader import attachments_downloader
 from package.summary import summary
 from package.separator import separator
@@ -29,20 +29,25 @@ else:
 
     folders_maker()
     db_starter()
-    if not os.path.exists(os.path.join(os.getcwd(), "Категории без кодов.xlsx")):
+    if not os.path.exists(os.path.join(os.getcwd(), "Категории и коды.xlsx")):
         pd.DataFrame(columns=['Папка','Вид медицинского обслуживания','Код ПИКОМЕД']). \
-            to_excel(os.path.join(os.getcwd(), "Категории без кодов.xlsx"), index=None)   
+            to_excel(os.path.join(os.getcwd(), "Категории и коды.xlsx"), index=None)   
         
     while True:
         try:
-            print()
+            n = 60
+            print(Fore.BLUE + '-'*n + Fore.RESET)
             print(Fore.WHITE + '0' + Fore.BLUE + ' - получить сводку по исходникам и подготовленным к загрузке' + Fore.RESET)
+            print(Fore.BLUE + '-'*n + Fore.RESET)
             print(Fore.WHITE + '1' + Fore.BLUE + ' - скачать вложения из писем электронной почты' + Fore.RESET)
             print(Fore.WHITE + '2' + Fore.BLUE + ' - разобрать скаченные вложения по папкам' + Fore.RESET)                
             print(Fore.WHITE + '3' + Fore.BLUE + ' - подготовить файлы для загрузки в Пикомед' + Fore.RESET)
             print(Fore.WHITE + '4' + Fore.BLUE + ' - подтвердить загрузку файлов в Пикомед' + Fore.RESET)
+            print(Fore.BLUE + '-'*n + Fore.RESET)
             print(Fore.WHITE + '5' + Fore.BLUE + ' - открыть файл на рабочем столе' + Fore.RESET)
-            print(Fore.WHITE + '6' + Fore.BLUE + ' - добавить/изменить код категории обслуживания' + Fore.RESET)
+            print(Fore.WHITE + '6' + Fore.BLUE + ' - загрузить коды категории обслуживания из файла' + Fore.RESET)
+            print(Fore.WHITE + '7' + Fore.BLUE + ' - выгрузить список категорий и кодов' + Fore.RESET)
+            print(Fore.BLUE + '-'*n + Fore.RESET)      
 
             print(Fore.MAGENTA + "Ваш выбор: " + Fore.RESET, end='')
             choise = input()
@@ -85,7 +90,7 @@ else:
                     else:
                         print(Fore.RED + prepared_maker_res[1], Fore.RESET)
                         if prepared_maker_res[1] == 'Есть виды медицинского обслуживания с несопоставленными кодами':
-                            os.startfile('Категории без кодов.xlsx')  
+                            os.startfile('Категории и коды.xlsx')  
                 else:
                     print(Fore.RED + 'Файл "Исходники и подготовленные.xlsx" уже открыт на рабочем столе. Закройте его и повторите попытку.' + Fore.RESET)     
                     os.startfile('Сводка по подготовке файлов к загрузке.xlsx')  
@@ -104,13 +109,12 @@ else:
                 open_file()
 
             elif choise == '6':
-                if os.path.exists(os.path.join(os.getcwd(), "~$Категории без кодов.xlsx")):
-                    print(Fore.RED + 'Файл "Категории без кодов.xlsx" открыт на рабочем столе. Закройте его и повторите попытку.' + Fore.RESET)                
-                    os.startfile('Категории без кодов.xlsx')
+                if os.path.exists(os.path.join(os.getcwd(), "~$Категории и коды.xlsx")):
+                    print(Fore.RED + 'Файл "Категории и коды.xlsx" открыт на рабочем столе. Закройте его и повторите попытку.' + Fore.RESET)                
+                    os.startfile('Категории и коды.xlsx')
                     continue    
-                elif not os.path.exists(os.path.join(os.getcwd(), "Категории без кодов.xlsx")):
-                    print(Fore.RED + 'Файл "Категории без кодов.xlsx" отсутствует в папке проекта.' + Fore.RESET)                
-                    os.startfile('Категории без кодов.xlsx')
+                elif not os.path.exists(os.path.join(os.getcwd(), "Категории и коды.xlsx")):
+                    print(Fore.RED + 'Файл "Категории и коды.xlsx" отсутствует в папке проекта.' + Fore.RESET)                
                     continue
 
                 add_codes_res = add_codes()
@@ -119,6 +123,20 @@ else:
                     print(Fore.GREEN, add_codes_res[1], Fore.RESET)
                 else:
                     print(Fore.RED, add_codes_res[1], Fore.RESET)
+
+            elif choise == '7':
+                if os.path.exists(os.path.join(os.getcwd(), "~$Категории и коды.xlsx")):
+                    print(Fore.RED + 'Файл "Категории и коды.xlsx" открыт на рабочем столе. Закройте его и повторите попытку.' + Fore.RESET)                
+                    os.startfile('Категории и коды.xlsx')
+                    continue
+
+                download_codes_res = download_codes()
+
+                if download_codes_res[0]:
+                    print(Fore.GREEN, download_codes_res[1], Fore.RESET)
+                    os.startfile('Категории и коды.xlsx')
+                else:
+                    print(Fore.RED, download_codes_res[1], Fore.RESET)         
 
         except Exception as e:
             print(Fore.RED, str(e), Fore.RESET)
