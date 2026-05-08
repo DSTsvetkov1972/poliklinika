@@ -45,8 +45,8 @@ else:
             print(Fore.WHITE + '4' + Fore.BLUE + ' - подтвердить загрузку файлов в Пикомед' + Fore.RESET)
             print(Fore.BLUE + '-'*n + Fore.RESET)
             print(Fore.WHITE + '5' + Fore.BLUE + ' - открыть файл на рабочем столе' + Fore.RESET)
-            print(Fore.WHITE + '6' + Fore.BLUE + ' - загрузить коды категории обслуживания из файла' + Fore.RESET)
-            print(Fore.WHITE + '7' + Fore.BLUE + ' - выгрузить список категорий и кодов' + Fore.RESET)
+            print(Fore.WHITE + '6' + Fore.BLUE + ' - загрузить коды категорий обслуживания из файла' + Fore.RESET)
+            print(Fore.WHITE + '7' + Fore.BLUE + ' - выгрузить список категорий и кодов из БД программы' + Fore.RESET)
             print(Fore.BLUE + '-'*n + Fore.RESET)      
 
             print(Fore.MAGENTA + "Ваш выбор: " + Fore.RESET, end='')
@@ -58,6 +58,8 @@ else:
 
 
             if choise == '0':
+                print(Fore.YELLOW + 'Получаем сводку по исходникам и подготовленным к загрузке...' + Fore.RESET)
+
                 if not os.path.exists(os.path.join(os.getcwd(),'~$Исходники и подготовленные.xlsx')):
                     summary()
                     print(Fore.GREEN + 'Файл "Исходники и подготовленные.xlsx" сформирован и открыт на рабочем столе.' + Fore.RESET)
@@ -66,9 +68,12 @@ else:
                 os.startfile('Исходники и подготовленные.xlsx')
 
             elif choise == '1':
+                print(Fore.YELLOW + 'Скачиваем вложения из писем электронной почты...' + Fore.RESET)
+
                 attachments_downloader()
 
             elif choise == '2':
+                print(Fore.YELLOW + 'Разбираем скаченные вложения по папкам...' + Fore.RESET)                
 
                 if os.path.exists(os.path.join(os.getcwd(), "~$Сводка по распределению файлов.xlsx")):
                     print(Fore.RED + 'Файл "Сводка по распределению файлов.xlsx" уже открыт на рабочем столе. Закройте его и повторите попытку.' + Fore.RESET)                
@@ -80,6 +85,7 @@ else:
                 os.startfile('Сводка по распределению файлов.xlsx')
             
             elif choise == '3':
+                print(Fore.YELLOW + 'Подготавливаем файлы для загрузки в Пикомед...' + Fore.RESET)             
 
                 if not os.path.exists(os.path.join(os.getcwd(), '~$Сводка по подготовке файлов к загрузке.xlsx')):
                     prepared_maker_res = prepared_maker()
@@ -97,6 +103,8 @@ else:
                         
                 
             elif choise == '4':
+                print(Fore.YELLOW + 'Подтверждаем загрузку файлов в Пикомед...' + Fore.RESET)    
+
                 check_opened_files_to_confirm_res = check_opened_files_to_confirm()
                 if check_opened_files_to_confirm_res:
                     print(Fore.RED + f'Закройте файлы:\n{check_opened_files_to_confirm_res}\n и повторите попытку' + Fore.RESET)
@@ -104,11 +112,19 @@ else:
 
                 files_to_confirm = get_files_to_confirm()
                 confirmed_files_qty = confirm_files(files_to_confirm)
-                print(Fore.GREEN + f'Подтверждена загрузка в Пикомед для\nподготовленных файлов: {len(files_to_confirm)} содержащих скачанных файлов: { confirmed_files_qty }' + Fore.RESET)
+                print(Fore.GREEN + 'Подтверждена загрузка в Пикомед для\nподготовленных файлов: ' +
+                      Fore.WHITE + str(len(files_to_confirm)) +
+                      Fore.GREEN + ', содержащих скачанных файлов: ' +
+                      Fore.WHITE + str(confirmed_files_qty) +
+                      Fore.RESET)
+
             elif choise == '5':
+                print(Fore.YELLOW + 'Открываем файл на робочем столе...' + Fore.RESET)    
                 open_file()
 
             elif choise == '6':
+                print(Fore.YELLOW + 'Загружаем коды категорий обслуживания из файла...' + Fore.RESET)                   
+
                 if os.path.exists(os.path.join(os.getcwd(), "~$Категории и коды.xlsx")):
                     print(Fore.RED + 'Файл "Категории и коды.xlsx" открыт на рабочем столе. Закройте его и повторите попытку.' + Fore.RESET)                
                     os.startfile('Категории и коды.xlsx')
@@ -125,6 +141,8 @@ else:
                     print(Fore.RED, add_codes_res[1], Fore.RESET)
 
             elif choise == '7':
+                print(Fore.YELLOW + 'Выгружаем список категорий и кодов из БД программы...' + Fore.RESET)                    
+
                 if os.path.exists(os.path.join(os.getcwd(), "~$Категории и коды.xlsx")):
                     print(Fore.RED + 'Файл "Категории и коды.xlsx" открыт на рабочем столе. Закройте его и повторите попытку.' + Fore.RESET)                
                     os.startfile('Категории и коды.xlsx')

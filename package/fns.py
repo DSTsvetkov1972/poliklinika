@@ -103,7 +103,13 @@ def add_codes():
                     cur.execute(f"INSERT OR REPLACE INTO folder_category_code (folder, category, code) VALUES ('{folder}', '{category}', '{code}')")
             
             
-            print(Fore.GREEN, f'Папка: {folder}, категория: {category}. Сопоставили код {code}', Fore.RESET)
+            print(Fore.GREEN + 'Папка: ' +
+                  Fore.WHITE + folder + 
+                  Fore.GREEN + '; категория: ' +
+                  Fore.WHITE + category +
+                  Fore.GREEN + '; сопоставили код: ' +
+                  Fore.WHITE + code +
+                  Fore.RESET)
 
         with sqlite3.connect(os.path.join(os.getcwd(), 'project.db')) as conn:
             cur = conn.cursor()
