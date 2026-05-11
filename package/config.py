@@ -277,11 +277,12 @@ folders_rules_dict = {
     },
     "ВСК_Скачано": {
         "email_folder": "ВСК",
-        "separator_name": "email_by_file_name",
+        "separator_name": "email_by_cell_value",
+        "file_to_del_extensions": ["png", "docx"],
         "file_rules": [
-            {"pattern": "^открепление.*\.xlsx$", "target_folder": "ВСК_Открепление"},
-            {"pattern": "^прикрепление.*\.xlsx$", "target_folder":  "ВСК_Прикрепление"}
-        ]
+            {"sheet_name": "", "cell": "A3", "pattern": "Список застрахованных на открепление:$", "target_folder": "ВСК_Открепление"},
+            {"sheet_name": "", "cell": "B5", "pattern": "просит Вас принять на медицинское обслуживание следующих застрахованных клиентов:$", "target_folder": "ВСК_Прикрепление"}
+            ]
     },
         
     "Ингосстрах_Изменение": {
@@ -416,6 +417,7 @@ folders_rules_dict = {
     "ЗЕТТА_Скачано": {
         "email_folder": "Альянс",
         "separator_name": "email_by_cell_value",
+        "file_to_del_extensions": ["png", "docx"],
         "file_rules": [
             {"sheet_name": "Письмо", "cell": "C11", "pattern": "^Уведомляем Вас об изменении программы обслуживания с:$", "target_folder": "ЗЕТТА_Изменение"},            
             {"sheet_name": "Письмо", "cell": "C14", "pattern": "^Уведомляем Вас об изменении персональных данных застрахованных с:$", "target_folder": "ЗЕТТА_Изменение"},
@@ -713,6 +715,7 @@ folders_rules_dict = {
     "РЕСО_Скачано": {
         "email_folder": "Ресо-Гарантия",
         "separator_name": "email_by_cell_value",
+        "file_to_del_extensions": ["png", "docx"],
         "file_rules": [
             {"sheet_name": "Список", "cell": "B8", "pattern": "принять на медицинское обслуживание застрахованных", "target_folder":"РЕСО_Прикрепление"},
             {"sheet_name": "Лист1", "cell": "A6", "pattern": "принять на медицинское обслуживание", "target_folder":"РЕСО_Прикрепление_2"},
@@ -836,6 +839,7 @@ folders_rules_dict = {
     "Совкомбанк_Скачано": {
         "email_folder": "Савкомбанк",
         "separator_name": "email_by_cell_value",
+        "file_to_del_extensions": ["png", "docx"],
         "file_rules": [
             {"sheet_name": "Sheet1", "cell": "A8", "pattern": "Изменение персональных данных", "target_folder":"Совкомбанк_Изменение"},
             {"sheet_name": "Шаблон", "cell": "B8", "pattern": "Список на открепление", "target_folder":"Совкомбанк_Открепление"},            
@@ -935,6 +939,7 @@ folders_rules_dict = {
     "СОГАЗ ЭДО_Скачано": {
         "email_folder": "",
         "separator_name": "email_by_cell_value",
+        "file_to_del_extensions": ["png", "docx"],
         "file_rules": [
             {"sheet_name": "Лист_1", "cell": "A16", "pattern": "АО \"СОГАЗ\" просит Вас принять на медицинское обслуживание застрахованных в соответствии с приложенным списком.", "target_folder":"СОГАЗ_Прикрепление"}
         ]
@@ -996,6 +1001,7 @@ folders_rules_dict = {
     "СОГЛАСИЕ_Скачано": {
         "email_folder": "Согласие",
         "separator_name": "email_by_cell_value",
+        "file_to_del_extensions": ["png", "docx"],
         "file_rules": [
             {"sheet_name": "TDSheet", "cell": "D3", "pattern": "извещает Вас об изменении данных у застрахованных:", "target_folder": "СОГЛАСИЕ_Изменение"},            
             {"sheet_name": "Лист1", "cell": "J7", "pattern": "POLICSER", "target_folder": "СОГЛАСИЕ_Прикрепление"},

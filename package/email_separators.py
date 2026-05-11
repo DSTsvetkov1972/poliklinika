@@ -67,7 +67,12 @@ def email_by_cell_value_bkp(folder, file, folders_rules_dict):
 
 
 def email_by_cell_value(folder, file, folders_rules_dict):
-    if file[-4:] not in ['.xls', 'xlsx']:
+    
+    file_extension = file.split('.')[-1]
+    
+    if file_extension in folders_rules_dict[folder]['file_to_del_extensions']:
+        return(True, "удалён")
+    elif file_extension not in ['xls', 'xlsx']:
         return (True, 'Не установлены правила обработки файла')
     
     try:
@@ -79,13 +84,19 @@ def email_by_cell_value(folder, file, folders_rules_dict):
 
         for file_rule in folders_rules_dict[folder]['file_rules']:
             sheet_name = file_rule['sheet_name']
-            if not sheet_name in wb_sheet_names:
-                continue
+            
+            if sheet_name:
+                if not sheet_name in wb_sheet_names:
+                    continue
 
+
+
+                df = pd.read_excel(file_path, sheet_name=sheet_name, dtype=str, header=None,  engine='calamine')
+            else:
+                df = pd.read_excel(file_path, dtype=str, header=None,  engine='calamine')   
+                
             col_letter, row_num = coordinate_from_string(file_rule['cell'])
-            col_num = column_index_from_string(col_letter)  
-
-            df = pd.read_excel(file_path, sheet_name=sheet_name, dtype=str, header=None,  engine='calamine')
+            col_num = column_index_from_string(col_letter)       
 
             cell_value = df.iat[row_num-1, col_num-1]
             # print(cell_value)
