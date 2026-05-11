@@ -32,11 +32,11 @@ def get_files_to_confirm():
     if files:
         print(Fore.BLACK)
         bar = FillingSquaresBar(
-            'Читаем подготовленные файлы:',
+            'Читаем подготовленные файлы:'.rjust(73),
             max=len(files),
             suffix = '%(index)d/%(max)d',
             fill='█', empty_fill='░',
-            width = 50)  
+            width = 20)  
         
         bar.start()
         
@@ -73,12 +73,20 @@ def check_opened_files_to_confirm():
     prepared_opened_files = [f"Подготовленные\\{ prepared_file[2:] }" for prepared_file in prepared_files if prepared_file[:2] == '~$']
 
     source_folders = list(os.walk(os.path.join(os.getcwd(), 'Исходники')))[0][1]
-    source_folder_lentgths = [len(f'Проверяем, чтобы в папке {source_folder} не было открытых на рабочем столе файлов') for source_folder in source_folders]
-    source_folder_max_lentgth = max(source_folder_lentgths)
+    
     source_opened_files = []
     
     print(Fore.BLACK)
+               
+    bar = FillingSquaresBar(
+        'Проверяем, чтобы все файлы в Исходниках не были открыты на рабочем столе:',
+        max=len(source_folders),
+        suffix = '%(index)d/%(max)d',
+        fill='█', empty_fill='░',
+        width = 20)  
+    
 
+    bar.start()
     for source_folder in source_folders:
         # print(source_folder)
         source_folder_path = os.path.join(os.getcwd(), 'Исходники', source_folder)
@@ -88,16 +96,7 @@ def check_opened_files_to_confirm():
 
         
         if source_files:
-               
-            bar = FillingSquaresBar(
-                f'Проверяем, чтобы в папке {source_folder} не было открытых на рабочем столе файлов'.rjust(source_folder_max_lentgth),
-                max=len(source_files),
-                suffix = '%(index)d/%(max)d',
-                fill='█', empty_fill='░',
-                width = 50)  
-            
 
-            bar.start()
             
             for source_file in source_files:
 
@@ -107,11 +106,12 @@ def check_opened_files_to_confirm():
                 sorce_file_path = os.path.join(source_folder_path, source_file)
                 if is_excel_file_open(sorce_file_path):
                     source_opened_files_in_folder.append(f"Исходники\\{ source_folder }\\{ source_file }")
-                bar.next()
 
             source_opened_files += source_opened_files_in_folder
-
-            bar.finish()
+            
+        bar.next()
+        
+    bar.finish()
     print(Fore.RESET)
 
     #print(Fore.YELLOW, source_opened_files, Fore.RESET)
