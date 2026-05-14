@@ -738,7 +738,7 @@ folders_rules_dict = {
         "separator_name": "email_rgs_tek",
         "file_rules": [
             {"row": 15, "column": 1, "pattern": "^Просим изменить программу с .*", "target_folder": "Росгосстрах_Изменение"},
-            {"row": 8, "column": 1, "pattern": "ИЗМЕНЕНИЕ ДАННЫХ", "target_folder": "Росгосстрах_Изменение"},            
+            {"row": 7, "column": 0, "pattern": "ИЗМЕНЕНИЕ ДАННЫХ", "target_folder": "Росгосстрах_Изменение"},            
             {"row": 6, "column": 0, "pattern": ".*просим Вас принять на медицинское обслуживание.*", "target_folder": "Росгосстрах_Прикрепление"},            
             {"row": 5, "column": 0, "pattern": ".*просим Вас принять на медицинское обслуживание.*", "target_folder": "Росгосстрах_Прикрепление"},
             {"row": 4, "column": 0, "pattern": ".*Просим снять с обслуживания.*", "target_folder": "Росгосстрах_Открепление"}
@@ -749,7 +749,7 @@ folders_rules_dict = {
         "separator_name": "email_rgs_tek",
         "file_rules": [
             {"row": 15, "column": 1, "pattern": "^Просим изменить программу с .*", "target_folder": "Росгосстрах_Изменение"},
-            {"row": 8, "column": 1, "pattern": "ИЗМЕНЕНИЕ ДАННЫХ", "target_folder": "Росгосстрах_Изменение"},              
+            {"row": 7, "column": 0, "pattern": "^ИЗМЕНЕНИЕ ДАННЫХ$", "target_folder": "Росгосстрах_Изменение"},              
             {"row": 6, "column": 0, "pattern": ".*просим Вас принять на медицинское обслуживание.*", "target_folder": "Росгосстрах_Прикрепление"},            
             {"row": 5, "column": 0, "pattern": ".*просим Вас принять на медицинское обслуживание.*", "target_folder": "Росгосстрах_Прикрепление"},
             {"row": 4, "column": 0, "pattern": ".*Просим снять с обслуживания.*", "target_folder": "Росгосстрах_Открепление"}

@@ -125,12 +125,15 @@ def look_insight_rgs_tek_file(
     decrypted = io.BytesIO()
     with open(file_path, 'rb') as f:
         office_file = msoffcrypto.OfficeFile(f)
-        office_file.load_key(password=password)  # Применяем пароль
-        office_file.decrypt(decrypted)           # Расшифровываем в память
+        if office_file.is_encrypted():
+            office_file.load_key(password=password)  # Применяем пароль
+            office_file.decrypt(decrypted)           # Расшифровываем в память
 
-    # 2. Переводим "курсор" в начало потока и читаем файл через pandas
-    decrypted.seek(0)
-    df = pd.read_excel(decrypted, header=None) # engine указывать необязательно
+            # 2. Переводим "курсор" в начало потока и читаем файл через pandas
+            decrypted.seek(0)
+            df = pd.read_excel(decrypted, header=None) # engine указывать необязательно
+        else:
+            df = pd.read_excel(file_path, header=None, dtype=str, engine='calamine')
 
     # 3. Готово!
     print(df)
@@ -188,9 +191,19 @@ separators_dict = {
 }
 
 if __name__ == '__main__':
-    #look_insight_rgs_tek_file(os.path.join(os.getcwd(), 'Исходники', folder, file))        
 
-    folder, file = 'ЗЕТТА_Скачано',	'220_ММВН-240005226_(200-200)(1)(4907666)[0].xlsx'
+    from dotenv import load_dotenv
+    if not load_dotenv(os.path.join(os.getcwd(), '.config')):
+        print(Fore.RED + 'Файл конфигурации .config отсутствует в папке с ffic.exe' + Fore.RESET)
+        while True:
+            pass
+
     
-    email_by_cell_value(folder, file, folders_rules_dict)
+    folder, file = 'Росгосстрах_Скачано', '14-05 изм 010-1.xls'
+
+    look_insight_rgs_tek_file(os.path.join(os.getcwd(), 'Исходники', folder, file))        
+
+
+    
+    # email_by_cell_value(folder, file, folders_rules_dict)
 
