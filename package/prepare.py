@@ -4,7 +4,7 @@ from datetime import datetime
 
 sys.path.append(os.getcwd())
 
-from package.config import folders_rules_dict
+from package.config import folders_rules_dict, TRIAL
 from package.processors import processors_dict
 from package.fns import format_folder_category_code_table
 
@@ -124,7 +124,12 @@ def prepared_maker():
                         res_df = pd.concat(res_dfs)
 
                         prepared_file = os.path.join(os.getcwd(), 'Подготовленные', f'{ folder }.xlsx')
-                        res_df.to_excel(prepared_file, index=False)
+
+                        if TRIAL:
+                            res_df = res_df.iloc[:5]
+                            res_df.to_excel(prepared_file, index=False)
+                        else:
+                            res_df.to_excel(prepared_file, index=False)
 
                         wb = load_workbook(prepared_file)
                         ws = wb.active

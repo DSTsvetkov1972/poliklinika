@@ -7,6 +7,8 @@ IMAP_PORT = 993
 EMAIL = 'spiski220@yandex.ru'  # Ваш полный адрес
 APP_PASSWORD = "scmvylbvzywljjou" # Сгенерированный пароль
 
+TRIAL = True
+
 # MARK_SEEN = False # Для разработки. Если False,
 #                   # письма просмотренные программой
 #                   # не будут помечаться как прочитанные  #
@@ -44,9 +46,9 @@ folders_rules_dict = {
         ]
     },
     "Абсолют_Прикрепление": {
-        "processor_name": "base",
+        "processor_name": "absolut_prikrep",
         "sheet_name": "Sheet1",
-        "header_row": 9,
+        "header_rows": [9, 11],
         "filter_not_in": {
             "column": "npp",
             "conditions": ["", "npp", "РУКОВОДИТЕЛЬ УПРАВЛЕНИЯ МЕДИЦИНСКОГО СОПРОВОЖДЕНИЯ                                        КОБЕЛЬКОВ А.А."]

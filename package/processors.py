@@ -186,6 +186,105 @@ def base(folder, file, folders_rules_dict):
         return(False, repr(e))
     
 
+def absolut_prikrep(folder, file, folders_rules_dict):
+
+    try:
+    #if True:
+
+        header_rows = folders_rules_dict[folder]['header_rows']
+        # print(header_rows)
+        source_header = folders_rules_dict[folder]['source_header']
+        sheet_name = folders_rules_dict[folder]['sheet_name']
+
+        for header_row in header_rows:
+
+            if sheet_name!="":
+                df = pd.read_excel(os.path.join('Исходники',folder, file), sheet_name=sheet_name, header=None, index_col=None, dtype=str)
+            else:
+                df = pd.read_excel(os.path.join('Исходники',folder, file), header=None, index_col=None, dtype=str)
+
+            if df.empty:
+                return(False, 'Пустой исходный файл') 
+            
+            df = df.fillna('')
+            df_columns = df.iloc[header_row-1].tolist()
+
+            if source_header == df_columns:
+                df = df.iloc[header_row:]
+                df.columns = df_columns
+            else:
+                continue    
+            
+
+            filter_not_in_column = folders_rules_dict[folder]['filter_not_in']['column']
+            if filter_not_in_column not in df_columns:
+                return(False, f'Нет колонки "{ filter_not_in_column }" по которой задана фильтрация')             
+
+            #
+            for condition in folders_rules_dict[folder]['filter_not_in']['conditions']:
+                df = df[df[filter_not_in_column]!=condition]                                                # Колонка не должна быть пустой и
+                                                                                                            # не содержать значение равное
+                                                                                                            # имени колонки. 
+                                                                                                            # Так сделано на случай, если на листе
+                                                                                                            # несколько таблиц с одинаковыми заголовками    
+
+            if df.empty:
+                return(False, 'Пустая таблица') 
+            else:
+                #pprint(folders_rules_dict[folder]['result_columns'])
+                res_df = pd.DataFrame()                                                                                                
+
+                for result_column_dict in folders_rules_dict[folder]['result_columns']:
+                    #print(result_column_dict)
+                    target_column  = result_column_dict['target_column']
+
+                    if result_column_dict['source_type'] == 'column':
+                        source_column_name = result_column_dict['source_column_name']
+                        res_df[target_column] = df[source_column_name]
+
+                    elif result_column_dict['source_type'] == 'date_column':
+                        source_column_name = result_column_dict['source_column_name']
+                        res_df[target_column] = df[source_column_name].apply(lambda x: convert_date(x))
+
+                    elif result_column_dict['source_type'] == 'concat_by_whitespace':
+                        source_columns= result_column_dict['source_columns']
+                        res_df[target_column] = df[source_columns].astype(str).agg(' '.join, axis=1)                    
+
+                    elif result_column_dict['source_type'] == 'surname_from_column':
+                        source_column_name = result_column_dict['source_column_name']
+                        res_df[target_column] = df[source_column_name].apply(lambda fio: fio_splitter(fio)['surname'])
+
+                    elif result_column_dict['source_type'] == 'name_from_column':
+                        source_column_name = result_column_dict['source_column_name']
+                        res_df[target_column] = df[source_column_name].apply(lambda fio: fio_splitter(fio)['name'])
+
+                    elif result_column_dict['source_type'] == 'patronymic_from_column':           
+                        source_column_name = result_column_dict['source_column_name']                                     
+                        res_df[target_column] = df[source_column_name].apply(lambda fio: fio_splitter(fio)['patronymic'])
+
+                    elif result_column_dict['source_type'] == 'dict':  
+                        source_column_name = result_column_dict['source_column_name']                                              
+                        #res_df[target_column] = df[source_column_name].apply(lambda k: result_column_dict['dict'].get(k) if result_column_dict['dict'].get(k) else '')
+                        res_df[target_column] = df[source_column_name].apply(lambda category: get_code_by_category(folder, category))
+
+                    elif result_column_dict['source_type'] == 'const':
+                        const = result_column_dict['const']                                              
+                        res_df[target_column] = const                           
+
+                res_df['Папка'] = folder
+                res_df['Файл'] = file        
+                return (True, res_df)
+
+        return (False,
+                f"Ожидалось, что начало таблицы будет в строках: { header_rows }\n"
+                f"Но в этих строках нет названий колонок:\n"
+                f"{ source_header }")
+
+    except Exception as e:
+        return(False, repr(e))
+
+
+
 def renessans_otkrep(folder, file, folders_rules_dict):
 
     #if True:
@@ -670,6 +769,7 @@ def reso_prikrep_2(folder, file, folders_rules_dict):
 
 processors_dict = {
     'base': base,
+    'absolut_prikrep': absolut_prikrep,
     'renessans_otkrep': renessans_otkrep,
     'rosgosstrah_otkrep': rosgosstrah_otkrep,
     # 'rosgosstrah_tek_otkrep': rosgosstrah_tek_otkrep,
@@ -684,8 +784,8 @@ if __name__ == '__main__':
     #folder, file = 'РЕСО_Прикрепление', 'p41894408.xlsx'
 
 
-    folder = 'ЗЕТТА_Прикрепление'
-    file = '220_ММВН-260001999_(87-87)(1)(4971063).xlsx'
+    folder = 'Абсолют_Прикрепление'
+    file = '№ 12510 ПРИНЯТИЕ_ГК Шлюмберже с 25.05.2026.xls'
     # file = '220_ММВН-190029645_(10108-10109)(2)(4980656).xlsx'
 
 
@@ -694,6 +794,6 @@ if __name__ == '__main__':
 
 
 
-    print(zetta_prikrep(folder, file, folders_rules_dict))
+    print(absolut_prikrep(folder, file, folders_rules_dict))
 
 
