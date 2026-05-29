@@ -5,7 +5,7 @@ IMAP_PORT = 993
 #APP_PASSWORD = "dtpfgxyymoacfvbi" # Сгенерированный пароль
 
 EMAIL = 'spiski220@yandex.ru'  # Ваш полный адрес
-APP_PASSWORD = "scmvylbvzywljjou" # Сгенерированный пароль
+APP_PASSWORD = "kylexiwdkxgmfoba" # Сгенерированный пароль
 
 TRIAL = True
 
