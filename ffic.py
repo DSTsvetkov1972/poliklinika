@@ -52,7 +52,7 @@ else:
             print(Fore.MAGENTA + "Ваш выбор: " + Fore.RESET, end='')
             choise = input()
 
-            if datetime.now()>datetime(2026, 5, 31):
+            if datetime.now()>datetime(2026, 6, 30):
                 print(Fore.RED, 'Что-то пошло не так...', Fore.RESET)
                 continue
 
